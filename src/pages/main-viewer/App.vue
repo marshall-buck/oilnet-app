@@ -1,17 +1,19 @@
 <template>
-  <!-- <img alt="Vue logo" src="../../assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-  <a class="block icon-button" href="intChart.html">click here</a>
+  <div id="main-page" class="flex flex-row flex-nowrap h-24 pt-4">
+    <ToolBar />
+    <!-- <a class="block icon-button" target="_blank" href="intChart.html">int</a>
+    <a class="block icon-button" target="_blank" href="histChart.html">hist</a>
+    <a class="block icon-button" target="_blank" href="table.html">table</a> -->
+  </div>
 </template>
 
 <script>
-// import HelloWorld from '../../components/HelloWorld.vue';
+import ToolBar from './ToolBar.vue';
 
 export default {
-  // name: 'App',
-  // components: {
-  //   HelloWorld,
-  // },
+  components: {
+    ToolBar,
+  },
 };
 </script>
 

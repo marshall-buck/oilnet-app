@@ -5,6 +5,9 @@ module.exports = {
     intChart: './src/pages/int-chart/int-main.js',
     table: './src/pages/table/table-main.js',
   },
+  devServer: {
+    open: 'Google Chrome',
+  },
 
   // pluginOptions: {
   //   electronBuilder: {

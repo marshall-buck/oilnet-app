@@ -1,4 +1,6 @@
-<template><h1>From Table</h1></template>
+<template>
+  <h1>Table</h1>
+</template>
 
 <script>
 export default {};

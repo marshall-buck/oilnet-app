@@ -1,4 +1,6 @@
-<template><h1>From Intensity</h1></template>
+<template>
+  <h1>Int Chart</h1>
+</template>
 
 <script>
 export default {};

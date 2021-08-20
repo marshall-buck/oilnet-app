@@ -1,9 +1,10 @@
 module.exports = {
   pages: {
-    index: './src/pages/main-viewer/main.js',
-    histChart: './src/pages/hist-chart/hist-main.js',
-    intChart: './src/pages/int-chart/int-main.js',
-    table: './src/pages/table/table-main.js',
+    index: './src/pages/main/main.js',
+    histChart: './src/pages/histChart/histMain.js',
+    intChart: './src/pages/intChart/intMain.js',
+    table: './src/pages/table/tableMain.js',
+    test: './src/pages/test/test.js',
   },
   devServer: {
     open: 'Google Chrome',

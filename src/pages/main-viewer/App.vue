@@ -8,11 +8,15 @@
 </template>
 
 <script>
-import ToolBar from './ToolBar.vue';
-
+import ToolBar from '../../components/ToolBar.vue';
+import { onMounted } from 'vue';
 export default {
   components: {
     ToolBar,
+  },
+
+  setup() {
+    onMounted(() => console.log(process.env));
   },
 };
 </script>

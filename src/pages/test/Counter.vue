@@ -13,39 +13,45 @@
         gap-10
       "
     >
-      <button class="icon-button h-16 w-16" @click="store.methods.increase">
-        +
-      </button>
-      <p :style="{ color: store.state.color }">{{ store.state.count }}</p>
-      <button class="icon-button h-16 w-16" @click="store.methods.decrease">
-        -
-      </button>
-      <div>{{ store.getters.squared() }}</div>
+      <button class="icon-button h-16 w-16" @click="increase">+</button>
+      <p :style="{ color: activeColor }">{{ count }}</p>
+      <button class="icon-button h-16 w-16" @click="decrease">-</button>
+      <!-- <div>{{ store.getters.squared() }}</div> -->
     </div>
-    <input v-model="colorCode" type="text" />
+    <input v-model="changeTo" type="text" />
     <!-- <input v-model="store.state.color" type="text" /> -->
   </section>
 </template>
 
 <script>
-import { inject, computed } from 'vue';
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 
 export default {
   setup() {
-    const store = inject('store');
+    const store = useStore();
+    const activeColor = computed(() => store.getters.color);
 
-    const colorCode = computed({
+    const changeTo = computed({
       get() {
-        return store.state.color;
+        return store.getters.color;
       },
-      set(val) {
-        store.methods.setColor(val);
+      set(value) {
+        store.dispatch('color', value);
       },
     });
 
+    const count = computed(() => store.getters.count);
+
+    const increase = () => store.dispatch('increase');
+    const decrease = () => store.dispatch('decrease');
+
     return {
-      store,
-      colorCode,
+      count,
+      increase,
+      decrease,
+      activeColor,
+      changeTo,
     };
   },
 };

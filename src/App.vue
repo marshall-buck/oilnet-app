@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ToolBar from '../../components/ToolBar.vue';
+import ToolBar from './components/ToolBar.vue';
 import { onMounted } from 'vue';
 export default {
   components: {

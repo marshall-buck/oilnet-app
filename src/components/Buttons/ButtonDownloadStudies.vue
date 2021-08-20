@@ -19,7 +19,10 @@
 <script>
 export default {
   setup() {
-    const clicked = () => console.log('DownLoad Studies');
+    const clicked = () => {
+      window.api.send('open-studyId-modal', 'clicked study id button');
+      console.log('DownLoad Studies');
+    };
     return {
       clicked,
     };

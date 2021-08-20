@@ -15,7 +15,7 @@
     <ButtonDeleteCharts class="mb-2" />
     <ButtonSaveCsv />
     <ButtonSaveImages />
-    <ButtonTest v-if="testMode" />
+    <ButtonTest />
   </div>
 </template>
 
@@ -34,8 +34,6 @@ import ButtonNextImg from './Buttons/ButtonNextImg.vue';
 import ButtonSaveImages from './Buttons/ButtonSaveImages.vue';
 import ButtonTest from './Buttons/ButtonTest.vue';
 
-import { ref, onMounted } from 'vue';
-
 export default {
   components: {
     ButtonOpenDicom,
@@ -51,21 +49,6 @@ export default {
     ButtonSaveCsv,
     ButtonSaveImages,
     ButtonTest,
-  },
-
-  setup() {
-    const testMode = ref();
-    onMounted(() => {
-      if (process.env.NODE_ENV === 'development') {
-        testMode.value = true;
-      } else {
-        testMode.value = false;
-      }
-    });
-
-    return {
-      testMode,
-    };
   },
 };
 </script>

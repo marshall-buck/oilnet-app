@@ -1,35 +1,39 @@
 import { createStore } from 'vuex';
-export const store = createStore({
-  state() {
-    return {
-      count: 0,
-      color: 'red',
-    };
+import * as getters from './getters';
+import * as actions from './actions';
+import * as mutations from './mutations';
+
+const state = {
+  stack: {
+    currentImageIdIndex: 0,
+    imageIds: [],
   },
-  mutations: {
-    increase(state) {
-      state.count++;
-    },
-    decrease(state) {
-      state.count--;
-    },
-    setColor(state, value) {
-      state.color = value;
-    },
+  defaultLevels: {
+    windowWidth: 2000,
+    windowCenter: 2000,
   },
 
-  getters: {
-    count(state) {
-      return state.count;
-    },
-    color(state) {
-      return state.color;
-    },
-  },
+  csvHistogram: [],
 
-  actions: {
-    increase: ({ commit }) => commit('increase'),
-    decrease: ({ commit }) => commit('decrease'),
-    color: ({ commit }, payload) => commit('setColor', payload),
+  imageData: [],
+  jpgImageData: [],
+  currentImageStats: {},
+  histogram: {
+    xAxis: [],
+    yAxis: [],
+    totalPixelCount: 0,
+    min: 0,
+    max: 0,
   },
+  measurements: [],
+  chartTitle: '',
+};
+
+const store = createStore({
+  state,
+  getters,
+  actions,
+  mutations,
 });
+
+export default store;

@@ -4,10 +4,7 @@ const { pathObject } = require('./basePaths.js');
 const { findStudy } = require('./fetch.js');
 const { spawn } = require('child_process');
 const { pathToCtFolder, url, baseUrl } = pathObject();
-/* TODO -- make levels always active, 
-            figure out windows python path
 
-            */
 let mainWindow, studyIdModal, histogramChart;
 
 function createWindows() {

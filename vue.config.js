@@ -6,13 +6,14 @@ module.exports = {
     table: './src/pages/table/tableMain.js',
     test: './src/pages/test/test.js',
   },
-  devServer: {
-    open: 'Google Chrome',
-  },
+  // devServer: {
+  //   open: 'Google Chrome',
+  // },
 
   pluginOptions: {
     electronBuilder: {
       preload: 'src//electron/preload.js',
+      mainProcessFile: 'src/electron/background.js',
     },
   },
 };

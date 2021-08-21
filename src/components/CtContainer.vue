@@ -4,6 +4,7 @@
     class="text-white flex flex-row flex-nowrap bg-black"
   >
     <LeftSide />
+
     <div id="dicom-image" class="canvas-wh self-center"></div>
     <div id="right" class="flex flex-col flex-nowrap justify-between">
       <div id="top-right" class="text-white min-w-max space-y-2 text-left">
@@ -16,12 +17,14 @@
       </div>
     </div>
   </section>
+  <WindowingSliders />
 </template>
 
 <script>
 import LeftSide from './LeftSide.vue';
+import WindowingSliders from './WindowingSliders.vue';
 export default {
-  components: { LeftSide },
+  components: { LeftSide, WindowingSliders },
 };
 </script>
 

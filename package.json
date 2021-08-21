@@ -12,7 +12,7 @@
     "postuninstall": "electron-builder install-app-deps",
     "serve-mode-prod": "vue-cli-service serve --mode production"
   },
-  "main": "./src/electron/background.js",
+  "main": "background.js",
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",

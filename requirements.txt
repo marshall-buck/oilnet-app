@@ -1,0 +1,15 @@
+altgraph==0.17
+autopep8==1.5.7
+certifi==2021.5.30
+chardet==4.0.0
+idna==2.10
+macholib==1.14
+numpy==1.20.3
+opencv-python==4.5.2.54
+pycodestyle==2.7.0
+pydicom==2.1.2
+pyinstaller==4.3
+pyinstaller-hooks-contrib==2021.1
+requests==2.25.1
+toml==0.10.2
+urllib3==1.26.5

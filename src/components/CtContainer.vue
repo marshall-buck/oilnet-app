@@ -4,18 +4,9 @@
     class="text-white flex flex-row flex-nowrap bg-black"
   >
     <LeftSide />
+    <DicomContainer />
 
-    <div id="dicom-image" class="canvas-wh self-center"></div>
-    <div id="right" class="flex flex-col flex-nowrap justify-between">
-      <div id="top-right" class="text-white min-w-max space-y-2 text-left">
-        <h3 id="study-number">Study No:</h3>
-        <h3 id="image-number">Image No:</h3>
-        <h3 id="axial-depth">Axial Depth</h3>
-      </div>
-      <div id="br" class="overlay text-white text-right">
-        <h3 id="bottom-right">Zoom:</h3>
-      </div>
-    </div>
+    <RightSide />
   </section>
   <WindowingSliders />
 </template>
@@ -23,8 +14,10 @@
 <script>
 import LeftSide from './LeftSide.vue';
 import WindowingSliders from './WindowingSliders.vue';
+import DicomContainer from './DicomContainer.vue';
+import RightSide from './RightSide.vue';
 export default {
-  components: { LeftSide, WindowingSliders },
+  components: { LeftSide, WindowingSliders, DicomContainer, RightSide },
 };
 </script>
 

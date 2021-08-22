@@ -17,11 +17,14 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
 export default {
   setup() {
+    const store = useStore();
     const clicked = () => {
-      window.api.send('open-studyId-modal', 'clicked study id button');
-      console.log('DownLoad Studies');
+      if (!store.getters.isStudyIdModal) store.dispatch('toggleStudyIdModal');
+      const def = store.getters.defaultLevels;
+      window.api.send('open-studyId-modal', JSON.stringify(def));
     };
     return {
       clicked,

@@ -51,7 +51,17 @@
 </template>
 
 <script>
-export default {};
+import { onMounted } from 'vue';
+export default {
+  setup() {
+    window.api.receive('from', (e, arg) => {
+      alert(arg);
+    });
+    onMounted(() => {
+      console.log('From Table');
+    });
+  },
+};
 </script>
 
 <style scoped>

@@ -28,21 +28,6 @@ import WindowingInputs from './WindowingInputs.vue';
 // import { computed } from 'vue';
 export default {
   components: { OverlayItem, WindowingInputs },
-
-  //   setup() {
-  //     const store = useStore();
-  //     const width = computed(() => store.getters.defaultLevels.windowWidth);
-  //     const center = computed(() => store.getters.defaultLevels.windowCenter);
-  //     const setWidth = (e) => store.dispatch('setWidth', e.target.value);
-  //     const setCenter = (e) => store.dispatch('setCenter', e.target.value);
-
-  //     return {
-  //       width,
-  //       center,
-  //       setWidth,
-  //       setCenter,
-  //     };
-  //   },
 };
 </script>
 

@@ -83,5 +83,6 @@ if (isDevelopment) {
 }
 
 ipcMain.on('open-studyId-modal', (e, args) => {
-  console.log(args);
+  e.reply('from-main', 'started from studyId-modal, sent to here ');
+  console.log(JSON.parse(args));
 });

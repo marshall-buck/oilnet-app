@@ -15,6 +15,9 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } },
 ]);
 
+let mainWindow;
+let measurementWindow;
+
 const mainOptions = {
   width: 1024,
   height: 768,
@@ -27,17 +30,14 @@ const mainOptions = {
 const measureTable = {
   width: 600,
   height: 300,
+
   webPreferences: {
     nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
     preload: path.join(__dirname, 'preload.js'),
   },
 };
 
-let mainWindow;
-let measurementWindow;
-
 function createWindow(devPath, prodPath, options) {
-  // Create the browser window.
   // Create the browser window.
   let window = new BrowserWindow(options);
 
@@ -56,15 +56,6 @@ function createWindow(devPath, prodPath, options) {
   return window;
 }
 
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -76,6 +67,7 @@ app.on('activate', () => {
   if (measurementWindow === null) {
     measurementWindow = createWindow('table', 'table.html', measureTable);
   }
+  measurementWindow.setParentWindow(mainWindow);
 });
 
 // This method will be called when Electron has finished
@@ -98,6 +90,7 @@ app.on('ready', async () => {
   }
   mainWindow = createWindow('', 'index.html', mainOptions);
   measurementWindow = createWindow('table', 'table.html', measureTable);
+  measurementWindow.setParentWindow(mainWindow);
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -115,6 +108,14 @@ if (isDevelopment) {
   }
 }
 
+// Quit when all windows are closed.
+app.on('window-all-closed', () => {
+  // On macOS it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 ipcMain.on('open-studyId-modal', (e, args) => {
   measurementWindow.webContents.send(
     'from-main',

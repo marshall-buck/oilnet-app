@@ -22,6 +22,9 @@ export default {
 
   setup() {
     const store = useStore();
+    window.api.receive('from-main', (e, arg) => {
+      console.log(e, arg);
+    });
     onMounted(() => {
       localStorage.setItem('TestItem', 'From app.vue');
     });

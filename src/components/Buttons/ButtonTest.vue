@@ -6,9 +6,14 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 export default {
   setup() {
-    const clicked = () => console.log('test');
+    const store = useStore();
+    const clicked = () => {
+      const def = { ...store.getters.defaultLevels, text: 'From Test Button' };
+      window.api.send('open-studyId-modal', JSON.stringify(def));
+    };
 
     const testMode = ref();
     onMounted(() => {

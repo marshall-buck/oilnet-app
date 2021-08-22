@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-1">
+  <div class="bg-white p-1" @click="clicked">
     <table class="table-auto">
       <caption class="text-2xl">
         Sample
@@ -8,7 +8,7 @@
         <tr>
           <th>icon</th>
           <!-- <th>Sample</th> -->
-          <th>Depth</th>
+          <th>Axial</th>
           <th>Area</th>
           <th>Count</th>
           <th>Mean</th>
@@ -37,7 +37,7 @@
             </svg>
           </td>
           <!-- <td>1234</td> -->
-          <td>4000.22</td>
+          <td>10</td>
           <td>857</td>
           <td>22000</td>
           <td>1234</td>
@@ -54,12 +54,16 @@
 import { onMounted } from 'vue';
 export default {
   setup() {
-    window.api.receive('from', (e, arg) => {
-      alert(arg);
+    window.api.receive('from-main', (e, arg) => {
+      console.log(e, arg);
     });
     onMounted(() => {
       console.log('From Table');
     });
+    const clicked = () => alert('div clicked');
+    return {
+      clicked,
+    };
   },
 };
 </script>

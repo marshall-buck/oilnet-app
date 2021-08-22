@@ -23,8 +23,6 @@ export default {
     const store = useStore();
     const clicked = () => {
       if (!store.getters.isStudyIdModal) store.dispatch('toggleStudyIdModal');
-      const def = store.getters.defaultLevels;
-      window.api.send('open-studyId-modal', JSON.stringify(def));
     };
     return {
       clicked,

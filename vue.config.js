@@ -1,10 +1,26 @@
 module.exports = {
   pages: {
-    index: './src/main.js',
-    histChart: './src/pages/histChart/histMain.js',
-    intChart: './src/pages/intChart/intMain.js',
-    table: './src/pages/table/tableMain.js',
-    test: './src/pages/test/test.js',
+    index: {
+      entry: './src/main.js',
+      title: 'Main Page',
+    },
+    histChart: {
+      entry: './src/pages/histChart/histMain.js',
+      title: 'Histogram',
+    },
+    intChart: {
+      entry: './src/pages/intChart/intMain.js',
+      title: 'Intensity',
+    },
+    table: {
+      entry: './src/pages/table/tableMain.js',
+      title: 'Measurements',
+    },
+
+    test: {
+      entry: './src/pages/test/test.js',
+      title: 'Test',
+    },
   },
   // devServer: {
   //   open: 'Google Chrome',

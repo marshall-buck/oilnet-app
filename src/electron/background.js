@@ -2,8 +2,8 @@
 
 import { app, protocol, BrowserWindow, ipcMain } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+// eslint-disable-next-line no-unused-vars
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
-import { table } from 'console';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -24,7 +24,7 @@ const mainOptions = {
   },
 };
 
-const tableOptions = {
+const measureTable = {
   width: 600,
   height: 300,
   webPreferences: {
@@ -34,7 +34,7 @@ const tableOptions = {
 };
 
 let mainWindow;
-let tables;
+let measurementWindow;
 
 function createWindow(devPath, prodPath, options) {
   // Create the browser window.
@@ -73,8 +73,8 @@ app.on('activate', () => {
   if (mainWindow === null) {
     mainWindow = createWindow('', 'index.html', mainOptions);
   }
-  if (tables === null) {
-    tables = createWindow('table', 'table.html', tableOptions);
+  if (measurementWindow === null) {
+    measurementWindow = createWindow('table', 'table.html', measureTable);
   }
 });
 
@@ -85,6 +85,7 @@ app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
+      // eslint-disable-next-line no-undef
       await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString());
@@ -96,7 +97,7 @@ app.on('ready', async () => {
     createProtocol('app');
   }
   mainWindow = createWindow('', 'index.html', mainOptions);
-  tables = createWindow('table', 'table.html', tableOptions);
+  measurementWindow = createWindow('table', 'table.html', measureTable);
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -115,6 +116,9 @@ if (isDevelopment) {
 }
 
 ipcMain.on('open-studyId-modal', (e, args) => {
-  tables.webContents.send('from-main', 'Test Button has been pressed ');
+  measurementWindow.webContents.send(
+    'from-main',
+    'Test Button has been pressed '
+  );
   console.log(args);
 });

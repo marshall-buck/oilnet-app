@@ -19,11 +19,19 @@ export default {
 
   setup() {
     const store = useStore();
-    // window.api.receive('from-main', (e, arg) => {
-    //   console.log(e, arg);
-    // });
+    window.api.receive('open-studyId-modal-reply', (arg) => {
+      store.dispatch('toggleStudyIdModal');
+      // Should log True
+      console.log(arg, store.getters.isStudyIdModal);
+    });
+    window.api.receive('close-studyId-modal-reply', (arg) => {
+      store.dispatch('toggleStudyIdModal');
+      // Should be false
+      console.log(arg, store.getters.isStudyIdModal);
+    });
+
     onMounted(() => {
-      console.log(store);
+      console.log('app mounted');
     });
   },
 };

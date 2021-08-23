@@ -3,6 +3,7 @@
     <input
       @keydown.enter="entered"
       @keydown.esc="clickClose"
+      v-model="studyId"
       class="
         appearance-none
         rounded
@@ -40,14 +41,17 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 export default {
   setup() {
-    const entered = () => window.api.send('open-studyId-modal', []);
+    const studyId = ref(null);
+    const entered = () => window.api.send('study-id-entered', studyId);
     const clickClose = () => {
       window.api.send('close-studyId-modal', []);
     };
     return {
       clickClose,
+      studyId,
       entered,
     };
   },

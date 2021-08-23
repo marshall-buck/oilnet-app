@@ -17,13 +17,14 @@
 </template>
 
 <script>
-import { useStore } from 'vuex';
+// import { useStore } from 'vuex';
 export default {
   setup() {
-    const store = useStore();
+    // const store = useStore();
     const clicked = () => {
-      if (!store.getters.isStudyIdModal) store.dispatch('toggleStudyIdModal');
+      window.api.send('open-studyId-modal', 'study modal Opened');
     };
+
     return {
       clicked,
     };

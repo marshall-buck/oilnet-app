@@ -22,26 +22,26 @@ let downloadStudyWin;
 const mainOptions = {
   width: 1024,
   height: 768,
+  title: 'Ct App',
   backgroundColor: '#000',
 };
 
 const measurementOptions = {
   width: 600,
   height: 300,
-  parent: mainWindow,
+  title: 'Measurements',
   show: false,
 };
 
 const downloadStudyOptions = {
   width: 348,
   height: 160,
-  parent: mainWindow,
-  modal: true,
+  title: 'Download Studies',
   show: false,
   frame: false,
 };
 
-function createWindow(devPath, prodPath, options) {
+async function createWindow(devPath, prodPath, options) {
   // Create the browser window.
   let window = new BrowserWindow({
     ...options,
@@ -54,12 +54,13 @@ function createWindow(devPath, prodPath, options) {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     window.loadURL(process.env.WEBPACK_DEV_SERVER_URL + devPath);
-    if (!process.env.IS_TEST) window.webContents.openDevTools();
+    if (!process.env.IS_TEST) {
+      if (window.title === 'Ct App') window.webContents.openDevTools();
+    }
   } else {
     // Load the index.html when not in development
     window.loadURL(`app://./${prodPath}`);
   }
-  // window.once('ready-to-show', () => window.show());
 
   window.on('closed', () => {
     window = null;
@@ -73,7 +74,6 @@ app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-      // eslint-disable-next-line no-undef
       await installExtension(VUEJS3_DEVTOOLS);
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString());
@@ -83,25 +83,30 @@ app.on('ready', async () => {
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
     createProtocol('app');
   }
-  mainWindow = createWindow('', 'index.html', mainOptions);
+  mainWindow = await createWindow('', 'index.html', mainOptions);
   mainWindow.once('ready-to-show', () => mainWindow.show());
-  // measurementWindow = createWindow('table', 'table.html');
-  // measurementWindow.setParentWindow(mainWindow);
-  // downloadStudyWin = createWindow('downloadStudy', 'downloadStudy.html');
-  // downloadStudyWin.setParentWindow(mainWindow);
+  mainWindow.on('closed', () => app.quit());
+  downloadStudyWin = await createWindow(
+    'downloadStudy',
+    'downloadStudy.html',
+    downloadStudyOptions
+  );
+  downloadStudyWin.setParentWindow(mainWindow);
+  measurementWindow = await createWindow(
+    'table',
+    'table.html',
+    measurementOptions
+  );
+  measurementWindow.setParentWindow(mainWindow);
+  measurementWindow.once('ready-to-show', () => measurementWindow.show());
 });
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-
-  // With
   if (mainWindow === null) {
     mainWindow = createWindow('', 'index.html', mainOptions);
     mainWindow.once('ready-to-show', () => mainWindow.show());
-    // measurementWindow = createWindow('table', 'table.html');
-    // measurementWindow.setParentWindow(mainWindow);
-    // downloadStudyWin = createWindow('table', 'table.html');
   }
 });
 
@@ -119,7 +124,6 @@ if (isDevelopment) {
     });
   }
 }
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
@@ -129,18 +133,20 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.on('open-studyId-modal', (e, args) => {
-  console.log(e, args);
-  // downloadStudyWin.show();
+ipcMain.on('open-studyId-modal', (e, arg) => {
+  downloadStudyWin.show();
+  mainWindow.webContents.send('open-studyId-modal-reply', true);
+
+  console.log(arg);
 });
-ipcMain.on('from-test-button', (e, args) => {
-  console.log(e, args);
-  // downloadStudyWin.show();
+ipcMain.on('study-id-entered', (e, arg) => {
+  console.log(arg);
 });
 
 // eslint-disable-next-line no-unused-vars
 ipcMain.on('close-studyId-modal', (e, arg) => {
-  // downloadStudyWin.hide();
+  downloadStudyWin.hide();
+  mainWindow.webContents.send('close-studyId-modal-reply', false);
 });
 
 // ipcMain.on('open-studyId-modal', (e, args) => {
@@ -150,3 +156,8 @@ ipcMain.on('close-studyId-modal', (e, arg) => {
 //   );
 //   console.log(args);
 // });
+
+ipcMain.on('from-test-button', (e, args) => {
+  console.log(e, args);
+  // downloadStudyWin.show();
+});

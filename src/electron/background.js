@@ -6,12 +6,17 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
-const { pathObject } = require('./basePaths.js');
+
 // const { spawn } = require('child_process');
-const { pathToCtFolder, url, baseUrl } = pathObject();
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
+
+const {
+  mainOptions,
+  measurementOptions,
+  downloadStudyOptions,
+} = require('./windowOptions');
 
 // TODO: Python Packager
 
@@ -23,28 +28,6 @@ protocol.registerSchemesAsPrivileged([
 let mainWindow;
 let measurementWindow;
 let downloadStudyWin;
-
-const mainOptions = {
-  width: 1024,
-  height: 768,
-  title: 'Ct App',
-  backgroundColor: '#000',
-};
-
-const measurementOptions = {
-  width: 600,
-  height: 300,
-  title: 'Measurements',
-  show: false,
-};
-
-const downloadStudyOptions = {
-  width: 348,
-  height: 160,
-  title: 'Download Studies',
-  show: false,
-  frame: false,
-};
 
 async function createWindow(devPath, prodPath, options) {
   // Create the browser window.
@@ -99,7 +82,6 @@ app.on('ready', async () => {
     downloadStudyOptions
   );
   downloadStudyWin.setParentWindow(mainWindow);
-  console.log(pathToCtFolder, url, baseUrl);
 });
 
 // app.on('activate', () => {

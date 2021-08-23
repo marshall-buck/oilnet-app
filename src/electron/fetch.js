@@ -47,7 +47,7 @@ exports.findStudy = async (StudyID) => {
       body: JSON.stringify(data),
     });
     const info = await response.json();
-    const id = info[0].ID;
+    const id = await info[0].ID;
     // set progress bar
 
     // return info;
@@ -79,6 +79,7 @@ exports.findStudy = async (StudyID) => {
       fs.mkdirSync(`${pathToCtFolder}/${StudyID}`);
     }
   } catch (error) {
+    console.log(error);
     progressBar.setCompleted();
     if (error.name === 'FetchError') {
       // eslint-disable-next-line no-unused-vars

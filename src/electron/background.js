@@ -6,9 +6,9 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
-// const { pathObject } = require('./basePaths.js');
+const { pathObject } = require('./basePaths.js');
 // const { spawn } = require('child_process');
-// const { pathToCtFolder, url, baseUrl } = pathObject();
+const { pathToCtFolder, url, baseUrl } = pathObject();
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -99,6 +99,7 @@ app.on('ready', async () => {
     downloadStudyOptions
   );
   downloadStudyWin.setParentWindow(mainWindow);
+  console.log(pathToCtFolder, url, baseUrl);
 });
 
 // app.on('activate', () => {
@@ -139,7 +140,7 @@ ipcMain.on('open-studyId-modal', (e, arg) => {
 
   console.log(arg);
 });
-ipcMain.on('study-id-entered', (e, arg) => {
+ipcMain.on('study-id-entered', async (e, arg) => {
   console.log(arg);
   const regex = /^\d{5}$/;
   if (!arg.match(regex) || !arg) {
@@ -151,9 +152,7 @@ ipcMain.on('study-id-entered', (e, arg) => {
     });
     return;
   }
-  findStudy(arg)
-    .then()
-    .catch((err) => console.log(err));
+  await findStudy(arg);
 });
 
 ipcMain.on('close-studyId-modal', () => {

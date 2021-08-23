@@ -79,7 +79,6 @@ exports.findStudy = async (StudyID) => {
       fs.mkdirSync(`${pathToCtFolder}/${StudyID}`);
     }
   } catch (error) {
-    console.log(error);
     progressBar.setCompleted();
     if (error.name === 'FetchError') {
       // eslint-disable-next-line no-unused-vars

@@ -34,6 +34,7 @@ module.exports = {
     electronBuilder: {
       preload: 'src//electron/preload.js',
       mainProcessFile: 'src/electron/background.js',
+      externals: ['node-fetch'],
     },
   },
 };

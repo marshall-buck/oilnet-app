@@ -76,14 +76,14 @@ async function createWindow(devPath, prodPath, options) {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
-    try {
-      await installExtension(VUEJS3_DEVTOOLS);
-    } catch (e) {
-      console.error('Vue Devtools failed to install:', e.toString());
-    }
-  }
+  // if (isDevelopment && !process.env.IS_TEST) {
+  //   // Install Vue Devtools
+  //   try {
+  //     await installExtension(VUEJS3_DEVTOOLS);
+  //   } catch (e) {
+  //     console.error('Vue Devtools failed to install:', e.toString());
+  //   }
+  // }
 
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
     createProtocol('app');

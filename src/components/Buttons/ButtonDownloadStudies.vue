@@ -1,5 +1,5 @@
 <template>
-  <button-base title="Download Studies" @click="clicked">
+  <button-base title="Download Studies" @click="clicked" :disabled="isActive">
     <svg
       fill="none"
       stroke="white"
@@ -17,16 +17,19 @@
 </template>
 
 <script>
-// import { useStore } from 'vuex';
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
-    // const store = useStore();
+    const store = useStore();
     const clicked = () => {
       window.api.send('open-studyId-modal', 'study modal Opened');
     };
+    const isActive = computed(() => store.getters.isStudyIdModal);
 
     return {
       clicked,
+      isActive,
     };
   },
 };

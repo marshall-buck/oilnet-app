@@ -1,9 +1,14 @@
 'use strict';
 
-import { app, protocol, BrowserWindow, ipcMain } from 'electron';
+import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 // eslint-disable-next-line no-unused-vars
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
+
+const { findStudy } = require('./fetch.js');
+// const { pathObject } = require('./basePaths.js');
+// const { spawn } = require('child_process');
+// const { pathToCtFolder, url, baseUrl } = pathObject();
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -86,29 +91,24 @@ app.on('ready', async () => {
   mainWindow = await createWindow('', 'index.html', mainOptions);
   mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.on('closed', () => app.quit());
+
+  // measurementWindow.hide();
   downloadStudyWin = await createWindow(
     'downloadStudy',
     'downloadStudy.html',
     downloadStudyOptions
   );
   downloadStudyWin.setParentWindow(mainWindow);
-  measurementWindow = await createWindow(
-    'table',
-    'table.html',
-    measurementOptions
-  );
-  measurementWindow.setParentWindow(mainWindow);
-  measurementWindow.once('ready-to-show', () => measurementWindow.show());
 });
 
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    mainWindow = createWindow('', 'index.html', mainOptions);
-    mainWindow.once('ready-to-show', () => mainWindow.show());
-  }
-});
+// app.on('activate', () => {
+//   // On macOS it's common to re-create a window in the app when the
+//   // dock icon is clicked and there are no other windows open.
+//   if (mainWindow === null) {
+//     mainWindow = createWindow('', 'index.html', mainOptions);
+//     mainWindow.once('ready-to-show', () => mainWindow.show());
+//   }
+// });
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
@@ -135,27 +135,45 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('open-studyId-modal', (e, arg) => {
   downloadStudyWin.show();
-  mainWindow.webContents.send('open-studyId-modal-reply', true);
+  mainWindow.webContents.send('open-studyId-modal:reply', true);
 
   console.log(arg);
 });
 ipcMain.on('study-id-entered', (e, arg) => {
   console.log(arg);
+  const regex = /^\d{5}$/;
+  if (!arg.match(regex) || !arg) {
+    // eslint-disable-next-line no-unused-vars
+    const mrs = dialog.showMessageBoxSync({
+      type: 'warning',
+      buttons: ['OK'],
+      detail: 'Error, Study Numbers are 5 Digits',
+    });
+    return;
+  }
+  findStudy(arg)
+    .then()
+    .catch((err) => console.log(err));
 });
 
-// eslint-disable-next-line no-unused-vars
-ipcMain.on('close-studyId-modal', (e, arg) => {
+ipcMain.on('close-studyId-modal', () => {
   downloadStudyWin.hide();
-  mainWindow.webContents.send('close-studyId-modal-reply', false);
+  mainWindow.webContents.send('close-studyId-modal:reply', false);
 });
-
-// ipcMain.on('open-studyId-modal', (e, args) => {
-//   measurementWindow.webContents.send(
-//     'from-main',
-//     'Test Button has been pressed '
-//   );
-//   console.log(args);
-// });
+// eslint-disable-next-line no-unused-vars
+ipcMain.on('record-data-pressed', async (e, arg) => {
+  if (!measurementWindow) {
+    measurementWindow = await createWindow(
+      'table',
+      'table.html',
+      measurementOptions
+    );
+    measurementWindow.setParentWindow(mainWindow);
+    measurementWindow.show();
+  }
+  measurementWindow.webContents.reload();
+  console.log(arg);
+});
 
 ipcMain.on('from-test-button', (e, args) => {
   console.log(e, args);

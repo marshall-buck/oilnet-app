@@ -18,8 +18,11 @@
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
+    "electron-progressbar": "^2.0.1",
+    "node-fetch": "^2.6.1",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "unzipper": "^0.10.11",
     "vue": "^3.0.0",
     "vuex": "^4.0.2"
   },

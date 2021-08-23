@@ -21,7 +21,8 @@
 export default {
   setup() {
     // const store = useStore();
-    const clicked = () => console.log('Record Data');
+    const clicked = () =>
+      window.api.send('record-data-pressed', 'record button pressed');
     return {
       clicked,
     };

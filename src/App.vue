@@ -19,12 +19,12 @@ export default {
 
   setup() {
     const store = useStore();
-    window.api.receive('open-studyId-modal-reply', (arg) => {
+    window.api.receive('open-studyId-modal:reply', (arg) => {
       store.dispatch('toggleStudyIdModal');
       // Should log True
       console.log(arg, store.getters.isStudyIdModal);
     });
-    window.api.receive('close-studyId-modal-reply', (arg) => {
+    window.api.receive('close-studyId-modal:reply', (arg) => {
       store.dispatch('toggleStudyIdModal');
       // Should be false
       console.log(arg, store.getters.isStudyIdModal);

@@ -1,6 +1,7 @@
 <template>
   <div class="bg-black flex items-center justify-center h-screen p-4">
     <input
+      :disabled="isDisabled"
       @keydown.enter="entered"
       @keydown.esc="clickClose"
       v-model="studyId"
@@ -41,11 +42,15 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 export default {
   setup() {
     const studyId = ref(null);
-    const entered = () => window.api.send('study-id-entered', studyId);
+    const isDisabled = computed(() => {
+      if (studyId.value === '') return true;
+      return false;
+    });
+    const entered = () => window.api.send('study-id-entered', studyId.value);
     const clickClose = () => {
       window.api.send('close-studyId-modal', []);
     };
@@ -53,6 +58,7 @@ export default {
       clickClose,
       studyId,
       entered,
+      isDisabled,
     };
   },
 };

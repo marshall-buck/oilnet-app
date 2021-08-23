@@ -1,9 +1,8 @@
 <template>
-  <div
-    class="bg-black flex items-center justify-center h-screen p-4"
-    draggable="true"
-  >
+  <div class="bg-black flex items-center justify-center h-screen p-4">
     <input
+      @keydown.enter="entered"
+      @keydown.esc="clickClose"
       class="
         appearance-none
         rounded
@@ -22,7 +21,7 @@
       placeholder="Enter Study Number"
     />
     <svg
-      @click="clicked"
+      @click="clickClose"
       id="close"
       class="w-12 h-12 -mt-20 -mx-1 cursor-pointer"
       fill="none"
@@ -41,15 +40,15 @@
 </template>
 
 <script>
-import { useStore } from 'vuex';
 export default {
   setup() {
-    const store = useStore();
-    const clicked = () => {
-      store.dispatch('toggleStudyIdModal');
+    const entered = () => window.api.send('open-studyId-modal', []);
+    const clickClose = () => {
+      window.api.send('close-studyId-modal', []);
     };
     return {
-      clicked,
+      clickClose,
+      entered,
     };
   },
 };

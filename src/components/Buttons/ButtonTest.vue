@@ -12,7 +12,7 @@ export default {
     const store = useStore();
     const clicked = () => {
       const def = { ...store.getters.defaultLevels, text: 'From Test Button' };
-      window.api.send('open-studyId-modal', JSON.stringify(def));
+      window.api.send('from-test-button', JSON.stringify(def));
     };
 
     const testMode = ref();

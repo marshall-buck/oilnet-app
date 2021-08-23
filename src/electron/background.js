@@ -17,29 +17,39 @@ protocol.registerSchemesAsPrivileged([
 
 let mainWindow;
 let measurementWindow;
+let downloadStudyWin;
 
 const mainOptions = {
   width: 1024,
   height: 768,
-  webPreferences: {
-    nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-    preload: path.join(__dirname, 'preload.js'),
-  },
+  backgroundColor: '#000',
 };
 
-const measureTable = {
+const measurementOptions = {
   width: 600,
   height: 300,
+  parent: mainWindow,
+  show: false,
+};
 
-  webPreferences: {
-    nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-    preload: path.join(__dirname, 'preload.js'),
-  },
+const downloadStudyOptions = {
+  width: 348,
+  height: 160,
+  parent: mainWindow,
+  modal: true,
+  show: false,
+  frame: false,
 };
 
 function createWindow(devPath, prodPath, options) {
   // Create the browser window.
-  let window = new BrowserWindow(options);
+  let window = new BrowserWindow({
+    ...options,
+    webPreferences: {
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -49,27 +59,13 @@ function createWindow(devPath, prodPath, options) {
     // Load the index.html when not in development
     window.loadURL(`app://./${prodPath}`);
   }
+  // window.once('ready-to-show', () => window.show());
 
   window.on('closed', () => {
     window = null;
   });
   return window;
 }
-
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-
-  // With
-  if (mainWindow === null) {
-    mainWindow = createWindow('', 'index.html', mainOptions);
-  }
-  if (measurementWindow === null) {
-    measurementWindow = createWindow('table', 'table.html', measureTable);
-  }
-  measurementWindow.setParentWindow(mainWindow);
-});
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -78,19 +74,35 @@ app.on('ready', async () => {
     // Install Vue Devtools
     try {
       // eslint-disable-next-line no-undef
-      await installExtension(VUEJS_DEVTOOLS);
+      await installExtension(VUEJS3_DEVTOOLS);
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
 
-  // With
   if (!process.env.WEBPACK_DEV_SERVER_URL) {
     createProtocol('app');
   }
   mainWindow = createWindow('', 'index.html', mainOptions);
-  measurementWindow = createWindow('table', 'table.html', measureTable);
-  measurementWindow.setParentWindow(mainWindow);
+  mainWindow.once('ready-to-show', () => mainWindow.show());
+  // measurementWindow = createWindow('table', 'table.html');
+  // measurementWindow.setParentWindow(mainWindow);
+  // downloadStudyWin = createWindow('downloadStudy', 'downloadStudy.html');
+  // downloadStudyWin.setParentWindow(mainWindow);
+});
+
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+
+  // With
+  if (mainWindow === null) {
+    mainWindow = createWindow('', 'index.html', mainOptions);
+    mainWindow.once('ready-to-show', () => mainWindow.show());
+    // measurementWindow = createWindow('table', 'table.html');
+    // measurementWindow.setParentWindow(mainWindow);
+    // downloadStudyWin = createWindow('table', 'table.html');
+  }
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -116,10 +128,25 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
 ipcMain.on('open-studyId-modal', (e, args) => {
-  measurementWindow.webContents.send(
-    'from-main',
-    'Test Button has been pressed '
-  );
-  console.log(args);
+  console.log(e, args);
+  // downloadStudyWin.show();
 });
+ipcMain.on('from-test-button', (e, args) => {
+  console.log(e, args);
+  // downloadStudyWin.show();
+});
+
+// eslint-disable-next-line no-unused-vars
+ipcMain.on('close-studyId-modal', (e, arg) => {
+  // downloadStudyWin.hide();
+});
+
+// ipcMain.on('open-studyId-modal', (e, args) => {
+//   measurementWindow.webContents.send(
+//     'from-main',
+//     'Test Button has been pressed '
+//   );
+//   console.log(args);
+// });

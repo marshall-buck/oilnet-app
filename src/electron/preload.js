@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('api', {
       'open-studyId-modal',
       'saveJpg',
       'close-studyId-modal',
-      'from-render-test',
+      'from-test-button',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);

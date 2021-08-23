@@ -16,6 +16,10 @@ module.exports = {
       entry: './src/pages/table/tableMain.js',
       title: 'Measurements',
     },
+    downloadStudy: {
+      entry: './src/pages/studyIdModal/studyIdModal.js',
+      title: 'Download Study',
+    },
 
     test: {
       entry: './src/pages/test/test.js',

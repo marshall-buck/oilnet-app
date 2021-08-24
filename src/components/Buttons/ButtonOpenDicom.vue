@@ -26,6 +26,7 @@ export default {
     const store = useStore();
     const fPut = ref(null);
     const clicked = () => {
+      store.dispatch('resetState');
       fPut.value.onchange = () => {
         let files = fPut.value.files;
         let arr = [];

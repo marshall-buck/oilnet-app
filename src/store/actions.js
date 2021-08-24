@@ -11,3 +11,6 @@ export const toggleStudyIdModal = ({ commit }) => {
 export const loadStoreStack = ({ commit }, value) => {
   commit('loadStoreStack', value);
 };
+export const resetState = ({ commit }) => {
+  commit('resetState');
+};

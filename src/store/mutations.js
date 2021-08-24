@@ -1,3 +1,5 @@
+import { getDefaultState } from './defaultState';
+
 export const setWidth = (state, value) => {
   state.defaultLevels.windowWidth = value;
 };
@@ -11,4 +13,8 @@ export const toggleStudyIdModal = (state) => {
 
 export const loadStoreStack = (state, value) => {
   state.stack.imageIds = value;
+};
+
+export const resetState = (state) => {
+  Object.assign(state, getDefaultState());
 };

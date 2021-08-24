@@ -8,3 +8,6 @@ export const setCenter = ({ commit }, value) => {
 export const toggleStudyIdModal = ({ commit }) => {
   commit('toggleStudyIdModal');
 };
+export const loadStoreStack = ({ commit }, value) => {
+  commit('loadStoreStack', value);
+};

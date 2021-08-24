@@ -1,5 +1,6 @@
 <template>
   <button-base title="Open Dicom Files" @click="clicked">
+    <input ref="fPut" class="hidden" type="file" multiple="true" />
     <svg
       fill="none"
       stroke="white"
@@ -17,12 +18,61 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 export default {
   setup() {
-    const clicked = () => console.log('Open dicom');
+    const store = useStore();
+    const fPut = ref(null);
+    const clicked = () => {
+      fPut.value.onchange = () => {
+        let files = fPut.value.files;
+        let arr = [];
+        for (let i = 0; i < files.length; i++) {
+          arr.push(
+            cornerstoneWADOImageLoader.wadouri.fileManager.add(files[i])
+          );
+        }
+        store.dispatch('loadStoreStack', arr);
+
+        // loadStack();
+      };
+      fPut.value.click();
+      fPut.value.remove();
+    };
     return {
       clicked,
+      fPut,
     };
   },
 };
+
+// function openFiles() {
+//   store.histogram = store.nullOutHistogram();
+//   store.setImageData = [];
+//   store.images = [];
+//   deleteTable();
+//   destroyAllCharts(['intensity-chart', 'hist-chart']);
+//   cornerstone.imageCache.purgeCache();
+//   store.setMeasurements = [store.labels];
+
+//   store.stack.imageIds = [];
+//   let input = document.createElement('input');
+//   input.type = 'file';
+//   input.multiple = true;
+//   input.onchange = (_) => {
+//     let files = input.files;
+
+//     for (let i = 0; i < files.length; i++) {
+//       store.stack.imageIds.push(
+//         cornerstoneWADOImageLoader.wadouri.fileManager.add(files[i])
+//       );
+//     }
+
+//     loadStack();
+//   };
+//   input.click();
+//   input.remove();
+// }
 </script>

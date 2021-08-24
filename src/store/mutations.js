@@ -8,3 +8,7 @@ export const setCenter = (state, value) => {
 export const toggleStudyIdModal = (state) => {
   state.isStudyIdModal = !state.isStudyIdModal;
 };
+
+export const loadStoreStack = (state, value) => {
+  state.stack.imageIds = value;
+};

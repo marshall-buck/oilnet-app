@@ -5,15 +5,17 @@
 <script>
 import * as cornerstone from 'cornerstone-core';
 import { onMounted, ref } from '@vue/runtime-core';
+import initCornerstone from '../helpers/initCornerStone';
 
 export default {
   setup() {
     const dicom = ref(null);
 
     onMounted(() => {
+      initCornerstone();
       cornerstone.enable(dicom.value);
-      console.log(cornerstone);
-      console.log(dicom.value);
+
+      // cornerstone.registerImageLoader('wadouri', loadStack);
     });
 
     return {

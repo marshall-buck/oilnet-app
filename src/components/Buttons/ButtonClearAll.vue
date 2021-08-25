@@ -17,11 +17,17 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
-    const clicked = () => console.log('Clear All');
+    const store = useStore();
+    const isCircleToolActive = computed(() => store.getters.isCircleToolActive);
     return {
-      clicked,
+      clicked: () => {
+        if (isCircleToolActive.value === true)
+          store.dispatch('toggleCircleTool');
+      },
     };
   },
 };

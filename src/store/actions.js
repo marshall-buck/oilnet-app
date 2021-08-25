@@ -14,3 +14,10 @@ export const loadStoreStack = ({ commit }, value) => {
 export const resetState = ({ commit }) => {
   commit('resetState');
 };
+
+export const sampleInfo = ({ commit }, value) => {
+  commit('sampleInfo', value);
+};
+export const toggleCircleTool = ({ commit }) => {
+  commit('toggleCircleTool');
+};

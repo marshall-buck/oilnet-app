@@ -1,5 +1,8 @@
 <template>
-  <h3 class="overlay">{{ title }}{{ data }}</h3>
+  <div class="flex">
+    <h3 class="overlay pr-2">{{ title }}</h3>
+    <h3 class="overlay text-right">{{ data }}</h3>
+  </div>
 </template>
 
 <script>

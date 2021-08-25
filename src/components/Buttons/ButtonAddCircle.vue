@@ -16,11 +16,17 @@
   </button-base>
 </template>
 <script>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
-    const clicked = () => console.log('Add Circle Clicked');
+    const store = useStore();
+    const isCircleToolActive = computed(() => store.getters.isCircleToolActive);
     return {
-      clicked,
+      clicked: () => {
+        if (isCircleToolActive.value === false)
+          store.dispatch('toggleCircleTool');
+      },
     };
   },
 };

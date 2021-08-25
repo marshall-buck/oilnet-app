@@ -11,7 +11,8 @@ export const getDefaultState = () => {
       windowCenter: 2000,
     },
 
-    newDicomLoaded: false,
+    sampleInfo: {},
+    isCircleToolActive: false,
 
     csvHistogram: [],
 

@@ -18,3 +18,10 @@ export const loadStoreStack = (state, value) => {
 export const resetState = (state) => {
   Object.assign(state, getDefaultState());
 };
+export const sampleInfo = (state, value) => {
+  state.sampleInfo = value;
+};
+
+export const toggleCircleTool = (state) => {
+  state.isCircleToolActive = !state.isCircleToolActive;
+};

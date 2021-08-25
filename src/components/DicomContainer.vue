@@ -7,11 +7,13 @@ import * as cornerstone from 'cornerstone-core';
 import * as cornerstoneTools from 'cornerstone-tools';
 // import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import { computed, onMounted, ref, watch } from 'vue';
-
 import { useStore } from 'vuex';
+
+import { getSampleInfo } from '../helpers/helpers';
 
 export default {
   setup() {
+    const circleRoiTool = cornerstoneTools.CircleRoiTool;
     const StackScrollMouseWheelTool =
       cornerstoneTools.StackScrollMouseWheelTool;
     const dicom = ref(null);
@@ -22,6 +24,7 @@ export default {
     const windowCenter = computed(() => store.getters.windowCenter);
     const scale = computed(() => store.getters.scale);
     const stack = computed(() => store.getters.stack);
+    const isCircleActive = computed(() => store.getters.isCircleToolActive);
 
     watch(imageIds, (newValue) => {
       if (newValue.length > 0) {
@@ -42,6 +45,8 @@ export default {
             cornerstoneTools.addToolState(dicom.value, 'stack', stack.value);
             // windowing.setWindowInputValues();
             // windowing.setSliderInputValues();
+            const info = getSampleInfo(image);
+            store.dispatch('sampleInfo', info);
             // setViewportInfo(image, viewportOptions);
             // TODO: Prevent StackScrollMouseWheel form begin added twice
             cornerstoneTools.addTool(StackScrollMouseWheelTool);
@@ -61,7 +66,15 @@ export default {
       viewport.voi.windowCenter = defaultLevels.value.windowCenter;
       cornerstone.setViewport(dicom.value, viewport);
     });
-
+    watch(isCircleActive, () => {
+      if (isCircleActive.value) {
+        cornerstoneTools.addTool(circleRoiTool);
+        cornerstoneTools.setToolActive('CircleRoi', { mouseButtonMask: 1 });
+      } else {
+        cornerstoneTools.clearToolState(dicom.value, 'CircleRoi');
+        cornerstone.updateImage(dicom.value);
+      }
+    });
     onMounted(() => {
       // console.log(defaultLevels, scale, StackScrollMouseWheelTool);
 

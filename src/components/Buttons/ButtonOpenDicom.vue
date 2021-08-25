@@ -48,32 +48,4 @@ export default {
     };
   },
 };
-
-// function openFiles() {
-//   store.histogram = store.nullOutHistogram();
-//   store.setImageData = [];
-//   store.images = [];
-//   deleteTable();
-//   destroyAllCharts(['intensity-chart', 'hist-chart']);
-//   cornerstone.imageCache.purgeCache();
-//   store.setMeasurements = [store.labels];
-
-//   store.stack.imageIds = [];
-//   let input = document.createElement('input');
-//   input.type = 'file';
-//   input.multiple = true;
-//   input.onchange = (_) => {
-//     let files = input.files;
-
-//     for (let i = 0; i < files.length; i++) {
-//       store.stack.imageIds.push(
-//         cornerstoneWADOImageLoader.wadouri.fileManager.add(files[i])
-//       );
-//     }
-
-//     loadStack();
-//   };
-//   input.click();
-//   input.remove();
-// }
 </script>

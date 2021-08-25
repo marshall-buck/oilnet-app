@@ -8,6 +8,9 @@
 <script>
 import ToolBar from './components/ToolBar.vue';
 import MiddleContainer from './components/MiddleContainer.vue';
+import * as cornerstone from 'cornerstone-core';
+// import * as cornerstoneTools from 'cornerstone-tools';
+import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 
 import { onMounted } from 'vue';
 import { useStore } from 'vuex';
@@ -29,6 +32,11 @@ export default {
       // Should be false
       console.log(arg, store.getters.isStudyIdModal);
     });
+
+    cornerstone.registerImageLoader(
+      'wadouri',
+      cornerstoneWADOImageLoader.loadImage
+    );
 
     onMounted(() => {
       console.log('app mounted');

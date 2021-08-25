@@ -11,6 +11,7 @@ import MiddleContainer from './components/MiddleContainer.vue';
 import * as cornerstone from 'cornerstone-core';
 // import * as cornerstoneTools from 'cornerstone-tools';
 import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+import initCornerstone from './helpers/initCornerStone';
 
 import { onMounted } from 'vue';
 import { useStore } from 'vuex';
@@ -32,7 +33,7 @@ export default {
       // Should be false
       console.log(arg, store.getters.isStudyIdModal);
     });
-
+    initCornerstone();
     cornerstone.registerImageLoader(
       'wadouri',
       cornerstoneWADOImageLoader.loadImage

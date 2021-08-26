@@ -8,15 +8,15 @@
       <OverlayItem title="Depth: " :data="depth" />
     </div>
     <div id="middle-left" class="overlay text-white space-y-2">
-      <OverlayItem title="Area: " :data="sampleNo" />
-      <OverlayItem title="StdDev: " :data="sampleNo" />
-      <OverlayItem title="Mean Hu: " :data="sampleNo" />
+      <OverlayItem title="Area: " :data="area" />
+      <OverlayItem title="StdDev: " :data="stdDev" />
+      <OverlayItem title="Mean Hu: " :data="meanHu" />
 
       <br />
 
-      <OverlayItem title="Min: " :data="sampleNo" />
-      <OverlayItem title="Max: " :data="sampleNo" />
-      <OverlayItem title="Count: " :data="sampleNo" />
+      <OverlayItem title="Min: " :data="min" />
+      <OverlayItem title="Max: " :data="max" />
+      <OverlayItem title="Count: " :data="count" />
     </div>
     <WindowingInputs />
   </div>
@@ -37,9 +37,12 @@ export default {
       sampleNo: computed(() => store.getters.sampleNo),
       depth: computed(() => store.getters.depth),
       job: computed(() => store.getters.job),
-      // client: computed(() => store.getters.client),
-      // client: computed(() => store.getters.client),
-      // client: computed(() => store.getters.client),
+      min: computed(() => store.getters.min),
+      max: computed(() => store.getters.max),
+      area: computed(() => parseFloat(store.getters.area).toFixed(2)),
+      stdDev: computed(() => parseFloat(store.getters.stdDev).toFixed(2)),
+      count: computed(() => store.getters.count),
+      meanHu: computed(() => parseFloat(store.getters.meanHu).toFixed(2)),
     };
   },
 };

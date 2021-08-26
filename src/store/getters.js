@@ -14,5 +14,12 @@ export const job = (state) => state.sampleInfo.job;
 export const sampleNo = (state) => state.sampleInfo.sampleNo;
 export const studyNo = (state) => state.sampleInfo.studyNo;
 export const well = (state) => state.sampleInfo.well;
+
 export const isCircleToolActive = (state) => state.isCircleToolActive;
-export const isClearLastCircle = (state) => state.isClearLastCircle;
+// Live Data
+export const area = (state) => state.liveData.area;
+export const stdDev = (state) => state.liveData.stdDev;
+export const min = (state) => state.liveData.min;
+export const max = (state) => state.liveData.max;
+export const count = (state) => state.liveData.count;
+export const meanHu = (state) => state.liveData.meanHu;

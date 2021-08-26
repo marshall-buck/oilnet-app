@@ -30,10 +30,33 @@ export default {
       return cornerstoneTools.getToolState(dicom.value, tool);
     };
 
-    onMounted(() => {
-      console.log(cornerstoneTools);
+    function displayOverlayData() {
+      const data = getToolState('CircleRoi').data[0].cachedStats;
 
+      if (data) {
+        store.dispatch('area', data.area);
+        store.dispatch('min', data.min);
+        store.dispatch('meanHu', data.mean);
+        store.dispatch('stdDev', data.stdDev);
+        store.dispatch('count', data.count);
+        store.dispatch('max', data.max);
+      }
+    }
+
+    onMounted(() => {
       cornerstone.enable(dicom.value);
+      dicom.value.addEventListener(
+        'cornerstonetoolsmeasurementmodified',
+        () => {
+          displayOverlayData();
+        }
+      );
+      dicom.value.addEventListener(
+        'cornerstonetoolsmeasurementcompleted',
+        () => {
+          displayOverlayData();
+        }
+      );
     });
 
     watch(imageIds, (newValue) => {
@@ -76,6 +99,7 @@ export default {
       viewport.voi.windowCenter = defaultLevels.value.windowCenter;
       cornerstone.setViewport(dicom.value, viewport);
     });
+    // TODO: Figure out a way to hide cursor when circle tool is false
     watch(isCircleActive, () => {
       if (isCircleActive.value === true) {
         cornerstoneTools.addTool(circleRoiTool);

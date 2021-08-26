@@ -12,6 +12,7 @@ export const getDefaultState = () => {
     },
 
     sampleInfo: {},
+    liveData: {},
     isCircleToolActive: false,
     isClearLastCircle: false,
 

@@ -46,6 +46,14 @@ export const stdDev = ({ commit }, value) => {
 export const addImagePixelData = ({ commit }, value) => {
   commit('addImagePixelData', value);
 };
+
+export const deleteImagePixelData = ({ commit }, index) => {
+  commit('deleteImagePixelData', index);
+};
 export const addMeasurementTableData = ({ commit }, value) => {
   commit('addMeasurementTableData', value);
+};
+
+export const deleteMeasurementTableData = ({ commit }, index) => {
+  commit('deleteMeasurementTableData', index);
 };

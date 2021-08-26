@@ -29,7 +29,7 @@ export default {
     const isCircleActive = computed(() => store.getters.isCircleToolActive);
     const isClearLastCircle = computed(() => store.getters.isClearLastCircle);
     const imagePixelData = computed(() => store.getters.imagePixelData);
-    // const sampleNo = computed(() => store.getters.sampleNo);
+    const measurementTable = computed(() => store.getters.measurementTable);
     const axialDepth = computed(() => store.getters.axialDepth);
     const getToolState = (tool) => {
       return cornerstoneTools.getToolState(dicom.value, tool);
@@ -58,6 +58,12 @@ export default {
       store.dispatch('addImagePixelData', item);
       const mes = [Math.abs(parseInt(axialDepth.value)), ...rounded];
       store.dispatch('addMeasurementTableData', mes);
+      const sentData = {
+        measurement: JSON.stringify(measurementTable.value),
+        hist: JSON.stringify(imagePixelData.value),
+      };
+
+      window.api.send('data-sent', sentData);
     }
 
     onMounted(() => {
@@ -86,7 +92,7 @@ export default {
 
     watch(imagePixelData, () => {
       // send data object for measurement table
-      // send data object for int chrt
+      // send data object for int chart
       // send data object for histogram chart
     });
 

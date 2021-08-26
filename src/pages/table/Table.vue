@@ -51,16 +51,17 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 export default {
   setup() {
-    window.api.receive('from-main', (e, arg) => {
-      console.log(e, arg);
+    const data = ref();
+    window.api.receive('table-data', (arg) => {
+      data.value = arg;
     });
     onMounted(() => {
       console.log('From Table');
     });
-    const clicked = () => alert('div clicked');
+    const clicked = () => console.log(data.value);
     return {
       clicked,
     };

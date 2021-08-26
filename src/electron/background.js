@@ -74,7 +74,13 @@ app.on('ready', async () => {
   mainWindow = await createWindow('', 'index.html', mainOptions);
   mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.on('closed', () => app.quit());
-
+  measurementWindow = await createWindow(
+    'table',
+    'table.html',
+    measurementOptions
+  );
+  measurementWindow.setParentWindow(mainWindow);
+  measurementWindow.once('ready-to-show', () => measurementWindow.show());
   // measurementWindow.hide();
   downloadStudyWin = await createWindow(
     'downloadStudy',
@@ -144,21 +150,20 @@ ipcMain.on('close-studyId-modal', () => {
 // eslint-disable-next-line no-unused-vars
 ipcMain.on('record-data-pressed', async (e, arg) => {
   mainWindow.webContents.send('record-data-pressed:reply', { fake: 'data' });
-  // if (!measurementWindow) {
 
-  //   measurementWindow = await createWindow(
-  //     'table',
-  //     'table.html',
-  //     measurementOptions
-  //   );
-  //   measurementWindow.setParentWindow(mainWindow);
-  //   measurementWindow.show();
-  // }
+  // measurementWindow.show();
+
   // measurementWindow.webContents.reload();
-  console.log(arg);
+  // console.log(arg);
 });
 
 ipcMain.on('from-test-button', (e, args) => {
   console.log(e, args);
   // downloadStudyWin.show();
+});
+
+ipcMain.on('data-sent', (e, args) => {
+  console.log(args.measurement);
+
+  measurementWindow.webContents.send('table-data', args.measurement);
 });

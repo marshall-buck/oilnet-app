@@ -23,3 +23,4 @@ export const min = (state) => state.liveData.min;
 export const max = (state) => state.liveData.max;
 export const count = (state) => state.liveData.count;
 export const meanHu = (state) => state.liveData.meanHu;
+export const liveData = (state) => state.liveData;

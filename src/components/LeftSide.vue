@@ -39,10 +39,19 @@ export default {
       job: computed(() => store.getters.job),
       min: computed(() => store.getters.min),
       max: computed(() => store.getters.max),
-      area: computed(() => parseFloat(store.getters.area).toFixed(2)),
-      stdDev: computed(() => parseFloat(store.getters.stdDev).toFixed(2)),
+      area: computed(() => {
+        if (isNaN(store.getters.area)) return '';
+        return parseFloat(store.getters.area).toFixed(2);
+      }),
+      stdDev: computed(() => {
+        if (isNaN(store.getters.stdDev)) return '';
+        return parseFloat(store.getters.stdDev).toFixed(2);
+      }),
       count: computed(() => store.getters.count),
-      meanHu: computed(() => parseFloat(store.getters.meanHu).toFixed(2)),
+      meanHu: computed(() => {
+        if (isNaN(store.getters.meanHu)) return '';
+        return parseFloat(store.getters.meanHu).toFixed(2);
+      }),
     };
   },
 };

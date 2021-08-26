@@ -32,7 +32,6 @@ export default {
 
     function displayOverlayData() {
       const data = getToolState('CircleRoi').data[0].cachedStats;
-
       if (data) {
         store.dispatch('area', data.area);
         store.dispatch('min', data.min);
@@ -57,6 +56,11 @@ export default {
           displayOverlayData();
         }
       );
+      dicom.value.addEventListener('cornerstonenewimage', (e) => {
+        const info = getSampleInfo(e.detail.image);
+        store.dispatch('sampleInfo', info);
+        // console.log(e);
+      });
     });
 
     watch(imageIds, (newValue) => {
@@ -78,8 +82,8 @@ export default {
             cornerstoneTools.addToolState(dicom.value, 'stack', stack.value);
             // windowing.setWindowInputValues();
             // windowing.setSliderInputValues();
-            const info = getSampleInfo(image);
-            store.dispatch('sampleInfo', info);
+            // const info = getSampleInfo(image);
+            // store.dispatch('sampleInfo', info);
             // setViewportInfo(image, viewportOptions);
             // TODO: Prevent StackScrollMouseWheel form begin added twice
             cornerstoneTools.addTool(StackScrollMouseWheelTool);

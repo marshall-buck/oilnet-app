@@ -26,3 +26,5 @@ export const meanHu = (state) => state.liveData.meanHu;
 export const liveData = (state) => state.liveData;
 
 export const imagePixelData = (state) => state.imagePixelData;
+
+export const measurementTable = (state) => state.measurementTable;

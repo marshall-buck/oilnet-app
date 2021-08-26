@@ -48,6 +48,10 @@ export const meanHu = (state, value) => {
   state.liveData.meanHu = value;
 };
 
-export const imagePixelData = (state, value) => {
+export const addImagePixelData = (state, value) => {
   state.imagePixelData = [...state.imagePixelData, value];
+};
+
+export const addMeasurementTableData = (state, value) => {
+  state.measurementTable = [...state.measurementTable, value];
 };

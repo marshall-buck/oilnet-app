@@ -10,17 +10,18 @@ export const getDefaultState = () => {
       windowWidth: 2000,
       windowCenter: 2000,
     },
-
+    // Parsed from the dicom image for viewport display and image information
     sampleInfo: {},
+    // Holds live date while using Circle Tool
     liveData: {},
     isCircleToolActive: false,
     isClearLastCircle: false,
 
     csvHistogram: [],
-
+    // An {name: "dicom:0..", data: [an array of pixels for histogram chart]}
     imagePixelData: [],
     jpgImageData: [],
-    currentImageStats: {},
+
     histogram: {
       xAxis: [],
       yAxis: [],
@@ -28,7 +29,7 @@ export const getDefaultState = () => {
       min: 0,
       max: 0,
     },
-    measurements: [],
+    measurementTable: [],
     chartTitle: '',
   };
 };

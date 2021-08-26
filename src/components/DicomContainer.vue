@@ -5,8 +5,8 @@
 <script>
 import * as cornerstone from 'cornerstone-core';
 import * as cornerstoneTools from 'cornerstone-tools';
-// import omit from 'lodash.omit';
-// import ceil from 'lodash.ceil';
+import omit from 'lodash.omit';
+import ceil from 'lodash.ceil';
 // import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
@@ -28,6 +28,9 @@ export default {
     const stack = computed(() => store.getters.stack);
     const isCircleActive = computed(() => store.getters.isCircleToolActive);
     const isClearLastCircle = computed(() => store.getters.isClearLastCircle);
+    const imagePixelData = computed(() => store.getters.imagePixelData);
+    // const sampleNo = computed(() => store.getters.sampleNo);
+    const axialDepth = computed(() => store.getters.axialDepth);
     const getToolState = (tool) => {
       return cornerstoneTools.getToolState(dicom.value, tool);
     };
@@ -44,33 +47,17 @@ export default {
       }
     }
 
-    function recordDataRow() {
+    function recordImageData() {
       const data = getToolState('CircleRoi');
-      // console.log(data);
       if (data.data.length === 0) return;
-      // const stats = data.data[0].cachedStats;
+      const stats = data.data[0].cachedStats;
       const handles = data.data[0].handles;
-
-      // const newData = Object.values(omit(stats, ['meanStdDevSUV', 'variance']));
-      // const rounded = newData.map((e) => ceil(e, 2));
+      const newData = Object.values(omit(stats, ['meanStdDevSUV', 'variance']));
+      const rounded = newData.map((e) => ceil(e, 2));
       const item = recordImagePixelDataToStore(dicom.value, handles);
-
-      console.log(item);
-      store.dispatch('imagePixelData', item);
-      // return item;
-
-      // const mes = [
-      //   store.currentImageStats.sampleNo,
-      //   Math.abs(parseInt(store.currentImageStats.axialDepth)),
-      //   ...rounded,
-      // ];
-      // const before = store.getMeasurements;
-      // before.push(mes);
-
-      // store.setMeasurements = before;
-
-      // console.log(store.getMeasurements);
-      // createTable(store.getMeasurements);
+      store.dispatch('addImagePixelData', item);
+      const mes = [Math.abs(parseInt(axialDepth.value)), ...rounded];
+      store.dispatch('addMeasurementTableData', mes);
     }
 
     onMounted(() => {
@@ -92,10 +79,15 @@ export default {
         store.dispatch('sampleInfo', info);
         // console.log(e);
       });
-      window.api.receive('record-data-pressed:reply', (args) => {
-        console.log(args);
-        recordDataRow();
+      window.api.receive('record-data-pressed:reply', () => {
+        recordImageData();
       });
+    });
+
+    watch(imagePixelData, () => {
+      // send data object for measurement table
+      // send data object for int chrt
+      // send data object for histogram chart
     });
 
     watch(imageIds, (newValue) => {

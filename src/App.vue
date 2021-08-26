@@ -23,6 +23,7 @@ export default {
 
   setup() {
     const store = useStore();
+
     window.api.receive('open-studyId-modal:reply', (arg) => {
       store.dispatch('toggleStudyIdModal');
       // Should log True

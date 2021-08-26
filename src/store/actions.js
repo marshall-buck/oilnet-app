@@ -43,6 +43,9 @@ export const meanHu = ({ commit }, value) => {
 export const stdDev = ({ commit }, value) => {
   commit('stdDev', value);
 };
-export const imagePixelData = ({ commit }, value) => {
-  commit('imagePixelData', value);
+export const addImagePixelData = ({ commit }, value) => {
+  commit('addImagePixelData', value);
+};
+export const addMeasurementTableData = ({ commit }, value) => {
+  commit('addMeasurementTableData', value);
 };

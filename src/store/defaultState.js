@@ -18,7 +18,7 @@ export const getDefaultState = () => {
 
     csvHistogram: [],
 
-    imageData: [],
+    imagePixelData: [],
     jpgImageData: [],
     currentImageStats: {},
     histogram: {

@@ -47,3 +47,7 @@ export const count = (state, value) => {
 export const meanHu = (state, value) => {
   state.liveData.meanHu = value;
 };
+
+export const imagePixelData = (state, value) => {
+  state.imagePixelData = [...state.imagePixelData, value];
+};

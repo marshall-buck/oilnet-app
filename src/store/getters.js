@@ -24,3 +24,5 @@ export const max = (state) => state.liveData.max;
 export const count = (state) => state.liveData.count;
 export const meanHu = (state) => state.liveData.meanHu;
 export const liveData = (state) => state.liveData;
+
+export const imagePixelData = (state) => state.imagePixelData;

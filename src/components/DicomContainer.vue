@@ -5,11 +5,13 @@
 <script>
 import * as cornerstone from 'cornerstone-core';
 import * as cornerstoneTools from 'cornerstone-tools';
+// import omit from 'lodash.omit';
+// import ceil from 'lodash.ceil';
 // import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import { getSampleInfo } from '../helpers/helpers';
+import { getSampleInfo, recordImagePixelDataToStore } from '../helpers/helpers';
 
 export default {
   setup() {
@@ -42,6 +44,35 @@ export default {
       }
     }
 
+    function recordDataRow() {
+      const data = getToolState('CircleRoi');
+      // console.log(data);
+      if (data.data.length === 0) return;
+      // const stats = data.data[0].cachedStats;
+      const handles = data.data[0].handles;
+
+      // const newData = Object.values(omit(stats, ['meanStdDevSUV', 'variance']));
+      // const rounded = newData.map((e) => ceil(e, 2));
+      const item = recordImagePixelDataToStore(dicom.value, handles);
+
+      console.log(item);
+      store.dispatch('imagePixelData', item);
+      // return item;
+
+      // const mes = [
+      //   store.currentImageStats.sampleNo,
+      //   Math.abs(parseInt(store.currentImageStats.axialDepth)),
+      //   ...rounded,
+      // ];
+      // const before = store.getMeasurements;
+      // before.push(mes);
+
+      // store.setMeasurements = before;
+
+      // console.log(store.getMeasurements);
+      // createTable(store.getMeasurements);
+    }
+
     onMounted(() => {
       cornerstone.enable(dicom.value);
       dicom.value.addEventListener(
@@ -60,6 +91,10 @@ export default {
         const info = getSampleInfo(e.detail.image);
         store.dispatch('sampleInfo', info);
         // console.log(e);
+      });
+      window.api.receive('record-data-pressed:reply', (args) => {
+        console.log(args);
+        recordDataRow();
       });
     });
 

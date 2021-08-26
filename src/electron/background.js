@@ -143,16 +143,18 @@ ipcMain.on('close-studyId-modal', () => {
 });
 // eslint-disable-next-line no-unused-vars
 ipcMain.on('record-data-pressed', async (e, arg) => {
-  if (!measurementWindow) {
-    measurementWindow = await createWindow(
-      'table',
-      'table.html',
-      measurementOptions
-    );
-    measurementWindow.setParentWindow(mainWindow);
-    measurementWindow.show();
-  }
-  measurementWindow.webContents.reload();
+  mainWindow.webContents.send('record-data-pressed:reply', { fake: 'data' });
+  // if (!measurementWindow) {
+
+  //   measurementWindow = await createWindow(
+  //     'table',
+  //     'table.html',
+  //     measurementOptions
+  //   );
+  //   measurementWindow.setParentWindow(mainWindow);
+  //   measurementWindow.show();
+  // }
+  // measurementWindow.webContents.reload();
   console.log(arg);
 });
 

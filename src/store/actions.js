@@ -21,3 +21,6 @@ export const sampleInfo = ({ commit }, value) => {
 export const toggleCircleTool = ({ commit }) => {
   commit('toggleCircleTool');
 };
+export const toggleClearLastCircle = ({ commit }) => {
+  commit('toggleClearLastCircle');
+};

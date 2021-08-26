@@ -25,6 +25,16 @@ export default {
     const scale = computed(() => store.getters.scale);
     const stack = computed(() => store.getters.stack);
     const isCircleActive = computed(() => store.getters.isCircleToolActive);
+    const isClearLastCircle = computed(() => store.getters.isClearLastCircle);
+    const getToolState = (tool) => {
+      return cornerstoneTools.getToolState(dicom.value, tool);
+    };
+
+    onMounted(() => {
+      console.log(cornerstoneTools);
+
+      cornerstone.enable(dicom.value);
+    });
 
     watch(imageIds, (newValue) => {
       if (newValue.length > 0) {
@@ -67,18 +77,28 @@ export default {
       cornerstone.setViewport(dicom.value, viewport);
     });
     watch(isCircleActive, () => {
-      if (isCircleActive.value) {
+      if (isCircleActive.value === true) {
         cornerstoneTools.addTool(circleRoiTool);
         cornerstoneTools.setToolActive('CircleRoi', { mouseButtonMask: 1 });
       } else {
         cornerstoneTools.clearToolState(dicom.value, 'CircleRoi');
-        cornerstone.updateImage(dicom.value);
+        cornerstoneTools.setToolDisabled('CircleRoi', { mouseButtonMask: 1 });
+
+        if (imageIds.value.length !== 0) cornerstone.updateImage(dicom.value);
       }
     });
-    onMounted(() => {
-      // console.log(defaultLevels, scale, StackScrollMouseWheelTool);
 
-      cornerstone.enable(dicom.value);
+    watch(isClearLastCircle, () => {
+      if (isClearLastCircle.value === true) {
+        const data = getToolState('CircleRoi');
+        cornerstoneTools.removeToolState(
+          dicom.value,
+          'CircleRoi',
+          data.data.pop()
+        );
+        cornerstone.updateImage(dicom.value);
+        store.dispatch('toggleClearLastCircle');
+      }
     });
 
     return {

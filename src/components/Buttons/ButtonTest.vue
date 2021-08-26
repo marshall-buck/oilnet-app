@@ -7,12 +7,15 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import * as cornerstoneTools from 'cornerstone-tools';
 export default {
   setup() {
     const store = useStore();
     const clicked = () => {
-      const def = { ...store.getters.defaultLevels, text: 'From Test Button' };
-      window.api.send('from-test-button', JSON.stringify(def));
+      // const def = { ...store.getters.defaultLevels, text: 'From Test Button' };
+      // window.api.send('from-test-button', JSON.stringify(def));
+      console.log(store);
+      console.log(cornerstoneTools);
     };
 
     const testMode = ref();

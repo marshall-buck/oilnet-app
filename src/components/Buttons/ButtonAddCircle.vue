@@ -22,10 +22,12 @@ export default {
   setup() {
     const store = useStore();
     const isCircleToolActive = computed(() => store.getters.isCircleToolActive);
+    const imageIds = computed(() => store.getters.imageIds);
     return {
       clicked: () => {
-        if (isCircleToolActive.value === false)
-          store.dispatch('toggleCircleTool');
+        if (imageIds.value.length === 0 || isCircleToolActive.value === true)
+          return;
+        store.dispatch('toggleCircleTool');
       },
     };
   },

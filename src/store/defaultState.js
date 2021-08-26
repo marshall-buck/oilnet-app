@@ -13,6 +13,7 @@ export const getDefaultState = () => {
 
     sampleInfo: {},
     isCircleToolActive: false,
+    isClearLastCircle: false,
 
     csvHistogram: [],
 

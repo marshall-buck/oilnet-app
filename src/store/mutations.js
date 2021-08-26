@@ -25,3 +25,6 @@ export const sampleInfo = (state, value) => {
 export const toggleCircleTool = (state) => {
   state.isCircleToolActive = !state.isCircleToolActive;
 };
+export const toggleClearLastCircle = (state) => {
+  state.isClearLastCircle = !state.isClearLastCircle;
+};

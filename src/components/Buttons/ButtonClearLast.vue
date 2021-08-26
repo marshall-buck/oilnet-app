@@ -16,11 +16,19 @@
   </button-base>
 </template>
 <script>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
-    const clicked = () => console.log('Clear Last');
+    const store = useStore();
+    const isCircleToolActive = computed(() => store.getters.isCircleToolActive);
+    const imageIds = computed(() => store.getters.imageIds);
     return {
-      clicked,
+      clicked: () => {
+        if (imageIds.value.length === 0 || isCircleToolActive.value === false)
+          return;
+        store.dispatch('toggleClearLastCircle');
+      },
     };
   },
 };

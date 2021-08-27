@@ -11,7 +11,8 @@ contextBridge.exposeInMainWorld('api', {
       'close-studyId-modal',
       'from-test-button',
       'record-data-pressed',
-      'data-sent',
+      'image-data-recorded',
+      'delete-data-at',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
@@ -23,7 +24,8 @@ contextBridge.exposeInMainWorld('api', {
       'open-studyId-modal:reply',
       'close-studyId-modal:reply',
       'record-data-pressed:reply',
-      'table-data',
+      'table-data:reply',
+      'delete-data-at:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

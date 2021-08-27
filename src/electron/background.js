@@ -2,7 +2,7 @@
 
 import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
-// eslint-disable-next-line no-unused-vars
+
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
@@ -14,8 +14,9 @@ const path = require('path');
 
 const {
   mainOptions,
-  measurementOptions,
+  histogramOptions,
   downloadStudyOptions,
+  tableOptions,
 } = require('./windowOptions');
 
 // TODO: Python Packager
@@ -26,8 +27,9 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 let mainWindow;
-let measurementWindow;
+let tableWindow;
 let downloadStudyWin;
+let histogramWindow;
 
 async function createWindow(devPath, prodPath, options) {
   // Create the browser window.
@@ -74,13 +76,16 @@ app.on('ready', async () => {
   mainWindow = await createWindow('', 'index.html', mainOptions);
   mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.on('closed', () => app.quit());
-  measurementWindow = await createWindow(
-    'table',
-    'table.html',
-    measurementOptions
+  tableWindow = await createWindow('table', 'table.html', tableOptions);
+  tableWindow.setParentWindow(mainWindow);
+  tableWindow.once('ready-to-show', () => tableWindow.show());
+  histogramWindow = await createWindow(
+    'histChart',
+    'histChart.html',
+    histogramOptions
   );
-  measurementWindow.setParentWindow(mainWindow);
-  measurementWindow.once('ready-to-show', () => measurementWindow.show());
+  histogramWindow.setParentWindow(mainWindow);
+  histogramWindow.once('ready-to-show', () => histogramWindow.show());
   // measurementWindow.hide();
   downloadStudyWin = await createWindow(
     'downloadStudy',
@@ -147,26 +152,23 @@ ipcMain.on('close-studyId-modal', () => {
   downloadStudyWin.hide();
   mainWindow.webContents.send('close-studyId-modal:reply', false);
 });
-// eslint-disable-next-line no-unused-vars
-ipcMain.on('record-data-pressed', async (e, arg) => {
-  mainWindow.webContents.send('record-data-pressed:reply', { fake: 'data' });
 
-  // measurementWindow.show();
-
-  // measurementWindow.webContents.reload();
-  // console.log(arg);
+ipcMain.on('record-data-pressed', async () => {
+  mainWindow.webContents.send('record-data-pressed:reply');
 });
 
 ipcMain.on('from-test-button', (e, args) => {
-  console.log(e, args);
-  // downloadStudyWin.show();
+  console.log(args);
 });
+// send proper data back to when data is recorded
+ipcMain.on('image-data-recorded', (e, args) => {
+  // TODO:send data to histogram
+  // TODO:send data to intensity
 
-ipcMain.on('data-sent', (e, args) => {
-  console.log(args.measurement);
-
-  measurementWindow.webContents.send('table-data', [
-    args.measurement,
-    args.sampleNo,
-  ]);
+  tableWindow.webContents.send('table-data:reply', [args.table, args.sampleNo]);
+});
+// Delete measurement when table row index is deleted
+ipcMain.on('delete-data-at', (e, arg) => {
+  console.log(arg);
+  mainWindow.webContents.send('delete-data-at:reply', arg);
 });

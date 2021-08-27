@@ -4,7 +4,7 @@ exports.mainOptions = {
   title: 'Ct App',
   backgroundColor: '#000',
 };
-exports.measurementOptions = {
+exports.tableOptions = {
   width: 600,
   height: 300,
   title: 'Measurements',
@@ -16,4 +16,10 @@ exports.downloadStudyOptions = {
   title: 'Download Studies',
   show: false,
   frame: false,
+};
+exports.histogramOptions = {
+  width: 550,
+  height: 250,
+  title: 'Histogram',
+  show: false,
 };

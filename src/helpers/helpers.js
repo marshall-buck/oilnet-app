@@ -2,6 +2,17 @@ import * as cornerstone from 'cornerstone-core';
 
 import getCircleCoords from '../circleMath/getCircleCoords';
 import { getPixelsInside } from '../circleMath/getPixelsInside';
+export function prepareDataForTable(arr) {
+  return {
+    depth: arr[0].toString(),
+    area: arr[1].toString(),
+    count: arr[2].toString(),
+    mean: arr[3].toString(),
+    std: arr[4].toString(),
+    min: arr[5].toString(),
+    max: arr[6].toString(),
+  };
+}
 
 // // Record and delete image data when creating/deleting a measurement
 export function recordImagePixelDataToStore(element, handles) {

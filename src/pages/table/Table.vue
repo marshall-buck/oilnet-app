@@ -51,14 +51,14 @@
     </table>
   </div>
 </template>
-
+// TODO: Delete data rows
 <script>
 import { onMounted, ref } from 'vue';
 export default {
   setup() {
     const data = ref(null);
     const title = ref('');
-    window.api.receive('table-data', (arg) => {
+    window.api.receive('table-data:reply', (arg) => {
       data.value = JSON.parse(arg[0]);
       title.value = JSON.parse(arg[1]);
     });
@@ -66,8 +66,10 @@ export default {
     onMounted(() => {
       console.log('From Table');
     });
-
-    const indexClicked = (index) => console.log(index);
+    // Send index to delete
+    const indexClicked = (index) => {
+      window.api.send('delete-data-at', index);
+    };
     return {
       data,
       indexClicked,

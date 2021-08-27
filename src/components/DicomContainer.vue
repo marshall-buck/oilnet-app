@@ -11,7 +11,11 @@ import ceil from 'lodash.ceil';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import { getSampleInfo, recordImagePixelDataToStore } from '../helpers/helpers';
+import {
+  getSampleInfo,
+  recordImagePixelDataToStore,
+  prepareDataForTable,
+} from '../helpers/helpers';
 
 export default {
   setup() {
@@ -62,24 +66,17 @@ export default {
         Math.abs(parseInt(axialDepth.value)),
         ...rounded,
       ];
-      const measurementObj = {
-        depth: measurementArray[0].toString(),
-        area: measurementArray[1].toString(),
-        count: measurementArray[2].toString(),
-        mean: measurementArray[3].toString(),
-        std: measurementArray[4].toString(),
-        min: measurementArray[5].toString(),
-        max: measurementArray[6].toString(),
-      };
+      const measurementObj = prepareDataForTable(measurementArray);
 
       store.dispatch('addMeasurementTableData', measurementObj);
+      //TODO:add intensity chart to data sent
       const sentData = {
-        measurement: JSON.stringify(measurementTable.value),
+        table: JSON.stringify(measurementTable.value),
         hist: JSON.stringify(imagePixelData.value),
         sampleNo: sampleNo.value,
       };
-
-      window.api.send('data-sent', sentData);
+      // Sends data for table and histogram
+      window.api.send('image-data-recorded', sentData);
     }
 
     onMounted(() => {
@@ -104,12 +101,12 @@ export default {
       window.api.receive('record-data-pressed:reply', () => {
         recordImageData();
       });
-    });
-
-    watch(imagePixelData, () => {
-      // send data object for measurement table
-      // send data object for int chart
-      // send data object for histogram chart
+      window.api.receive('delete-data-at:reply', (arg) => {
+        // TODO:delete data row
+        console.log(arg);
+        store.dispatch('deleteImagePixelData', arg);
+        store.dispatch('deleteMeasurementTableData', arg);
+      });
     });
 
     watch(imageIds, (newValue) => {
@@ -129,11 +126,7 @@ export default {
               'CircleRoi',
             ]);
             cornerstoneTools.addToolState(dicom.value, 'stack', stack.value);
-            // windowing.setWindowInputValues();
-            // windowing.setSliderInputValues();
-            // const info = getSampleInfo(image);
-            // store.dispatch('sampleInfo', info);
-            // setViewportInfo(image, viewportOptions);
+
             // TODO: Prevent StackScrollMouseWheel form begin added twice
             cornerstoneTools.addTool(StackScrollMouseWheelTool);
             cornerstoneTools.setToolActive('StackScrollMouseWheel', {});

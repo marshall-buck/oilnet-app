@@ -51,10 +51,12 @@ async function createWindow(devPath, prodPath, options) {
     // Load the index.html when not in development
     window.loadURL(`app://./${prodPath}`);
   }
+  if (window.getTitle() === 'Ct App') {
+    window.on('closed', () => {
+      window = null;
+    });
+  }
 
-  window.on('closed', () => {
-    window = null;
-  });
   return window;
 }
 // This method will be called when Electron has finished
@@ -79,6 +81,10 @@ app.on('ready', async () => {
   tableWindow = await createWindow('table', 'table.html', tableOptions);
   tableWindow.setParentWindow(mainWindow);
   tableWindow.once('ready-to-show', () => tableWindow.show());
+  tableWindow.on('close', (e) => {
+    e.preventDefault();
+    tableWindow.hide();
+  });
   histogramWindow = await createWindow(
     'histChart',
     'histChart.html',
@@ -86,7 +92,11 @@ app.on('ready', async () => {
   );
   histogramWindow.setParentWindow(mainWindow);
   histogramWindow.once('ready-to-show', () => histogramWindow.show());
-  // measurementWindow.hide();
+  histogramWindow.on('close', (e) => {
+    e.preventDefault();
+    histogramWindow.hide();
+  });
+
   downloadStudyWin = await createWindow(
     'downloadStudy',
     'downloadStudy.html',
@@ -127,14 +137,11 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.on('open-studyId-modal', (e, arg) => {
+ipcMain.on('open-studyId-modal', () => {
   downloadStudyWin.show();
   mainWindow.webContents.send('open-studyId-modal:reply', true);
-
-  console.log(arg);
 });
 ipcMain.on('study-id-entered', async (e, arg) => {
-  console.log(arg);
   const regex = /^\d{5}$/;
   if (!arg.match(regex) || !arg) {
     // eslint-disable-next-line no-unused-vars
@@ -154,6 +161,7 @@ ipcMain.on('close-studyId-modal', () => {
 });
 
 ipcMain.on('record-data-pressed', async () => {
+  console.log(tableWindow.isVisible());
   mainWindow.webContents.send('record-data-pressed:reply');
 });
 
@@ -165,14 +173,14 @@ ipcMain.on('image-data-change', (e, args) => {
   // TODO:send data to intensity
   if (!args.sampleNo) return;
   histogramWindow.webContents.send('hist-data:reply', [
-    args.histogram,
     args.sampleNo,
+    args.table,
+    args.histogram,
   ]);
+
   tableWindow.webContents.send('table-data:reply', [args.table, args.sampleNo]);
-  console.log('image-data-changed');
 });
 // Delete measurement when table row index is deleted
 ipcMain.on('delete-data-at', (e, arg) => {
-  console.log(arg);
   mainWindow.webContents.send('delete-data-at:reply', arg);
 });

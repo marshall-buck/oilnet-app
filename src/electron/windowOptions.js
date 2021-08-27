@@ -1,6 +1,6 @@
 exports.mainOptions = {
   width: 1024,
-  height: 768,
+  height: 700,
   title: 'Ct App',
   backgroundColor: '#000',
 };

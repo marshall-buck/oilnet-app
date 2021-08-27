@@ -17,10 +17,8 @@
 </template>
 
 <script>
-// import { useStore } from 'vuex';
 export default {
   setup() {
-    // const store = useStore();
     const clicked = () =>
       window.api.send('record-data-pressed', 'record button pressed');
     return {

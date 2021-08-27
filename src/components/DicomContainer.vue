@@ -54,7 +54,8 @@ export default {
 
     function recordImageData() {
       const data = getToolState('CircleRoi');
-      if (data.data.length === 0) return;
+      if (data === undefined || data.data.length === 0) return;
+
       const stats = data.data[0].cachedStats;
       const handles = data.data[0].handles;
       const newData = Object.values(omit(stats, ['meanStdDevSUV', 'variance']));
@@ -88,14 +89,11 @@ export default {
       dicom.value.addEventListener('cornerstonenewimage', (e) => {
         const info = getSampleInfo(e.detail.image);
         store.dispatch('sampleInfo', info);
-        // console.log(e);
       });
       window.api.receive('record-data-pressed:reply', () => {
         recordImageData();
       });
       window.api.receive('delete-data-at:reply', (arg) => {
-        // TODO:delete data row
-        console.log(arg);
         store.dispatch('deleteImagePixelData', arg);
         store.dispatch('deleteMeasurementTableData', arg);
       });

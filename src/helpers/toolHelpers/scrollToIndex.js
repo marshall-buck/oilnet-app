@@ -62,7 +62,6 @@ export default function (element, newImageIdIndex) {
     // Check if the element is still enabled in Cornerstone,
     // If an error is thrown, stop here.
     try {
-      // TODO: Add 'isElementEnabled' to Cornerstone?
       cornerstone.getEnabledElement(element);
     } catch (error) {
       return;
@@ -110,9 +109,7 @@ export default function (element, newImageIdIndex) {
 
     Const config = stackScroll.getConfiguration();
 
-    TODO: Revisit this. It appears that Core's imageCache is not
-    keeping rejected promises anywhere, so we have no way to know
-    if something was previously rejected.
+  
 
     if (config && config.retryLoadOnScroll === true) {
     }

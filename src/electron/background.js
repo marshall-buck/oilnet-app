@@ -163,6 +163,7 @@ ipcMain.on('from-test-button', (e, args) => {
 // send proper data back to when data is recorded
 ipcMain.on('image-data-change', (e, args) => {
   // TODO:send data to intensity
+  if (!args.sampleNo) return;
   histogramWindow.webContents.send('hist-data:reply', [
     args.histogram,
     args.sampleNo,

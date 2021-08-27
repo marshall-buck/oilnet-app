@@ -52,14 +52,18 @@ export const addImagePixelData = (state, value) => {
   state.imagePixelData = [...state.imagePixelData, value];
 };
 
-export const deleteImagePixelData = (state, index) => {
-  state.imagePixelData.splice(index, 1);
-};
-
 export const addMeasurementTableData = (state, value) => {
   state.measurementTable = [...state.measurementTable, value];
 };
 
-export const deleteMeasurementTableData = (state, index) => {
-  state.measurementTable.splice(index, 1);
+export const deleteImagePixelData = (state, value) => {
+  state.imagePixelData = state.imagePixelData.filter(
+    (e, index) => index !== value
+  );
+};
+
+export const deleteMeasurementTableData = (state, value) => {
+  state.measurementTable = state.measurementTable.filter(
+    (e, index) => index !== value
+  );
 };

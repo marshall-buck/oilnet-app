@@ -69,14 +69,6 @@ export default {
       const measurementObj = prepareDataForTable(measurementArray);
 
       store.dispatch('addMeasurementTableData', measurementObj);
-      //TODO:add intensity chart to data sent
-      const sentData = {
-        table: JSON.stringify(measurementTable.value),
-        histogram: JSON.stringify(imagePixelData.value),
-        sampleNo: sampleNo.value,
-      };
-      // Sends data for table and histogram
-      window.api.send('image-data-recorded', sentData);
     }
 
     onMounted(() => {
@@ -134,7 +126,18 @@ export default {
           .catch((e) => console.log(e));
       }
     });
-
+    watch(imagePixelData, (o, n) => {
+      //TODO:add intensity chart to data sent
+      if (o === n) return;
+      const sentData = {
+        table: JSON.stringify(measurementTable.value),
+        histogram: JSON.stringify(imagePixelData.value),
+        sampleNo: sampleNo.value,
+      };
+      console.log(sentData.table);
+      // Sends data for table and histogram
+      window.api.send('image-data-change', sentData);
+    });
     watch(windowWidth, () => {
       const viewport = cornerstone.getViewport(dicom.value);
       viewport.voi.windowWidth = defaultLevels.value.windowWidth;

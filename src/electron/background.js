@@ -6,7 +6,7 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
-
+// TODO:position window correctly
 // const { spawn } = require('child_process');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -161,14 +161,14 @@ ipcMain.on('from-test-button', (e, args) => {
   console.log(args);
 });
 // send proper data back to when data is recorded
-ipcMain.on('image-data-recorded', (e, args) => {
-  // TODO:send data to histogram
+ipcMain.on('image-data-change', (e, args) => {
   // TODO:send data to intensity
   histogramWindow.webContents.send('hist-data:reply', [
     args.histogram,
     args.sampleNo,
   ]);
   tableWindow.webContents.send('table-data:reply', [args.table, args.sampleNo]);
+  console.log('image-data-changed');
 });
 // Delete measurement when table row index is deleted
 ipcMain.on('delete-data-at', (e, arg) => {

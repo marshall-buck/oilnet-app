@@ -53,7 +53,7 @@ export const addImagePixelData = (state, value) => {
 };
 
 export const deleteImagePixelData = (state, index) => {
-  state.imagePixelData = state.imagePixelData.splice(index, 1);
+  state.imagePixelData.splice(index, 1);
 };
 
 export const addMeasurementTableData = (state, value) => {
@@ -61,5 +61,5 @@ export const addMeasurementTableData = (state, value) => {
 };
 
 export const deleteMeasurementTableData = (state, index) => {
-  state.measurementTable = state.measurementTable.splice(index, 1);
+  state.measurementTable.splice(index, 1);
 };

@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white">
     <h1>{{ title }}</h1>
-    <p>{{ data }}</p>
+    <p v-for="(item, index) in data" :key="index">{{ item.name }}</p>
   </div>
 </template>
 

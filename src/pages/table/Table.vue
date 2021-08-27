@@ -58,13 +58,13 @@ export default {
   setup() {
     const data = ref(null);
     const title = ref('');
-    window.api.receive('table-data:reply', (arg) => {
-      data.value = JSON.parse(arg[0]);
-      title.value = JSON.parse(arg[1]);
-    });
 
     onMounted(() => {
-      console.log('From Table');
+      window.api.receive('table-data:reply', (arg) => {
+        data.value = JSON.parse(arg[0]);
+        title.value = JSON.parse(arg[1]);
+        console.log('image-data-changed', data.value);
+      });
     });
     // Send index to delete
     const indexClicked = (index) => {

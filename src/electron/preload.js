@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld('api', {
       'close-studyId-modal',
       'from-test-button',
       'record-data-pressed',
-      'image-data-recorded',
+      'image-data-change',
       'delete-data-at',
     ];
     if (validChannels.includes(channel)) {

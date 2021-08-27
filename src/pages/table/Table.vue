@@ -1,13 +1,16 @@
 <template>
-  <div class="bg-white p-1" @click="clicked">
+  <div class="bg-white p-1">
     <table class="table-auto">
-      <caption class="text-2xl">
+      <caption class="text-2xl mb-2">
         Sample
+        {{
+          title
+        }}
       </caption>
-      <thead class="border-b-2">
+      <thead class="border-b-2 mb-2">
         <tr>
-          <th>icon</th>
-          <!-- <th>Sample</th> -->
+          <th></th>
+
           <th>Axial</th>
           <th>Area</th>
           <th>Count</th>
@@ -18,10 +21,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
+        <tr v-for="(item, index) in data" :key="index">
+          <td @click="indexClicked(index)">
             <svg
-              class="w-4 h-4"
+              class="w-4 h-4 cursor-pointer"
               fill="none"
               stroke="red"
               viewBox="0 0 24 24"
@@ -36,14 +39,13 @@
               />
             </svg>
           </td>
-          <!-- <td>1234</td> -->
-          <td>10</td>
-          <td>857</td>
-          <td>22000</td>
-          <td>1234</td>
-          <td>100</td>
-          <td>3000</td>
-          <td>-988</td>
+          <td>{{ item.depth }}</td>
+          <td>{{ item.area }}</td>
+          <td>{{ item.count }}</td>
+          <td>{{ item.mean }}</td>
+          <td>{{ item.std }}</td>
+          <td>{{ item.min }}</td>
+          <td>{{ item.max }}</td>
         </tr>
       </tbody>
     </table>
@@ -54,16 +56,22 @@
 import { onMounted, ref } from 'vue';
 export default {
   setup() {
-    const data = ref();
+    const data = ref(null);
+    const title = ref('');
     window.api.receive('table-data', (arg) => {
-      data.value = arg;
+      data.value = JSON.parse(arg[0]);
+      title.value = JSON.parse(arg[1]);
     });
+
     onMounted(() => {
       console.log('From Table');
     });
-    const clicked = () => console.log(data.value);
+
+    const indexClicked = (index) => console.log(index);
     return {
-      clicked,
+      data,
+      indexClicked,
+      title,
     };
   },
 };
@@ -71,9 +79,10 @@ export default {
 
 <style scoped>
 th,
-td {
-  padding: 0.75rem;
+td,
+tr {
+  padding: 0 0.75rem;
   font-size: 1rem;
-  text-align: right;
+  text-align: center;
 }
 </style>

@@ -31,6 +31,7 @@ export default {
     const imagePixelData = computed(() => store.getters.imagePixelData);
     const measurementTable = computed(() => store.getters.measurementTable);
     const axialDepth = computed(() => store.getters.axialDepth);
+    const sampleNo = computed(() => store.getters.sampleNo);
     const getToolState = (tool) => {
       return cornerstoneTools.getToolState(dicom.value, tool);
     };
@@ -54,13 +55,28 @@ export default {
       const handles = data.data[0].handles;
       const newData = Object.values(omit(stats, ['meanStdDevSUV', 'variance']));
       const rounded = newData.map((e) => ceil(e, 2));
+
       const item = recordImagePixelDataToStore(dicom.value, handles);
       store.dispatch('addImagePixelData', item);
-      const mes = [Math.abs(parseInt(axialDepth.value)), ...rounded];
-      store.dispatch('addMeasurementTableData', mes);
+      const measurementArray = [
+        Math.abs(parseInt(axialDepth.value)),
+        ...rounded,
+      ];
+      const measurementObj = {
+        depth: measurementArray[0].toString(),
+        area: measurementArray[1].toString(),
+        count: measurementArray[2].toString(),
+        mean: measurementArray[3].toString(),
+        std: measurementArray[4].toString(),
+        min: measurementArray[5].toString(),
+        max: measurementArray[6].toString(),
+      };
+
+      store.dispatch('addMeasurementTableData', measurementObj);
       const sentData = {
         measurement: JSON.stringify(measurementTable.value),
         hist: JSON.stringify(imagePixelData.value),
+        sampleNo: sampleNo.value,
       };
 
       window.api.send('data-sent', sentData);

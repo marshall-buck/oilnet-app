@@ -165,5 +165,8 @@ ipcMain.on('from-test-button', (e, args) => {
 ipcMain.on('data-sent', (e, args) => {
   console.log(args.measurement);
 
-  measurementWindow.webContents.send('table-data', args.measurement);
+  measurementWindow.webContents.send('table-data', [
+    args.measurement,
+    args.sampleNo,
+  ]);
 });

@@ -72,7 +72,7 @@ export default {
       //TODO:add intensity chart to data sent
       const sentData = {
         table: JSON.stringify(measurementTable.value),
-        hist: JSON.stringify(imagePixelData.value),
+        histogram: JSON.stringify(imagePixelData.value),
         sampleNo: sampleNo.value,
       };
       // Sends data for table and histogram

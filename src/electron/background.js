@@ -164,7 +164,10 @@ ipcMain.on('from-test-button', (e, args) => {
 ipcMain.on('image-data-recorded', (e, args) => {
   // TODO:send data to histogram
   // TODO:send data to intensity
-
+  histogramWindow.webContents.send('hist-data:reply', [
+    args.histogram,
+    args.sampleNo,
+  ]);
   tableWindow.webContents.send('table-data:reply', [args.table, args.sampleNo]);
 });
 // Delete measurement when table row index is deleted

@@ -22,4 +22,5 @@ exports.histogramOptions = {
   height: 250,
   title: 'Histogram',
   show: false,
+  backgroundColor: '#fff',
 };

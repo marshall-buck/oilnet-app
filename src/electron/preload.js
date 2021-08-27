@@ -26,6 +26,7 @@ contextBridge.exposeInMainWorld('api', {
       'record-data-pressed:reply',
       'table-data:reply',
       'delete-data-at:reply',
+      'hist-data:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

@@ -17,9 +17,23 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
-    const clicked = () => console.log('Save Images');
+    const store = useStore();
+    const studyId = computed(() => store.getters.studyNo);
+    const windowWidth = computed(() => store.getters.windowWidth);
+    const windowCenter = computed(() => store.getters.windowCenter);
+
+    const clicked = () => {
+      const data = {
+        studyId: studyId.value,
+        width: windowWidth.value,
+        center: windowCenter.value,
+      };
+      window.api.send('save-jpeg-pressed', data);
+    };
     return {
       clicked,
     };

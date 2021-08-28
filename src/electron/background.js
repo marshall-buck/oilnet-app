@@ -6,8 +6,10 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
+const { writeImagesToDisk } = require('./mainHelpers');
+
 // TODO:position window correctly
-// const { spawn } = require('child_process');
+// TODO:Save Jpegs
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -136,7 +138,7 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
+// Downloading Studies Communications
 ipcMain.on('open-studyId-modal', () => {
   downloadStudyWin.show();
   mainWindow.webContents.send('open-studyId-modal:reply', true);
@@ -159,16 +161,13 @@ ipcMain.on('close-studyId-modal', () => {
   downloadStudyWin.hide();
   mainWindow.webContents.send('close-studyId-modal:reply', false);
 });
-
+// Data Recording and deleting Communications
 ipcMain.on('record-data-pressed', async () => {
   console.log(tableWindow.isVisible());
   mainWindow.webContents.send('record-data-pressed:reply');
 });
 
-ipcMain.on('from-test-button', (e, args) => {
-  console.log(args);
-});
-// send proper data back to when data is recorded
+// send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
   // TODO:send data to intensity
   if (!args.sampleNo) return;
@@ -180,7 +179,17 @@ ipcMain.on('image-data-change', (e, args) => {
 
   tableWindow.webContents.send('table-data:reply', [args.table, args.sampleNo]);
 });
-// Delete measurement when table row index is deleted
+// Send index to renderer from table delete row
 ipcMain.on('delete-data-at', (e, arg) => {
   mainWindow.webContents.send('delete-data-at:reply', arg);
+});
+
+// Save Jpeg Images
+ipcMain.on('save-jpeg-pressed', (e, arg) => {
+  writeImagesToDisk(arg);
+});
+
+// TESTING
+ipcMain.on('from-test-button', (e, args) => {
+  console.log(args);
 });

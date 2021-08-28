@@ -1,6 +1,9 @@
 export const getDefaultState = () => {
   return {
     isStudyIdModal: false,
+    isCircleToolActive: false,
+    isClearLastCircle: false,
+    scrollToThisNumber: 0,
     scale: 1.75,
     stack: {
       currentImageIdIndex: 0,
@@ -12,24 +15,15 @@ export const getDefaultState = () => {
     },
     // Parsed from the dicom image for viewport display and image information
     sampleInfo: {},
+
     // Holds live date while using Circle Tool
     liveData: {},
-    isCircleToolActive: false,
-    isClearLastCircle: false,
+    //
 
-    csvHistogram: [],
     // An {name: "dicom:0..", data: [an array of pixels for histogram chart]}
     imagePixelData: [],
-    jpgImageData: [],
 
-    histogram: {
-      xAxis: [],
-      yAxis: [],
-      totalPixelCount: 0,
-      min: 0,
-      max: 0,
-    },
+    // Contains the data to populate the table page
     measurementTable: [],
-    chartTitle: '',
   };
 };

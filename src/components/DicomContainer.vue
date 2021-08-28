@@ -17,6 +17,8 @@ import {
   prepareDataForTable,
 } from '../helpers/helpers';
 
+import scrollToIndex from '../helpers/toolHelpers/scrollToIndex';
+
 export default {
   setup() {
     const circleRoiTool = cornerstoneTools.CircleRoiTool;
@@ -36,6 +38,7 @@ export default {
     const measurementTable = computed(() => store.getters.measurementTable);
     const axialDepth = computed(() => store.getters.axialDepth);
     const sampleNo = computed(() => store.getters.sampleNo);
+    const scrollToThisNumber = computed(() => store.getters.scrollToThisNumber);
     const getToolState = (tool) => {
       return cornerstoneTools.getToolState(dicom.value, tool);
     };
@@ -99,6 +102,10 @@ export default {
       });
     });
 
+    watch(scrollToThisNumber, () => {
+      scrollToIndex(dicom.value, scrollToThisNumber.value);
+    });
+
     watch(imageIds, (newValue) => {
       if (newValue.length > 0) {
         cornerstone
@@ -124,6 +131,7 @@ export default {
           .catch((e) => console.log(e));
       }
     });
+
     watch(measurementTable, (newValue, oldValue) => {
       //TODO:add intensity chart to data sent
 
@@ -139,16 +147,19 @@ export default {
       // Sends data for table and histogram
       window.api.send('image-data-change', sentData);
     });
+
     watch(windowWidth, () => {
       const viewport = cornerstone.getViewport(dicom.value);
       viewport.voi.windowWidth = defaultLevels.value.windowWidth;
       cornerstone.setViewport(dicom.value, viewport);
     });
+
     watch(windowCenter, () => {
       const viewport = cornerstone.getViewport(dicom.value);
       viewport.voi.windowCenter = defaultLevels.value.windowCenter;
       cornerstone.setViewport(dicom.value, viewport);
     });
+
     // TODO: Figure out a way to hide cursor when circle tool is false
     watch(isCircleActive, () => {
       if (isCircleActive.value === true) {

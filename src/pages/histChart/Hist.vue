@@ -7,11 +7,18 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
 export default {
   setup() {
     const data = ref(null);
     const title = ref('');
+    const histogram = reactive({
+      xAxis: [],
+      yAxis: [],
+      totalPixelCount: 0,
+      min: 0,
+      max: 0,
+    });
     const measurements = ref(null);
     window.api.receive('hist-data:reply', (arg) => {
       data.value = JSON.parse(arg[2]);
@@ -19,9 +26,8 @@ export default {
       measurements.value = JSON.parse(arg[1]);
     });
     onMounted(() => {
-      console.log('From hist');
+      console.log(histogram);
     });
-    // Send index to delete
 
     return {
       data,

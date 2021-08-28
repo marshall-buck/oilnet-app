@@ -1,7 +1,7 @@
 <template>
   <section
     id="ct-container"
-    class="text-white flex flex-row flex-nowrap bg-black"
+    class="text-white flex flex-row flex-nowrap justify-between bg-black"
   >
     <LeftSide />
     <DicomContainer />

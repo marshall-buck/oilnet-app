@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import * as cornerstone from 'cornerstone-core';
 import { getMaxSimultaneousRequests } from './getMaxSimultaneousRequests';
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="main-page" class="flex flex-row flex-nowrap h-24 pt-4">
+  <div id="main-page" class="flex flex-row flex-nowrap pt-4 h-screen w-screen">
     <ToolBar />
     <MiddleContainer />
   </div>

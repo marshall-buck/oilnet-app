@@ -17,9 +17,24 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
   setup() {
-    const clicked = () => console.log('Prev Img Clocked');
+    const store = useStore();
+    const imageIds = computed(() => store.getters.imageIds);
+    const currentImageIdIndex = computed(
+      () => store.getters.currentImageIdIndex
+    );
+
+    const clicked = () => {
+      if (currentImageIdIndex.value === 0 || imageIds.value.length === 0)
+        return;
+
+      const data = currentImageIdIndex.value - 1;
+      store.dispatch('scrollToThisNumber', data);
+    };
     return {
       clicked,
     };

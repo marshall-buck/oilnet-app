@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('api', {
     let validChannels = [
       'study-id-entered',
       'open-studyId-modal',
-      'saveJpg',
+      'save-jpeg-pressed',
       'close-studyId-modal',
       'from-test-button',
       'record-data-pressed',

@@ -67,3 +67,7 @@ export const deleteMeasurementTableData = (state, value) => {
     (e, index) => index !== value
   );
 };
+
+export const scrollToThisNumber = (state, value) => {
+  state.scrollToThisNumber = value;
+};

@@ -71,3 +71,7 @@ export const deleteMeasurementTableData = (state, value) => {
 export const scrollToThisNumber = (state, value) => {
   state.scrollToThisNumber = value;
 };
+
+export const changeScale = (state, value) => {
+  state.scale = value;
+};

@@ -16,9 +16,19 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
   setup() {
-    const clicked = () => console.log('Zoom Reset');
+    const store = useStore();
+    const imageIds = computed(() => store.getters.imageIds);
+
+    const clicked = () => {
+      if (imageIds.value.length === 0) return;
+
+      store.dispatch('changeScale', 1.75);
+    };
     return {
       clicked,
     };

@@ -102,6 +102,12 @@ export default {
       });
     });
 
+    watch(scale, () => {
+      let viewport = cornerstone.getViewport(dicom.value);
+      viewport.scale = scale.value;
+      cornerstone.setViewport(dicom.value, viewport);
+    });
+
     watch(scrollToThisNumber, () => {
       scrollToIndex(dicom.value, scrollToThisNumber.value);
     });

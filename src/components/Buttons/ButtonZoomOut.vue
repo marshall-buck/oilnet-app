@@ -16,9 +16,21 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
   setup() {
-    const clicked = () => console.log('Zoom Out');
+    const store = useStore();
+    const imageIds = computed(() => store.getters.imageIds);
+    const scale = computed(() => store.getters.scale);
+
+    const clicked = () => {
+      if (imageIds.value.length === 0) return;
+
+      const data = scale.value - 0.25;
+      store.dispatch('changeScale', data);
+    };
     return {
       clicked,
     };

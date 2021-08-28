@@ -61,4 +61,6 @@ export const deleteMeasurementTableData = ({ commit }, index) => {
 export const scrollToThisNumber = ({ commit }, value) => {
   commit('scrollToThisNumber', value);
 };
-//
+export const changeScale = ({ commit }, value) => {
+  commit('changeScale', value);
+};

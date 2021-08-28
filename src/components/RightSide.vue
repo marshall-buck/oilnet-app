@@ -26,7 +26,9 @@ export default {
         if (isNaN(store.getters.axialDepth)) return '';
         return Math.abs(parseFloat(store.getters.axialDepth).toFixed(2));
       }),
-      scale: computed(() => store.getters.scale),
+      scale: computed(() => {
+        return `${store.getters.scale * 100} %`;
+      }),
     };
   },
 };

@@ -37,17 +37,6 @@ export function recordImagePixelDataToStore(element, handles) {
   // store.setImageData = newArr;
 }
 
-// export function deleteImagePixelDataFromStore(index) {
-//   let old = store.getImageData;
-//   old.splice(index - 1, 1);
-//   store.setImageData = old;
-// }
-
-// export function noImagesLoaded() {
-//   if (store.stack.imageIds.length === 0) return true;
-//   return false;
-// }
-
 export function getSampleInfo(image) {
   return {
     client: image.data.string('x00100020'),

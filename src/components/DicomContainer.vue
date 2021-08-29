@@ -38,6 +38,7 @@ export default {
     const measurementTable = computed(() => store.getters.measurementTable);
     const axialDepth = computed(() => store.getters.axialDepth);
     const sampleNo = computed(() => store.getters.sampleNo);
+    const studyNo = computed(() => store.getters.studyNo);
     const scrollToThisNumber = computed(() => store.getters.scrollToThisNumber);
     const getToolState = (tool) => {
       return cornerstoneTools.getToolState(dicom.value, tool);
@@ -140,17 +141,25 @@ export default {
 
     watch(measurementTable, () => {
       //TODO:add intensity chart to data sent
+      const table = JSON.stringify(measurementTable.value);
+      const tableObj = JSON.parse(table);
+      const image = JSON.stringify(imagePixelData.value);
+      const imageObj = JSON.parse(image);
 
       const sentData = {
-        table: JSON.stringify(measurementTable.value),
-        histogram: JSON.stringify(imagePixelData.value),
+        //table: JSON.stringify(measurementTable.value),
+        table: tableObj,
+        //histogram: JSON.stringify(imagePixelData.value),
+        histogram: imageObj,
         sampleNo: sampleNo.value,
+        studyNo: studyNo.value,
       };
+      console.log(sentData);
 
-      // console.log(sentData.table);
-      // console.log(oldValue);
-      // console.log(newValue);
-      // Sends data for table and histogram
+      // // console.log(sentData.table);
+      // // console.log(oldValue);
+      // // console.log(newValue);
+      // // Sends data for table and histogram
       window.api.send('image-data-change', sentData);
     });
 

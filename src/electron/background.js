@@ -7,12 +7,14 @@ import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
 const { writeImagesToDisk } = require('./mainHelpers');
-
+const { pathObject } = require('./basePaths.js');
+const { pathToCtFolder, url, baseUrl } = pathObject();
 // TODO:position window correctly
 // TODO:Save Jpegs
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
+const fs = require('fs');
 
 const {
   mainOptions,
@@ -169,14 +171,17 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
+  console.log(args);
   // TODO:send data to intensity
   if (!args.sampleNo) return;
   if (histogramWindow.isVisible()) {
-    histogramWindow.webContents.send('hist-data:reply', [
-      args.sampleNo,
-      args.table,
-      args.histogram,
-    ]);
+    histogramWindow.webContents.send('hist-data:reply', args);
+    // histogramWindow.webContents.send('hist-data:reply', [
+    //   args.table,
+    //   args.histogram,
+    //   args.sampleNo,
+    //   args.studyNo,
+    // ]);
   }
   if (tableWindow.isVisible()) {
     tableWindow.webContents.send('table-data:reply', [
@@ -194,8 +199,15 @@ ipcMain.on('delete-data-at', (e, arg) => {
 ipcMain.on('save-jpeg-pressed', (e, arg) => {
   writeImagesToDisk(arg);
 });
+// Save chart
+ipcMain.on('save-chart', (e, args) => {
+  const data = args[0].substring(23);
+  const buffer = Buffer.from(data, 'base64');
+  fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);
+});
 
 // TESTING
 ipcMain.on('from-test-button', (e, args) => {
   console.log(args);
 });
+// data:image/jpeg;base64,

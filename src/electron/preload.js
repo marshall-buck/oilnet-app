@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('api', {
       'record-data-pressed',
       'image-data-change',
       'delete-data-at',
+      'save-chart',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);

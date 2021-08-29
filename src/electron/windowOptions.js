@@ -19,7 +19,7 @@ exports.downloadStudyOptions = {
   frame: false,
 };
 exports.histogramOptions = {
-  width: 550,
+  width: 420,
   height: 200,
   title: 'Histogram',
   show: false,

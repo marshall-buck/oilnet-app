@@ -138,7 +138,7 @@ export default {
       }
     });
 
-    watch(measurementTable, (newValue, oldValue) => {
+    watch(measurementTable, () => {
       //TODO:add intensity chart to data sent
 
       const sentData = {
@@ -147,9 +147,9 @@ export default {
         sampleNo: sampleNo.value,
       };
 
-      console.log(sentData.table);
-      console.log(oldValue);
-      console.log(newValue);
+      // console.log(sentData.table);
+      // console.log(oldValue);
+      // console.log(newValue);
       // Sends data for table and histogram
       window.api.send('image-data-change', sentData);
     });

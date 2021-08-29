@@ -20,8 +20,15 @@ exports.downloadStudyOptions = {
 };
 exports.histogramOptions = {
   width: 550,
-  height: 250,
+  height: 200,
   title: 'Histogram',
+  show: false,
+  backgroundColor: '#fff',
+};
+exports.intensityOptions = {
+  width: 250,
+  height: 600,
+  title: 'Intensity',
   show: false,
   backgroundColor: '#fff',
 };

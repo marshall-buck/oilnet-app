@@ -171,13 +171,19 @@ ipcMain.on('record-data-pressed', async () => {
 ipcMain.on('image-data-change', (e, args) => {
   // TODO:send data to intensity
   if (!args.sampleNo) return;
-  histogramWindow.webContents.send('hist-data:reply', [
-    args.sampleNo,
-    args.table,
-    args.histogram,
-  ]);
-
-  tableWindow.webContents.send('table-data:reply', [args.table, args.sampleNo]);
+  if (histogramWindow.isVisible()) {
+    histogramWindow.webContents.send('hist-data:reply', [
+      args.sampleNo,
+      args.table,
+      args.histogram,
+    ]);
+  }
+  if (tableWindow.isVisible()) {
+    tableWindow.webContents.send('table-data:reply', [
+      args.table,
+      args.sampleNo,
+    ]);
+  }
 });
 // Send index to renderer from table delete row
 ipcMain.on('delete-data-at', (e, arg) => {

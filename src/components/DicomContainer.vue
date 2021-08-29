@@ -15,6 +15,7 @@ import {
   getSampleInfo,
   recordImagePixelDataToStore,
   prepareDataForTable,
+  convertRef,
 } from '../helpers/helpers';
 
 import scrollToIndex from '../helpers/toolHelpers/scrollToIndex';
@@ -140,26 +141,13 @@ export default {
     });
 
     watch(measurementTable, () => {
-      //TODO:add intensity chart to data sent
-      const table = JSON.stringify(measurementTable.value);
-      const tableObj = JSON.parse(table);
-      const image = JSON.stringify(imagePixelData.value);
-      const imageObj = JSON.parse(image);
-
       const sentData = {
-        //table: JSON.stringify(measurementTable.value),
-        table: tableObj,
-        //histogram: JSON.stringify(imagePixelData.value),
-        histogram: imageObj,
+        table: convertRef(measurementTable.value),
+        histogram: convertRef(imagePixelData.value),
         sampleNo: sampleNo.value,
         studyNo: studyNo.value,
       };
-      console.log(sentData);
 
-      // // console.log(sentData.table);
-      // // console.log(oldValue);
-      // // console.log(newValue);
-      // // Sends data for table and histogram
       window.api.send('image-data-change', sentData);
     });
 

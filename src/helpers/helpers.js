@@ -49,3 +49,8 @@ export function getSampleInfo(image) {
     axialDepth: image.data.string('x00201041'),
   };
 }
+
+export function convertRef(ref) {
+  const x = JSON.stringify(ref);
+  return JSON.parse(x);
+}

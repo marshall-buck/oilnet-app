@@ -61,8 +61,8 @@ export default {
 
     onMounted(() => {
       window.api.receive('table-data:reply', (arg) => {
-        data.value = JSON.parse(arg[0]);
-        title.value = JSON.parse(arg[1]);
+        data.value = arg.table;
+        title.value = arg.sampleId;
         console.log('image-data-changed', data.value);
       });
     });

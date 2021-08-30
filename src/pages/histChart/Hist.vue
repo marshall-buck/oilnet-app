@@ -39,32 +39,37 @@ export default {
   setup() {
     const container = ref(null);
     const histChart = ref(null);
-    const title = ref(null);
-    const sampleNo = ref(null);
+    // const title = ref(null);
+    // const sampleNo = ref(null);
     const histogram = reactive({
       xAxis: [],
       yAxis: [],
       totalPixelCount: 0,
       min: 0,
       max: 0,
+      title: '',
+      sampleNo: '',
     });
 
     window.api.receive('hist-data:reply', (arg) => {
-      // console.log(arg.table);
-      // console.log(arg.histogram);
-      // console.log(arg.sampleNo);
-      // console.log(arg.studyNo);
-      sampleNo.value = arg.studyNo;
-      title.value = arg.sampleNo;
-
+      console.log('arg.sampleNo', arg.sampleNo);
+      if (arg.sampleNo === undefined) {
+        (histogram.xAxis = []),
+          (histogram.yAxis = []),
+          (histogram.totalPixelCount = 0),
+          (histogram.min = 0),
+          (histogram.max = 0),
+          (histogram.title = ''),
+          (histogram.sampleNo = '');
+        destroyChart();
+        return;
+      }
+      histogram.sampleNo = arg.studyNo;
+      histogram.title = arg.sampleNo;
       createHistogramChartData(arg);
     });
-    const buttonClicked = () => {
-      saveChartJpgHistogram();
-      console.log('save button clicked');
-    };
 
-    //Returns object for histogram chart
+    //Create Chart Data
     function createHistogramChartData(arg) {
       const mArr = arg.table.map((e) => Object.values(e));
       // Array of all pixels arrays
@@ -99,7 +104,7 @@ export default {
       histogram.max = max;
       createHistogramChart();
     }
-
+    // Create chart
     function createHistogramChart() {
       let chart = Chart.getChart(histChart.value);
       if (!chart) {
@@ -154,7 +159,7 @@ export default {
           plugins: {
             title: {
               display: true,
-              text: title.value,
+              text: `Sample: ${histogram.title}`,
               color: '#000',
               font: {
                 size: 24,
@@ -195,9 +200,16 @@ export default {
           chart.update();
       }
     }
+    // Destroy Chart
+    function destroyChart() {
+      let chart = Chart.getChart(histChart.value);
+      if (!chart) return;
+      chart.destroy();
+    }
+    // Save Chart
     function saveChartJpgHistogram() {
-      let chart;
-      chart = Chart.getChart(histChart.value);
+      let chart = Chart.getChart(histChart.value);
+      if (!chart) return;
       container.value.style.height = '350px';
       container.value.style.width = '1200px';
 
@@ -205,16 +217,17 @@ export default {
       chart = Chart.getChart(histChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
-      const study = convertRef(sampleNo.value);
+      const study = convertRef(histogram.sampleNo);
       window.api.send('save-chart', [image, study, 'hisC']);
       container.value.style.height = '150px';
       container.value.style.width = '400px';
       chart.resize();
-      // chart.destroy();
     }
+    const buttonClicked = () => {
+      saveChartJpgHistogram();
+    };
 
     return {
-      title,
       histogram,
       histChart,
       buttonClicked,

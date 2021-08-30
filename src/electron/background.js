@@ -165,14 +165,14 @@ ipcMain.on('close-studyId-modal', () => {
 });
 // Data Recording and deleting Communications
 ipcMain.on('record-data-pressed', async () => {
-  console.log(tableWindow.isVisible());
   mainWindow.webContents.send('record-data-pressed:reply');
 });
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
+  console.log('image-data-change');
   // TODO:send data to intensity
-  if (!args.sampleNo) return;
+
   if (histogramWindow.isVisible()) {
     histogramWindow.webContents.send('hist-data:reply', args);
   }
@@ -191,7 +191,6 @@ ipcMain.on('save-jpeg-pressed', (e, arg) => {
 });
 // Save chart
 ipcMain.on('save-chart', (e, args) => {
-  console.log(args[1]);
   const data = args[0].substring(23);
   const buffer = Buffer.from(data, 'base64');
   fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);

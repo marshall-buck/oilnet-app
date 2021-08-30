@@ -26,8 +26,8 @@ exports.histogramOptions = {
   backgroundColor: '#fff',
 };
 exports.intensityOptions = {
-  width: 250,
-  height: 600,
+  width: 300,
+  height: 900,
   title: 'Intensity',
   show: false,
   backgroundColor: '#fff',

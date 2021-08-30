@@ -1,11 +1,6 @@
 <template>
   <a
-    ><button
-      @click="buttonClicked"
-      class="icon-button"
-      type="submit"
-      id="chart-hist-download"
-    >
+    ><button @click="buttonClicked" class="icon-button p-2" type="submit">
       Save
     </button></a
   >
@@ -15,6 +10,7 @@
 </template>
 
 <script>
+// TODO:Changeable mins and max's
 import { ref, reactive } from 'vue';
 import sum from 'lodash.sum';
 import Chart from 'chart.js/auto';
@@ -51,9 +47,8 @@ export default {
       sampleNo: '',
     });
 
-    window.api.receive('hist-data:reply', (arg) => {
-      console.log('arg.sampleNo', arg.sampleNo);
-      if (arg.sampleNo === undefined) {
+    window.api.receive('image-data-change:reply', (arg) => {
+      if (arg.histogram.length === 0) {
         (histogram.xAxis = []),
           (histogram.yAxis = []),
           (histogram.totalPixelCount = 0),

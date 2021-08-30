@@ -25,9 +25,7 @@ contextBridge.exposeInMainWorld('api', {
       'open-studyId-modal:reply',
       'close-studyId-modal:reply',
       'record-data-pressed:reply',
-      'table-data:reply',
-      'delete-data-at:reply',
-      'hist-data:reply',
+      'image-data-change:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

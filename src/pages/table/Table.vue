@@ -60,7 +60,7 @@ export default {
     const title = ref('');
 
     onMounted(() => {
-      window.api.receive('table-data:reply', (arg) => {
+      window.api.receive('image-data-change:reply', (arg) => {
         data.value = arg.table;
         title.value = arg.sampleId;
         console.log('image-data-changed', data.value);

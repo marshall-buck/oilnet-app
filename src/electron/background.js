@@ -21,6 +21,7 @@ const {
   histogramOptions,
   downloadStudyOptions,
   tableOptions,
+  intensityOptions,
 } = require('./windowOptions');
 
 // TODO: Python Packager
@@ -34,6 +35,7 @@ let mainWindow;
 let tableWindow;
 let downloadStudyWin;
 let histogramWindow;
+let intensityWindow;
 
 async function createWindow(devPath, prodPath, options) {
   // Create the browser window.
@@ -99,6 +101,19 @@ app.on('ready', async () => {
   histogramWindow.on('close', (e) => {
     e.preventDefault();
     histogramWindow.hide();
+  });
+
+  intensityWindow = await createWindow(
+    'intChart',
+    'intChart.html',
+    intensityOptions
+  );
+
+  intensityWindow.setParentWindow(mainWindow);
+  intensityWindow.once('ready-to-show', () => intensityWindow.show());
+  intensityWindow.on('close', (e) => {
+    e.preventDefault();
+    intensityWindow.hide();
   });
 
   downloadStudyWin = await createWindow(
@@ -170,14 +185,17 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
-  console.log('image-data-change');
+  console.log('image-data-change', args.table);
   // TODO:send data to intensity
 
   if (histogramWindow.isVisible()) {
-    histogramWindow.webContents.send('hist-data:reply', args);
+    histogramWindow.webContents.send('image-data-change:reply', args);
   }
   if (tableWindow.isVisible()) {
-    tableWindow.webContents.send('table-data:reply', args);
+    tableWindow.webContents.send('image-data-change:reply', args);
+  }
+  if (intensityWindow.isVisible()) {
+    intensityWindow.webContents.send('image-data-change:reply', args);
   }
 });
 // Send index to renderer from table delete row

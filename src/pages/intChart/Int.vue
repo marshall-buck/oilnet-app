@@ -13,7 +13,7 @@
 import { ref } from 'vue';
 
 import sortBy from 'lodash.sortby';
-
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Chart from 'chart.js/auto';
 import { convertRef } from '../../helpers/helpers';
 Chart.defaults.color = '#000';
@@ -35,15 +35,25 @@ export default {
   setup() {
     const container = ref(null);
     const title = ref(null);
-
+    const studyNo = ref(null);
     const intChart = ref(null);
+    const reData = {
+      borderColor: 'rgba(0,0,255,0.5)',
+      data: null,
+      min: 0,
+      max: 0,
+      length: 0,
+      maxLength: 0,
+    };
 
     window.api.receive('image-data-change:reply', (arg) => {
       if (arg.histogram.length === 0) {
         destroyChart();
         return;
       }
+
       title.value = arg.sampleNo;
+      studyNo.value = arg.studyNo;
       createChartDataIntensity(arg);
     });
     // Create Chart Data
@@ -57,11 +67,11 @@ export default {
       });
 
       const data = sortBy(nonSorted, 'y');
-      const borderColor = 'rgba(0,0,255,0.5)';
+
       const mean = data.map((e) => e.x);
+
       const min = Math.floor(Math.min(...mean) / 100) * 100;
       const max = Math.ceil(Math.max(...mean) / 100) * 100;
-      // console.log(min, max);
 
       const length = data.map((e) => e.y);
 
@@ -71,26 +81,36 @@ export default {
         return Math.ceil(num * 2) / 2;
       };
 
+      reData.data = data;
+      reData.min = min;
+      reData.max = max;
+      reData.length = length;
+      reData.maxLength = maxLength(length);
+      createChart();
+    }
+    // Create Chart
+    function createChart() {
       let chart = Chart.getChart(intChart.value);
       if (!chart) {
         const chartData = {
           datasets: [
             {
-              data: data,
+              data: reData.data,
               parsing: {
                 xAxisKey: 'x',
                 yAxisKey: 'y',
               },
 
               borderWidth: 3,
-              borderColor: borderColor,
+              borderColor: 'rgba(0,0,255,0.5)',
             },
           ],
         };
 
         const chartOptions = {
           tension: 0.3,
-          responsive: false,
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
             x: {
               title: {
@@ -98,8 +118,8 @@ export default {
                 text: 'CT Numbers',
               },
               type: 'linear',
-              min: min,
-              max: max,
+              min: reData.min,
+              max: reData.max,
 
               ticks: {
                 stepSize: 50,
@@ -113,7 +133,7 @@ export default {
               },
               reverse: true,
               min: 0,
-              max: maxLength(length),
+              max: reData.maxLength,
               grid: {
                 color: function (context) {
                   if (context.index % 5 === 0) {
@@ -143,7 +163,7 @@ export default {
               text: `${title.value} Intensity Profile`,
               color: '#000',
               font: {
-                size: 24,
+                size: 16,
                 family: 'Arial',
                 weight: 'normal',
               },
@@ -177,22 +197,22 @@ export default {
         chart = new Chart(ctx, {
           type: 'line',
           data: chartData,
+          plugins: [ChartDataLabels],
           options: chartOptions,
         });
       } else {
-        const chart = Chart.getChart('intensity-chart');
-        chart.options.scales.y.max = maxLength(length);
+        chart.options.scales.y.max = reData.maxLength;
 
         (chart.data.datasets = [
           {
-            data: data,
+            data: reData.data,
             parsing: {
               xAxisKey: 'x',
               yAxisKey: 'y',
             },
 
             borderWidth: 3,
-            borderColor: borderColor,
+            borderColor: reData.borderColor,
           },
         ]),
           chart.update();
@@ -210,10 +230,10 @@ export default {
       chart = Chart.getChart(intChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
-      const study = convertRef(title.value);
+      const study = convertRef(studyNo.value);
       window.api.send('save-chart', [image, study, 'intC']);
-      container.value.style.height = '200px';
-      container.value.style.width = '800px';
+      container.value.style.height = '800px';
+      container.value.style.width = '200px';
       chart.resize();
     }
     // Destroy Chart
@@ -228,6 +248,7 @@ export default {
     return {
       intChart,
       buttonClicked,
+      container,
     };
   },
 };

@@ -18,6 +18,7 @@
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
     "chart.js": "^3.5.1",
+    "chartjs-plugin-datalabels": "^2.0.0",
     "core-js": "^3.6.5",
     "cornerstone-core": "^2.3.0",
     "cornerstone-math": "^0.1.9",

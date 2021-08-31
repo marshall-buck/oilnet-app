@@ -16,6 +16,7 @@ contextBridge.exposeInMainWorld('api', {
       'save-chart',
       'hist-mounted',
       'int-mounted',
+      'table-mounted',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
@@ -30,6 +31,7 @@ contextBridge.exposeInMainWorld('api', {
       'image-data-change:reply',
       'hist-mounted:reply',
       'int-mounted:reply',
+      'table-mounted:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

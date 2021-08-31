@@ -213,12 +213,15 @@ ipcMain.on('save-chart', (e, args) => {
   const buffer = Buffer.from(data, 'base64');
   fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);
 });
-// History chart mopunted
+// History chart mounted
 ipcMain.on('hist-mounted', () => {
   mainWindow.webContents.send('hist-mounted:reply');
 });
 ipcMain.on('int-mounted', () => {
   mainWindow.webContents.send('int-mounted:reply');
+});
+ipcMain.on('table-mounted', () => {
+  mainWindow.webContents.send('table-mounted:reply');
 });
 
 // TESTING

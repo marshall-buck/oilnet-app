@@ -78,7 +78,7 @@ export default {
     }
 
     onMounted(() => {
-      console.log('on mounted');
+      store.dispatch('resetState');
       cornerstone.enable(dicom.value);
       dicom.value.addEventListener(
         'cornerstonetoolsmeasurementmodified',
@@ -114,6 +114,16 @@ export default {
         window.api.send('image-data-change', sentData);
       });
       window.api.receive('int-mounted:reply', () => {
+        const sentData = {
+          table: convertRef(measurementTable.value),
+          histogram: convertRef(imagePixelData.value),
+          sampleNo: sampleNo.value,
+          studyNo: studyNo.value,
+        };
+
+        window.api.send('image-data-change', sentData);
+      });
+      window.api.receive('table-mounted:reply', () => {
         const sentData = {
           table: convertRef(measurementTable.value),
           histogram: convertRef(imagePixelData.value),

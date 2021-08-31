@@ -10,6 +10,8 @@
 </template>
 
 <script>
+// TODO:Changeable mins and max's
+// TODO:Changeable font sizes for viewing and saving
 import { ref } from 'vue';
 
 import sortBy from 'lodash.sortby';

@@ -1,21 +1,22 @@
 <template>
-  <div class="flex flex-row flex-nowrap items-center justify-start gap-2 px-4">
+  <div ref="container" style="position: relative; width: 400px; height: 150px">
+    <canvas ref="histChart"></canvas>
+  </div>
+  <div class="flex flex-row flex-nowrap items-center justify-around">
     <button @click="buttonClicked" class="icon-button p-2" type="submit">
       Save
     </button>
     <ButtonDrag />
   </div>
-
-  <div ref="container" style="position: relative; width: 400px; height: 150px">
-    <canvas ref="histChart"></canvas>
-  </div>
 </template>
 
 <script>
 // TODO:Changeable mins and max's
+// TODO:Changeable font sizes for viewing and saving
+
 import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
 
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch, onMounted } from 'vue';
 import sum from 'lodash.sum';
 import Chart from 'chart.js/auto';
 import { convertRef } from '../../helpers/helpers';
@@ -68,6 +69,14 @@ export default {
       histogram.title = arg.sampleNo;
       createHistogramChartData(arg);
     });
+    // Watch data and run create chart on change
+    watch(histogram, () => {
+      createHistogramChart();
+    });
+
+    onMounted(() => {
+      window.api.send('hist-mounted');
+    });
 
     //Create Chart Data
     function createHistogramChartData(arg) {
@@ -102,7 +111,7 @@ export default {
       histogram.yAxis = yAxis;
       histogram.min = min;
       histogram.max = max;
-      createHistogramChart();
+      // createHistogramChart();
     }
     // Create chart
     function createHistogramChart() {

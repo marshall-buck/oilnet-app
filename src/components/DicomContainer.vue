@@ -102,6 +102,16 @@ export default {
         store.dispatch('deleteImagePixelData', arg);
         store.dispatch('deleteMeasurementTableData', arg);
       });
+      window.api.receive('hist-mounted:reply', () => {
+        const sentData = {
+          table: convertRef(measurementTable.value),
+          histogram: convertRef(imagePixelData.value),
+          sampleNo: sampleNo.value,
+          studyNo: studyNo.value,
+        };
+
+        window.api.send('image-data-change', sentData);
+      });
     });
 
     watch(scale, () => {

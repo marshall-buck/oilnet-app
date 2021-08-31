@@ -14,6 +14,7 @@ contextBridge.exposeInMainWorld('api', {
       'image-data-change',
       'delete-data-at',
       'save-chart',
+      'hist-mounted',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
@@ -26,6 +27,7 @@ contextBridge.exposeInMainWorld('api', {
       'close-studyId-modal:reply',
       'record-data-pressed:reply',
       'image-data-change:reply',
+      'hist-mounted:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

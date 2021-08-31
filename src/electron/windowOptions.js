@@ -19,8 +19,8 @@ exports.downloadStudyOptions = {
   frame: false,
 };
 exports.histogramOptions = {
-  width: 420,
-  height: 250,
+  width: 434,
+  height: 230,
   title: 'Histogram',
   show: false,
   // backgroundColor: '#fff',

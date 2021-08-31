@@ -2,16 +2,25 @@
   <div ref="container" style="position: relative; width: 400px; height: 150px">
     <canvas ref="histChart"></canvas>
   </div>
-  <div class="flex flex-row justify-between px-5 mb-4">
+  <div class="flex flex-row justify-between px-5 mb-4 text-sm">
     <div>
       <label class="mr-1" for="hist-min">Min</label>
-      <input class="w-20 border-2" type="text" :placeholder="histogram.min" />
+      <input
+        v-model="min"
+        class="w-20 border-2"
+        type="text"
+        :placeholder="histogram.min"
+      />
     </div>
     <div>
       <label class="mr-1" for="hist-max">Max</label>
-      <input class="w-20 border-2" type="text" :placeholder="histogram.max" />
+      <input
+        v-model="max"
+        class="w-20 border-2"
+        type="text"
+        :placeholder="histogram.max"
+      />
     </div>
-    <ButtonRefresh />
   </div>
 
   <div class="flex flex-row flex-nowrap items-center justify-around">
@@ -20,6 +29,7 @@
     </button> -->
 
     <ButtonSave @click="buttonClicked" class="icon-button p-2" />
+    <ButtonRefresh @click="refresh" />
     <ButtonDrag />
   </div>
 </template>
@@ -55,6 +65,8 @@ Chart.register(plug);
 export default {
   components: { ButtonDrag, ButtonSave, ButtonRefresh },
   setup() {
+    const min = ref(null);
+    const max = ref(null);
     const container = ref(null);
     const histChart = ref(null);
     const histogram = reactive({
@@ -66,7 +78,10 @@ export default {
       title: '',
       studyNo: '',
     });
-
+    const refresh = () => {
+      histogram.min = parseInt(min.value);
+      histogram.max = parseInt(max.value);
+    };
     window.api.receive('image-data-change:reply', (arg) => {
       if (arg.histogram.length === 0) {
         (histogram.xAxis = []),
@@ -86,6 +101,8 @@ export default {
     // Watch data and run create chart on change
     watch(histogram, () => {
       createHistogramChart();
+      min.value = null;
+      max.value = null;
     });
 
     onMounted(() => {
@@ -255,6 +272,9 @@ export default {
       histChart,
       buttonClicked,
       container,
+      min,
+      max,
+      refresh,
     };
   },
 };

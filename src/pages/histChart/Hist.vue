@@ -2,10 +2,24 @@
   <div ref="container" style="position: relative; width: 400px; height: 150px">
     <canvas ref="histChart"></canvas>
   </div>
+  <div class="flex flex-row justify-between px-5 mb-4">
+    <div>
+      <label class="mr-1" for="hist-min">Min</label>
+      <input class="w-20 border-2" type="text" :placeholder="histogram.min" />
+    </div>
+    <div>
+      <label class="mr-1" for="hist-max">Max</label>
+      <input class="w-20 border-2" type="text" :placeholder="histogram.max" />
+    </div>
+    <ButtonRefresh />
+  </div>
+
   <div class="flex flex-row flex-nowrap items-center justify-around">
-    <button @click="buttonClicked" class="icon-button p-2" type="submit">
+    <!-- <button @click="buttonClicked" class="icon-button p-2" type="submit">
       Save
-    </button>
+    </button> -->
+
+    <ButtonSave @click="buttonClicked" class="icon-button p-2" />
     <ButtonDrag />
   </div>
 </template>
@@ -15,6 +29,8 @@
 // TODO:Changeable font sizes for viewing and saving
 
 import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
+import ButtonSave from '../../components/Buttons/ButtonSave.vue';
+import ButtonRefresh from '../../components/Buttons/ButtonRefresh.vue';
 
 import { ref, reactive, watch, onMounted } from 'vue';
 import sum from 'lodash.sum';
@@ -37,12 +53,10 @@ const plug = {
 Chart.register(plug);
 
 export default {
-  components: { ButtonDrag },
+  components: { ButtonDrag, ButtonSave, ButtonRefresh },
   setup() {
     const container = ref(null);
     const histChart = ref(null);
-    // const title = ref(null);
-    // const sampleNo = ref(null);
     const histogram = reactive({
       xAxis: [],
       yAxis: [],
@@ -50,7 +64,7 @@ export default {
       min: 0,
       max: 0,
       title: '',
-      sampleNo: '',
+      studyNo: '',
     });
 
     window.api.receive('image-data-change:reply', (arg) => {
@@ -61,11 +75,11 @@ export default {
           (histogram.min = 0),
           (histogram.max = 0),
           (histogram.title = ''),
-          (histogram.sampleNo = '');
+          (histogram.studyNo = '');
         destroyChart();
         return;
       }
-      histogram.sampleNo = arg.studyNo;
+      histogram.studyNo = arg.studyNo;
       histogram.title = arg.sampleNo;
       createHistogramChartData(arg);
     });
@@ -171,7 +185,7 @@ export default {
               text: `Sample: ${histogram.title}`,
               color: '#000',
               font: {
-                size: 24,
+                size: 16,
                 family: 'Arial',
                 weight: 'normal',
               },
@@ -226,7 +240,7 @@ export default {
       chart = Chart.getChart(histChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
-      const study = convertRef(histogram.sampleNo);
+      const study = convertRef(histogram.studyNo);
       window.api.send('save-chart', [image, study, 'hisC']);
       container.value.style.height = '150px';
       container.value.style.width = '400px';
@@ -245,11 +259,3 @@ export default {
   },
 };
 </script>
-
-//
-<style scoped>
-/* // body {
-//   -webkit-app-region: drag;
-// }
-// */
-</style>

@@ -23,7 +23,8 @@ exports.histogramOptions = {
   height: 250,
   title: 'Histogram',
   show: false,
-  backgroundColor: '#fff',
+  // backgroundColor: '#fff',
+  frame: false,
 };
 exports.intensityOptions = {
   width: 300,

@@ -1,9 +1,11 @@
 <template>
-  <a
-    ><button @click="buttonClicked" class="icon-button p-2" type="submit">
+  <div class="flex flex-row flex-nowrap items-center justify-start gap-2 px-4">
+    <button @click="buttonClicked" class="icon-button p-2" type="submit">
       Save
-    </button></a
-  >
+    </button>
+    <ButtonDrag />
+  </div>
+
   <div ref="container" style="position: relative; width: 400px; height: 150px">
     <canvas ref="histChart"></canvas>
   </div>
@@ -11,6 +13,8 @@
 
 <script>
 // TODO:Changeable mins and max's
+import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
+
 import { ref, reactive } from 'vue';
 import sum from 'lodash.sum';
 import Chart from 'chart.js/auto';
@@ -32,6 +36,7 @@ const plug = {
 Chart.register(plug);
 
 export default {
+  components: { ButtonDrag },
   setup() {
     const container = ref(null);
     const histChart = ref(null);
@@ -232,4 +237,10 @@ export default {
 };
 </script>
 
-<style></style>
+//
+<style scoped>
+/* // body {
+//   -webkit-app-region: drag;
+// }
+// */
+</style>

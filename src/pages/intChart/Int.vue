@@ -1,18 +1,50 @@
 <template>
-  <a
-    ><button @click="buttonClicked" class="icon-button p-2" type="submit">
-      Save
-    </button></a
-  >
-  <div ref="container" style="position: relative; width: 200px; height: 800px">
+  <div ref="container" style="position: relative; width: 250px; height: 700px">
     <canvas ref="intChart"></canvas>
+  </div>
+  <div class="flex flex-row justify-between px-5 mb-4 text-sm">
+    <div>
+      <label class="mr-1">Min</label>
+      <input
+        v-model="min"
+        class="w-20 border-2"
+        type="text"
+        :placeholder="intensity.min"
+      />
+    </div>
+    <div>
+      <label class="mr-1">Max</label>
+      <input
+        v-model="max"
+        class="w-20 border-2"
+        type="text"
+        :placeholder="intensity.max"
+      />
+    </div>
+    <div>
+      <label class="mr-1">Step Size</label>
+      <input
+        v-model="step"
+        class="w-20 border-2"
+        type="text"
+        :placeholder="intensity.stepSize"
+      />
+    </div>
+  </div>
+  <div class="flex flex-row flex-nowrap items-center justify-around">
+    <ButtonSave @click="buttonClicked" class="icon-button p-2" />
+    <ButtonRefresh @click="refresh" />
+    <ButtonDrag />
   </div>
 </template>
 
 <script>
 // TODO:Changeable mins and max's
 // TODO:Changeable font sizes for viewing and saving
-import { ref } from 'vue';
+import { reactive, ref, watch, onMounted } from 'vue';
+import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
+import ButtonSave from '../../components/Buttons/ButtonSave.vue';
+import ButtonRefresh from '../../components/Buttons/ButtonRefresh.vue';
 
 import sortBy from 'lodash.sortby';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -34,29 +66,60 @@ const plug = {
 
 Chart.register(plug);
 export default {
+  components: { ButtonDrag, ButtonSave, ButtonRefresh },
   setup() {
     const container = ref(null);
-    const title = ref(null);
-    const studyNo = ref(null);
+    const min = ref(null);
+    const max = ref(null);
+    const step = ref(null);
+
     const intChart = ref(null);
-    const reData = {
+    const intensity = reactive({
       borderColor: 'rgba(0,0,255,0.5)',
       data: null,
       min: 0,
       max: 0,
       length: 0,
       maxLength: 0,
+      title: '',
+      studyNo: '',
+      stepSize: 50,
+    });
+
+    const refresh = () => {
+      if (min.value !== '') intensity.min = parseInt(min.value);
+      if (max.value !== '') intensity.max = parseInt(max.value);
+      if (step.value !== '') intensity.stepSize = parseInt(step.value);
     };
+    onMounted(() => {
+      window.api.send('int-mounted');
+    });
 
     window.api.receive('image-data-change:reply', (arg) => {
       if (arg.histogram.length === 0) {
+        intensity.data = null;
+        intensity.min = 0;
+        intensity.max = 0;
+        intensity.length = 0;
+        intensity.maxLength = 0;
+        intensity.title = '';
+        intensity.studyNo = '';
+        intensity.stepSize = 50;
+
         destroyChart();
         return;
       }
 
-      title.value = arg.sampleNo;
-      studyNo.value = arg.studyNo;
+      intensity.title = arg.sampleNo;
+      intensity.studyNo = arg.studyNo;
       createChartDataIntensity(arg);
+    });
+
+    watch(intensity, () => {
+      createChart();
+      min.value = '';
+      max.value = '';
+      step.value = '';
     });
     // Create Chart Data
     function createChartDataIntensity(arg) {
@@ -83,12 +146,12 @@ export default {
         return Math.ceil(num * 2) / 2;
       };
 
-      reData.data = data;
-      reData.min = min;
-      reData.max = max;
-      reData.length = length;
-      reData.maxLength = maxLength(length);
-      createChart();
+      intensity.data = data;
+      intensity.min = min;
+      intensity.max = max;
+      intensity.length = length;
+      intensity.maxLength = maxLength(length);
+      // createChart();
     }
     // Create Chart
     function createChart() {
@@ -97,7 +160,7 @@ export default {
         const chartData = {
           datasets: [
             {
-              data: reData.data,
+              data: intensity.data,
               parsing: {
                 xAxisKey: 'x',
                 yAxisKey: 'y',
@@ -120,11 +183,11 @@ export default {
                 text: 'CT Numbers',
               },
               type: 'linear',
-              min: reData.min,
-              max: reData.max,
+              min: intensity.min,
+              max: intensity.max,
 
               ticks: {
-                stepSize: 50,
+                stepSize: intensity.stepSize,
               },
             },
 
@@ -135,7 +198,7 @@ export default {
               },
               reverse: true,
               min: 0,
-              max: reData.maxLength,
+              max: intensity.maxLength,
               grid: {
                 color: function (context) {
                   if (context.index % 5 === 0) {
@@ -162,7 +225,7 @@ export default {
           plugins: {
             title: {
               display: true,
-              text: `${title.value} Intensity Profile`,
+              text: `${intensity.title} Intensity Profile`,
               color: '#000',
               font: {
                 size: 16,
@@ -177,7 +240,7 @@ export default {
               display: true,
               color: 'red',
               font: {
-                size: 16,
+                size: 12,
               },
               anchor: 'end',
               align: 'left',
@@ -203,18 +266,20 @@ export default {
           options: chartOptions,
         });
       } else {
-        chart.options.scales.y.max = reData.maxLength;
-
+        chart.options.scales.y.max = intensity.maxLength;
+        chart.options.scales.x.max = intensity.max;
+        chart.options.scales.x.min = intensity.min;
+        chart.options.scales.x.ticks.stepSize = intensity.stepSize;
         (chart.data.datasets = [
           {
-            data: reData.data,
+            data: intensity.data,
             parsing: {
               xAxisKey: 'x',
               yAxisKey: 'y',
             },
 
             borderWidth: 3,
-            borderColor: reData.borderColor,
+            borderColor: intensity.borderColor,
           },
         ]),
           chart.update();
@@ -232,10 +297,10 @@ export default {
       chart = Chart.getChart(intChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
-      const study = convertRef(studyNo.value);
+      const study = convertRef(intensity.studyNo);
       window.api.send('save-chart', [image, study, 'intC']);
-      container.value.style.height = '800px';
-      container.value.style.width = '200px';
+      container.value.style.height = '700px';
+      container.value.style.width = '250px';
       chart.resize();
     }
     // Destroy Chart
@@ -251,6 +316,11 @@ export default {
       intChart,
       buttonClicked,
       container,
+      min,
+      max,
+      step,
+      refresh,
+      intensity,
     };
   },
 };

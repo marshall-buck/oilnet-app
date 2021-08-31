@@ -214,8 +214,11 @@ ipcMain.on('save-chart', (e, args) => {
   fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);
 });
 // History chart mopunted
-ipcMain.on('hist-mounted', (e, args) => {
+ipcMain.on('hist-mounted', () => {
   mainWindow.webContents.send('hist-mounted:reply');
+});
+ipcMain.on('int-mounted', () => {
+  mainWindow.webContents.send('int-mounted:reply');
 });
 
 // TESTING

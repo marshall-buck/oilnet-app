@@ -4,7 +4,7 @@
   </div>
   <div class="flex flex-row justify-between px-5 mb-4 text-sm">
     <div>
-      <label class="mr-1" for="hist-min">Min</label>
+      <label class="mr-1">Min</label>
       <input
         v-model="min"
         class="w-20 border-2"
@@ -13,7 +13,7 @@
       />
     </div>
     <div>
-      <label class="mr-1" for="hist-max">Max</label>
+      <label class="mr-1">Max</label>
       <input
         v-model="max"
         class="w-20 border-2"

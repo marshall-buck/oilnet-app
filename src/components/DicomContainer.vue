@@ -19,7 +19,7 @@ import {
 } from '../helpers/helpers';
 
 import scrollToIndex from '../helpers/toolHelpers/scrollToIndex';
-
+// TODO: clear last circle not working
 export default {
   setup() {
     const circleRoiTool = cornerstoneTools.CircleRoiTool;
@@ -78,6 +78,7 @@ export default {
     }
 
     onMounted(() => {
+      console.log('on mounted');
       cornerstone.enable(dicom.value);
       dicom.value.addEventListener(
         'cornerstonetoolsmeasurementmodified',
@@ -103,6 +104,16 @@ export default {
         store.dispatch('deleteMeasurementTableData', arg);
       });
       window.api.receive('hist-mounted:reply', () => {
+        const sentData = {
+          table: convertRef(measurementTable.value),
+          histogram: convertRef(imagePixelData.value),
+          sampleNo: sampleNo.value,
+          studyNo: studyNo.value,
+        };
+
+        window.api.send('image-data-change', sentData);
+      });
+      window.api.receive('int-mounted:reply', () => {
         const sentData = {
           table: convertRef(measurementTable.value),
           histogram: convertRef(imagePixelData.value),

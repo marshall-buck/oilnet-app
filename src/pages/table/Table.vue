@@ -51,7 +51,7 @@
     </table>
   </div>
 </template>
-// TODO: Delete data rows
+
 <script>
 import { onMounted, ref } from 'vue';
 export default {

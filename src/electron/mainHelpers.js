@@ -2,15 +2,15 @@ const ProgressBar = require('electron-progressbar');
 const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder } = pathObject();
-const { dialog } = require('electron');
 
 exports.writeImagesToDisk = async (arg) => {
+  if (arg.paths.length === 0) return;
+
   const paths = async () => {
-    const list = await dialog.showOpenDialog({
-      properties: ['openFile', 'multiSelections'],
-    });
-    return list;
+    const path = await arg.paths;
+    return path;
   };
+
   let progressBar;
   paths()
     .then((e) => {
@@ -29,10 +29,10 @@ exports.writeImagesToDisk = async (arg) => {
         });
       if (e.canceled === true) return;
       const regex = /\d{5}/;
-      const path = e.filePaths[0];
+      const path = e[0];
       const id = path.match(regex)[0];
       arg.studyId = id;
-      arg.filePaths = e.filePaths;
+      arg.filePaths = e;
       arg.ct = pathToCtFolder;
 
       const str = JSON.stringify(arg);

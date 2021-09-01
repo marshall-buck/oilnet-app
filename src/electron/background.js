@@ -222,7 +222,7 @@ ipcMain.on('delete-data-at', (e, arg) => {
 
 // Save Jpeg Images
 ipcMain.on('save-jpeg-pressed', (e, arg) => {
-  // console.log(arg);
+  console.log(arg);
   writeImagesToDisk(arg);
 });
 // Save chart

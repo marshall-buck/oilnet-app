@@ -7,11 +7,16 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
-// import * as cornerstoneTools from 'cornerstone-tools';
+import * as cornerstoneTools from 'cornerstone-tools';
+import * as cornerstone from 'cornerstone-core';
+import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 export default {
   setup() {
     const store = useStore();
     const clicked = () => {
+      console.log(cornerstone);
+      console.log(cornerstoneTools);
+      console.log(cornerstoneWADOImageLoader);
       console.log(store);
       window.api.send('from-test-button');
     };

@@ -10,6 +10,6 @@ export default {
 </script>
 <style scoped>
 .active {
-  opacity: 0.2;
+  opacity: 0.5;
 }
 </style>

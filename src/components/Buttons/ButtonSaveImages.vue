@@ -19,19 +19,23 @@
 <script>
 import { useStore } from 'vuex';
 import { computed } from 'vue';
+import { convertRef } from '../../helpers/helpers';
 export default {
   setup() {
     const store = useStore();
     const studyId = computed(() => store.getters.studyNo);
     const windowWidth = computed(() => store.getters.windowWidth);
     const windowCenter = computed(() => store.getters.windowCenter);
+    const paths = computed(() => store.getters.paths);
 
     const clicked = () => {
       const data = {
         studyId: studyId.value,
+        paths: convertRef(paths.value),
         width: windowWidth.value,
         center: windowCenter.value,
       };
+      // if (data.width == data.center) alert('blah blah blah');
       window.api.send('save-jpeg-pressed', data);
     };
     return {

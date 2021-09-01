@@ -11,8 +11,11 @@ export const toggleStudyIdModal = (state) => {
   state.isStudyIdModal = !state.isStudyIdModal;
 };
 
-export const loadStoreStack = (state, value) => {
+export const loadStoreStackIds = (state, value) => {
   state.stack.imageIds = value;
+};
+export const loadStoreStackPaths = (state, value) => {
+  state.stack.paths = value;
 };
 
 export const resetState = (state) => {

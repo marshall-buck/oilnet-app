@@ -8,7 +8,9 @@ export const getDefaultState = () => {
     stack: {
       currentImageIdIndex: 0,
       imageIds: [],
+      paths: [],
     },
+
     defaultLevels: {
       windowWidth: 2000,
       windowCenter: 2000,

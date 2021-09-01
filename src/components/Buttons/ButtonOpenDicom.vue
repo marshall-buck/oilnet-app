@@ -29,13 +29,19 @@ export default {
       store.dispatch('resetState');
       fPut.value.onchange = () => {
         let files = fPut.value.files;
-        let arr = [];
+        // console.log(Array.from(files).map((e) => e.path));
+        let ids = [];
+
         for (let i = 0; i < files.length; i++) {
-          arr.push(
+          ids.push(
             cornerstoneWADOImageLoader.wadouri.fileManager.add(files[i])
           );
         }
-        store.dispatch('loadStoreStack', arr);
+        store.dispatch('loadStoreStackIds', ids);
+        store.dispatch(
+          'loadStoreStackPaths',
+          Array.from(files).map((e) => e.path)
+        );
 
         // loadStack();
       };

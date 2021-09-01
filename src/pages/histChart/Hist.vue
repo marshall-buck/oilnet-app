@@ -81,6 +81,7 @@ export default {
     const refresh = () => {
       if (min.value) histogram.min = parseInt(min.value);
       if (max.value) histogram.max = parseInt(max.value);
+
       return;
     };
     window.api.receive('image-data-change:reply', (arg) => {
@@ -101,12 +102,15 @@ export default {
     });
     // Watch data and run create chart on change
     watch(histogram, () => {
+      if (histogram.totalPixelCount === 0) return;
       createHistogramChart();
       min.value = null;
       max.value = null;
     });
 
     onMounted(() => {
+      let chart = Chart.getChart(histChart.value);
+      if (chart) chart.destroy();
       window.api.send('hist-mounted');
     });
 

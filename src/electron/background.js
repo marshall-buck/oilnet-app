@@ -205,7 +205,7 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
-  console.log('image-data-change', args.table);
+  // console.log('image-data-change', args.table);
   // TODO:send data to intensity
 
   if (histogramWindow.isVisible()) {
@@ -225,10 +225,12 @@ ipcMain.on('delete-data-at', (e, arg) => {
 
 // Save Jpeg Images
 ipcMain.on('save-jpeg-pressed', (e, arg) => {
+  // console.log(arg);
   writeImagesToDisk(arg);
 });
 // Save chart
 ipcMain.on('save-chart', (e, args) => {
+  console.log(args);
   const data = args[0].substring(23);
   const buffer = Buffer.from(data, 'base64');
   fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);

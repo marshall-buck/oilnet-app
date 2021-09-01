@@ -65,7 +65,7 @@ export default {
 
     window.api.receive('image-data-change:reply', (arg) => {
       data.data = arg.table;
-      data.title = arg.sampleId;
+      data.title = arg.sampleNo;
       console.log('image-data-changed', data.value);
     });
 

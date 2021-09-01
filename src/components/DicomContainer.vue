@@ -79,7 +79,9 @@ export default {
 
     onMounted(() => {
       store.dispatch('resetState');
+
       cornerstone.enable(dicom.value);
+
       dicom.value.addEventListener(
         'cornerstonetoolsmeasurementmodified',
         () => {
@@ -184,12 +186,14 @@ export default {
 
     watch(windowWidth, () => {
       const viewport = cornerstone.getViewport(dicom.value);
+      if (!viewport) return;
       viewport.voi.windowWidth = defaultLevels.value.windowWidth;
       cornerstone.setViewport(dicom.value, viewport);
     });
 
     watch(windowCenter, () => {
       const viewport = cornerstone.getViewport(dicom.value);
+      if (!viewport) return;
       viewport.voi.windowCenter = defaultLevels.value.windowCenter;
       cornerstone.setViewport(dicom.value, viewport);
     });

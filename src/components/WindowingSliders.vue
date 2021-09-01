@@ -45,8 +45,10 @@ export default {
     const store = useStore();
     const width = computed(() => store.getters.defaultLevels.windowWidth);
     const center = computed(() => store.getters.defaultLevels.windowCenter);
-    const setWidth = (e) => store.dispatch('setWidth', e.target.value);
-    const setCenter = (e) => store.dispatch('setCenter', e.target.value);
+    const setWidth = (e) =>
+      store.dispatch('setWidth', parseInt(e.target.value));
+    const setCenter = (e) =>
+      store.dispatch('setCenter', parseInt(e.target.value));
 
     return {
       width,

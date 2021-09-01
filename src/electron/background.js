@@ -87,7 +87,12 @@ app.on('ready', async () => {
 
   tableWindow = await createWindow('table', 'table.html', tableOptions);
   tableWindow.setParentWindow(mainWindow);
-  tableWindow.once('ready-to-show', () => tableWindow.show());
+  tableWindow.once('ready-to-show', () => {
+    const mainBounds = mainWindow.getBounds();
+    const tableBounds = tableWindow.getBounds();
+    tableWindow.setPosition(mainBounds.x, mainBounds.y - tableBounds.height);
+    tableWindow.show();
+  });
   tableWindow.on('close', (e) => {
     e.preventDefault();
     tableWindow.hide();
@@ -99,7 +104,15 @@ app.on('ready', async () => {
     histogramOptions
   );
   histogramWindow.setParentWindow(mainWindow);
-  histogramWindow.once('ready-to-show', () => histogramWindow.show());
+  histogramWindow.once('ready-to-show', () => {
+    const mainBounds = mainWindow.getBounds();
+    const histBounds = histogramWindow.getBounds();
+    histogramWindow.setPosition(
+      mainBounds.x + mainBounds.width - histBounds.width,
+      mainBounds.y - histBounds.height
+    );
+    histogramWindow.show();
+  });
 
   histogramWindow.on('close', (e) => {
     e.preventDefault();
@@ -113,7 +126,11 @@ app.on('ready', async () => {
   );
 
   intensityWindow.setParentWindow(mainWindow);
-  intensityWindow.once('ready-to-show', () => intensityWindow.show());
+  intensityWindow.once('ready-to-show', () => {
+    const mainBounds = mainWindow.getBounds();
+    intensityWindow.setPosition(mainBounds.x + mainBounds.width, mainBounds.y);
+    intensityWindow.show();
+  });
   intensityWindow.on('close', (e) => {
     e.preventDefault();
     intensityWindow.hide();
@@ -125,17 +142,6 @@ app.on('ready', async () => {
     downloadStudyOptions
   );
   downloadStudyWin.setParentWindow(mainWindow);
-  const mainBounds = mainWindow.getBounds();
-  const histBounds = histogramWindow.getBounds();
-  const tableBounds = tableWindow.getBounds();
-
-  histogramWindow.setPosition(
-    mainBounds.x + mainBounds.width - histBounds.width,
-    mainBounds.y - histBounds.height
-  );
-  tableWindow.setPosition(mainBounds.x, mainBounds.y - tableBounds.height);
-
-  intensityWindow.setPosition(mainBounds.x + mainBounds.width, mainBounds.y);
 });
 
 // app.on('activate', () => {

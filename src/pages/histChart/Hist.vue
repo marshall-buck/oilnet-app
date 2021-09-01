@@ -79,8 +79,9 @@ export default {
       studyNo: '',
     });
     const refresh = () => {
-      histogram.min = parseInt(min.value);
-      histogram.max = parseInt(max.value);
+      if (min.value) histogram.min = parseInt(min.value);
+      if (max.value) histogram.max = parseInt(max.value);
+      return;
     };
     window.api.receive('image-data-change:reply', (arg) => {
       if (arg.histogram.length === 0) {

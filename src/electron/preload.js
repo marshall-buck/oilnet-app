@@ -33,6 +33,7 @@ contextBridge.exposeInMainWorld('api', {
       'hist-mounted:reply',
       'int-mounted:reply',
       'table-mounted:reply',
+      'save-jpeg-pressed:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

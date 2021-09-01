@@ -28,7 +28,7 @@
       Save
     </button> -->
 
-    <ButtonSave @click="buttonClicked" class="icon-button p-2" />
+    <!-- <ButtonSave @click="buttonClicked" class="icon-button p-2" /> -->
     <ButtonRefresh @click="refresh" />
     <ButtonDrag />
   </div>
@@ -39,7 +39,7 @@
 // TODO:Changeable font sizes for viewing and saving
 
 import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
-import ButtonSave from '../../components/Buttons/ButtonSave.vue';
+// import ButtonSave from '../../components/Buttons/ButtonSave.vue';
 import ButtonRefresh from '../../components/Buttons/ButtonRefresh.vue';
 
 import { ref, reactive, watch, onMounted } from 'vue';
@@ -63,7 +63,7 @@ const plug = {
 Chart.register(plug);
 
 export default {
-  components: { ButtonDrag, ButtonSave, ButtonRefresh },
+  components: { ButtonDrag, ButtonRefresh },
   setup() {
     const min = ref(null);
     const max = ref(null);
@@ -99,6 +99,10 @@ export default {
       histogram.studyNo = arg.studyNo;
       histogram.title = arg.sampleNo;
       createHistogramChartData(arg);
+    });
+
+    window.api.receive('save-jpeg-pressed:reply', () => {
+      saveChartJpgHistogram();
     });
     // Watch data and run create chart on change
     watch(histogram, () => {
@@ -271,14 +275,14 @@ export default {
       container.value.style.width = '400px';
       destroyChart();
     }
-    const buttonClicked = () => {
-      saveChartJpgHistogram();
-    };
+    // const buttonClicked = () => {
+    //   saveChartJpgHistogram();
+    // };
 
     return {
       histogram,
       histChart,
-      buttonClicked,
+      // buttonClicked,
       container,
       min,
       max,

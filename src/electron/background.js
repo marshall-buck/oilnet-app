@@ -222,7 +222,15 @@ ipcMain.on('delete-data-at', (e, arg) => {
 
 // Save Jpeg Images
 ipcMain.on('save-jpeg-pressed', (e, arg) => {
-  console.log(arg);
+  if (histogramWindow.isVisible()) {
+    histogramWindow.webContents.send('save-jpeg-pressed:reply');
+  }
+  if (tableWindow.isVisible()) {
+    tableWindow.webContents.send('save-jpeg-pressed:reply');
+  }
+  if (intensityWindow.isVisible()) {
+    intensityWindow.webContents.send('save-jpeg-pressed:reply');
+  }
   writeImagesToDisk(arg);
 });
 // Save chart

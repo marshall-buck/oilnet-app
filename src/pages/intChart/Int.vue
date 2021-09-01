@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="flex flex-row flex-nowrap items-center justify-around">
-      <ButtonSave @click="buttonClicked" class="icon-button" />
+      <!-- <ButtonSave @click="buttonClicked" class="icon-button" /> -->
       <ButtonRefresh @click="refresh" class="icon-button" />
       <ButtonDrag class="icon-button" />
     </div>
@@ -49,7 +49,7 @@
 // TODO:Changeable font sizes for viewing and saving
 import { reactive, ref, watch, onMounted } from 'vue';
 import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
-import ButtonSave from '../../components/Buttons/ButtonSave.vue';
+// import ButtonSave from '../../components/Buttons/ButtonSave.vue';
 import ButtonRefresh from '../../components/Buttons/ButtonRefresh.vue';
 
 import sortBy from 'lodash.sortby';
@@ -72,7 +72,7 @@ const plug = {
 
 Chart.register(plug);
 export default {
-  components: { ButtonDrag, ButtonSave, ButtonRefresh },
+  components: { ButtonDrag, ButtonRefresh },
   setup() {
     const container = ref(null);
     const min = ref(null);
@@ -119,6 +119,10 @@ export default {
       intensity.title = arg.sampleNo;
       intensity.studyNo = arg.studyNo;
       createChartDataIntensity(arg);
+    });
+
+    window.api.receive('save-jpeg-pressed:reply', () => {
+      saveChartJpgInt();
     });
 
     watch(intensity, () => {
@@ -340,12 +344,12 @@ export default {
       if (!chart) return;
       chart.destroy();
     }
-    const buttonClicked = () => {
-      saveChartJpgInt();
-    };
+    // const buttonClicked = () => {
+    //   saveChartJpgInt();
+    // };
     return {
       intChart,
-      buttonClicked,
+      // buttonClicked,
       container,
       min,
       max,

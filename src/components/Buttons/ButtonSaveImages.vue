@@ -17,6 +17,8 @@
 </template>
 
 <script>
+// TODO:disable saving images if levels are equal of if no images loaded
+// TODO: trigger saving of charts
 import { useStore } from 'vuex';
 import { computed } from 'vue';
 import { convertRef } from '../../helpers/helpers';

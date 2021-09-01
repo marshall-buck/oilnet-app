@@ -17,6 +17,7 @@ export const studyNo = (state) => state.sampleInfo.studyNo;
 export const well = (state) => state.sampleInfo.well;
 
 export const isCircleToolActive = (state) => state.isCircleToolActive;
+export const isClearLastCircle = (state) => state.isClearLastCircle;
 
 // Live Data
 export const area = (state) => state.liveData.area;

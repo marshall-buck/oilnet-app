@@ -56,7 +56,8 @@ import sortBy from 'lodash.sortby';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Chart from 'chart.js/auto';
 import { convertRef } from '../../helpers/helpers';
-
+Chart.defaults.color = '#000';
+Chart.defaults.font.size = 8;
 const plug = {
   id: 'custom_canvas_background_color',
   beforeDraw: (chart) => {
@@ -70,7 +71,6 @@ const plug = {
 };
 
 Chart.register(plug);
-Chart.defaults.color = '#000';
 export default {
   components: { ButtonDrag, ButtonSave, ButtonRefresh },
   setup() {
@@ -78,9 +78,7 @@ export default {
     const min = ref(null);
     const max = ref(null);
     const step = ref(null);
-    const preview = ref(true);
 
-    // Chart.defaults.font.size = preview.value === true ? 8 : 16;
     const intChart = ref(null);
     const intensity = reactive({
       borderColor: 'rgba(0,0,255,0.7)',
@@ -174,7 +172,7 @@ export default {
                 yAxisKey: 'y',
               },
 
-              borderWidth: preview.value === true ? 2 : 3,
+              borderWidth: 2,
               borderColor: 'rgba(0,0,255,0.7)',
             },
           ],
@@ -190,7 +188,6 @@ export default {
               title: {
                 display: true,
                 text: 'CT Numbers',
-                font: { size: preview.value === true ? 8 : 16 },
               },
               type: 'linear',
               min: intensity.min,
@@ -198,7 +195,6 @@ export default {
 
               ticks: {
                 stepSize: intensity.stepSize,
-                font: { size: preview.value === true ? 8 : 16 },
               },
             },
 
@@ -206,7 +202,6 @@ export default {
               title: {
                 display: true,
                 text: 'Length (CM)',
-                font: { size: preview.value === true ? 8 : 16 },
               },
               reverse: true,
               min: 0,
@@ -219,12 +214,10 @@ export default {
                     return '#D0D0D0';
                   }
                 },
-                font: { size: preview.value === true ? 8 : 16 },
               },
 
               ticks: {
                 stepSize: 0.1,
-                font: { size: preview.value === true ? 8 : 16 },
                 callback: function (value, index) {
                   if (index % 5 === 0) {
                     this.color = '#000';
@@ -242,7 +235,7 @@ export default {
               text: `${intensity.title} Intensity Profile`,
               color: '#000',
               font: {
-                size: preview.value === true ? 8 : 24,
+                size: 8,
                 family: 'Arial',
                 weight: 'normal',
               },
@@ -254,11 +247,11 @@ export default {
               display: true,
               color: 'red',
               font: {
-                size: preview.value === true ? 8 : 16,
+                size: 8,
               },
               anchor: 'end',
               align: 'left',
-              offset: preview.value === true ? 8 : 10,
+              offset: 8,
               formatter: function (_, context) {
                 const index = context.dataIndex;
                 return context.dataset.data[index].x;
@@ -294,7 +287,7 @@ export default {
               yAxisKey: 'y',
             },
 
-            borderWidth: preview.value === true ? 2 : 3,
+            borderWidth: 2,
             borderColor: intensity.borderColor,
           },
         ]),
@@ -308,20 +301,19 @@ export default {
       let chart = Chart.getChart(intChart.value);
       if (!chart) return;
 
-      preview.value = false;
-
+      chart.options.plugins.datalabels.font.size = 16;
+      chart.options.plugins.datalabels.offset = 10;
+      chart.options.plugins.title.font.size = 24;
       container.value.style.height = '1900px';
       container.value.style.width = '350px';
 
       chart.resize();
-      chart.update();
 
       chart = Chart.getChart(intChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
       const study = convertRef(intensity.studyNo);
       window.api.send('save-chart', [image, study, 'intC']);
-      preview.value = true;
       // Chart.defaults.font.size = 8;
       // chart.options.plugins.datalabels.font.size = 8;
       // chart.options.plugins.datalabels.offset = 8;

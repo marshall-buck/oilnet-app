@@ -1,5 +1,9 @@
 <template>
-  <button-base title="Add Circle" @click="clicked">
+  <button-base
+    title="Add Circle"
+    @click="clicked"
+    :mode="isCircleToolActive ? 'active' : ''"
+  >
     <svg
       fill="none"
       stroke="white"
@@ -22,13 +26,15 @@ export default {
   setup() {
     const store = useStore();
     const isCircleToolActive = computed(() => store.getters.isCircleToolActive);
+    const clicked = () => {
+      if (imageIds.value.length === 0 || isCircleToolActive.value === true)
+        return;
+      store.dispatch('toggleCircleTool');
+    };
     const imageIds = computed(() => store.getters.imageIds);
     return {
-      clicked: () => {
-        if (imageIds.value.length === 0 || isCircleToolActive.value === true)
-          return;
-        store.dispatch('toggleCircleTool');
-      },
+      clicked,
+      isCircleToolActive,
     };
   },
 };

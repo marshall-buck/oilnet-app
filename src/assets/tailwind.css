@@ -22,6 +22,9 @@
   @apply bg-blue-400;
   @apply p-1;
 }
+.icon-button-active {
+  opacity: 0.5;
+}
 
 .icon-button:focus {
   @apply outline-none;

@@ -53,7 +53,7 @@ export default function initCornerstone() {
       },
     },
   };
-  // TODO: Fix duplicate initialization
+
   cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 }
 

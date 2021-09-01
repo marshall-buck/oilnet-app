@@ -19,7 +19,7 @@ import {
 } from '../helpers/helpers';
 
 import scrollToIndex from '../helpers/toolHelpers/scrollToIndex';
-// TODO: clear last circle not working
+
 export default {
   setup() {
     const circleRoiTool = cornerstoneTools.CircleRoiTool;

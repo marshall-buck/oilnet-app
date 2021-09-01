@@ -9,8 +9,6 @@ const { findStudy } = require('./fetch.js');
 const { writeImagesToDisk } = require('./mainHelpers');
 const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder } = pathObject();
-// TODO:position window correctly
-// TODO:Save Jpegs
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
@@ -206,7 +204,6 @@ ipcMain.on('record-data-pressed', async () => {
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
   // console.log('image-data-change', args.table);
-  // TODO:send data to intensity
 
   if (histogramWindow.isVisible()) {
     histogramWindow.webContents.send('image-data-change:reply', args);

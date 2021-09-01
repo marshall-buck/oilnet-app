@@ -255,10 +255,13 @@ export default {
     function saveChartJpgHistogram() {
       let chart = Chart.getChart(histChart.value);
       if (!chart) return;
+      Chart.defaults.font.size = 16;
+      chart.options.plugins.title.font.size = 24;
       container.value.style.height = '350px';
       container.value.style.width = '1200px';
 
       chart.resize();
+      chart.update();
       chart = Chart.getChart(histChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
@@ -266,7 +269,7 @@ export default {
       window.api.send('save-chart', [image, study, 'hisC']);
       container.value.style.height = '150px';
       container.value.style.width = '400px';
-      chart.resize();
+      destroyChart();
     }
     const buttonClicked = () => {
       saveChartJpgHistogram();

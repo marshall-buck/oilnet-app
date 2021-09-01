@@ -57,7 +57,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Chart from 'chart.js/auto';
 import { convertRef } from '../../helpers/helpers';
 Chart.defaults.color = '#000';
-Chart.defaults.font.size = 8;
+Chart.defaults.font.size = 7;
 const plug = {
   id: 'custom_canvas_background_color',
   beforeDraw: (chart) => {
@@ -172,7 +172,7 @@ export default {
                 yAxisKey: 'y',
               },
 
-              borderWidth: 2,
+              borderWidth: 1,
               borderColor: 'rgba(0,0,255,0.7)',
             },
           ],
@@ -287,7 +287,7 @@ export default {
               yAxisKey: 'y',
             },
 
-            borderWidth: 2,
+            borderWidth: 1,
             borderColor: intensity.borderColor,
           },
         ]),
@@ -300,24 +300,36 @@ export default {
     function saveChartJpgInt() {
       let chart = Chart.getChart(intChart.value);
       if (!chart) return;
-
+      Chart.defaults.font.size = 16;
       chart.options.plugins.datalabels.font.size = 16;
-      chart.options.plugins.datalabels.offset = 10;
+      chart.options.plugins.datalabels.offset = 12;
       chart.options.plugins.title.font.size = 24;
+
+      chart.data.datasets = [
+        {
+          data: intensity.data,
+          parsing: {
+            xAxisKey: 'x',
+            yAxisKey: 'y',
+          },
+
+          borderWidth: 3,
+          borderColor: intensity.borderColor,
+        },
+      ];
+
       container.value.style.height = '1900px';
       container.value.style.width = '350px';
 
       chart.resize();
+      chart.update();
 
       chart = Chart.getChart(intChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
       const study = convertRef(intensity.studyNo);
       window.api.send('save-chart', [image, study, 'intC']);
-      // Chart.defaults.font.size = 8;
-      // chart.options.plugins.datalabels.font.size = 8;
-      // chart.options.plugins.datalabels.offset = 8;
-      // chart.options.plugins.title.font.size = 8;
+
       container.value.style.height = '600px';
       container.value.style.width = '150px';
       destroyChart();

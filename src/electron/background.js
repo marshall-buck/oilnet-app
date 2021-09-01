@@ -230,7 +230,6 @@ ipcMain.on('save-jpeg-pressed', (e, arg) => {
 });
 // Save chart
 ipcMain.on('save-chart', (e, args) => {
-  console.log(args);
   const data = args[0].substring(23);
   const buffer = Buffer.from(data, 'base64');
   fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);

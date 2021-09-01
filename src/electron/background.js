@@ -8,7 +8,7 @@ import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 const { findStudy } = require('./fetch.js');
 const { writeImagesToDisk } = require('./mainHelpers');
 const { pathObject } = require('./basePaths.js');
-const { pathToCtFolder, url, baseUrl } = pathObject();
+const { pathToCtFolder } = pathObject();
 // TODO:position window correctly
 // TODO:Save Jpegs
 
@@ -84,6 +84,7 @@ app.on('ready', async () => {
   mainWindow = await createWindow('', 'index.html', mainOptions);
   mainWindow.once('ready-to-show', () => mainWindow.show());
   mainWindow.on('closed', () => app.quit());
+
   tableWindow = await createWindow('table', 'table.html', tableOptions);
   tableWindow.setParentWindow(mainWindow);
   tableWindow.once('ready-to-show', () => tableWindow.show());
@@ -91,6 +92,7 @@ app.on('ready', async () => {
     e.preventDefault();
     tableWindow.hide();
   });
+
   histogramWindow = await createWindow(
     'histChart',
     'histChart.html',
@@ -98,6 +100,7 @@ app.on('ready', async () => {
   );
   histogramWindow.setParentWindow(mainWindow);
   histogramWindow.once('ready-to-show', () => histogramWindow.show());
+
   histogramWindow.on('close', (e) => {
     e.preventDefault();
     histogramWindow.hide();
@@ -122,6 +125,17 @@ app.on('ready', async () => {
     downloadStudyOptions
   );
   downloadStudyWin.setParentWindow(mainWindow);
+  const mainBounds = mainWindow.getBounds();
+  const histBounds = histogramWindow.getBounds();
+  const tableBounds = tableWindow.getBounds();
+
+  histogramWindow.setPosition(
+    mainBounds.x + mainBounds.width - histBounds.width,
+    mainBounds.y - histBounds.height
+  );
+  tableWindow.setPosition(mainBounds.x, mainBounds.y - tableBounds.height);
+
+  intensityWindow.setPosition(mainBounds.x + mainBounds.width, mainBounds.y);
 });
 
 // app.on('activate', () => {
@@ -225,7 +239,8 @@ ipcMain.on('table-mounted', () => {
 });
 
 // TESTING
-ipcMain.on('from-test-button', (e, args) => {
-  console.log(args);
+ipcMain.on('from-test-button', () => {
+  const mainBounds = mainWindow.getBounds();
+  console.log(mainBounds);
 });
 // data:image/jpeg;base64,

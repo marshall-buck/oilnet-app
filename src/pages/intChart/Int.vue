@@ -1,40 +1,46 @@
 <template>
-  <div ref="container" style="position: relative; width: 250px; height: 700px">
-    <canvas ref="intChart"></canvas>
-  </div>
-  <div class="flex flex-row justify-between px-5 mb-4 text-sm">
-    <div>
-      <label class="mr-1">Min</label>
-      <input
-        v-model="min"
-        class="w-20 border-2"
-        type="text"
-        :placeholder="intensity.min"
-      />
+  <div class="overflow-hidden">
+    <div
+      ref="container"
+      style="position: relative; height: 600px; width: 150px"
+    >
+      <canvas ref="intChart"></canvas>
     </div>
-    <div>
-      <label class="mr-1">Max</label>
-      <input
-        v-model="max"
-        class="w-20 border-2"
-        type="text"
-        :placeholder="intensity.max"
-      />
+
+    <div class="flex flex-row mb-1 text-xs justify-around">
+      <div>
+        <label class="mr-1">Min</label>
+        <input
+          v-model="min"
+          class="w-10 border-2"
+          type="text"
+          :placeholder="intensity.min"
+        />
+      </div>
+      <div>
+        <label class="mr-1">Max</label>
+        <input
+          v-model="max"
+          class="w-10 border-2"
+          type="text"
+          :placeholder="intensity.max"
+        />
+      </div>
+      <div>
+        <label class="mr-1">Step Size</label>
+        <input
+          v-model="step"
+          class="w-6 border-2"
+          type="text"
+          :placeholder="intensity.stepSize"
+        />
+      </div>
     </div>
-    <div>
-      <label class="mr-1">Step Size</label>
-      <input
-        v-model="step"
-        class="w-20 border-2"
-        type="text"
-        :placeholder="intensity.stepSize"
-      />
+    <div class="flex flex-row flex-nowrap items-center justify-around">
+      <ButtonSave @click="buttonClicked" class="icon-button" />
+      <ButtonRefresh @click="refresh" class="icon-button" />
+      <ButtonDrag class="icon-button" />
     </div>
-  </div>
-  <div class="flex flex-row flex-nowrap items-center justify-around">
-    <ButtonSave @click="buttonClicked" class="icon-button p-2" />
-    <ButtonRefresh @click="refresh" />
-    <ButtonDrag />
   </div>
 </template>
 
@@ -51,7 +57,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Chart from 'chart.js/auto';
 import { convertRef } from '../../helpers/helpers';
 Chart.defaults.color = '#000';
-Chart.defaults.font.size = 12;
+Chart.defaults.font.size = 8;
 const plug = {
   id: 'custom_canvas_background_color',
   beforeDraw: (chart) => {
@@ -75,7 +81,7 @@ export default {
 
     const intChart = ref(null);
     const intensity = reactive({
-      borderColor: 'rgba(0,0,255,0.5)',
+      borderColor: 'rgba(0,0,255,0.7)',
       data: null,
       min: 0,
       max: 0,
@@ -151,7 +157,6 @@ export default {
       intensity.max = max;
       intensity.length = length;
       intensity.maxLength = maxLength(length);
-      // createChart();
     }
     // Create Chart
     function createChart() {
@@ -166,8 +171,8 @@ export default {
                 yAxisKey: 'y',
               },
 
-              borderWidth: 3,
-              borderColor: 'rgba(0,0,255,0.5)',
+              borderWidth: 2,
+              borderColor: 'rgba(0,0,255,0.7)',
             },
           ],
         };
@@ -176,6 +181,7 @@ export default {
           tension: 0.3,
           responsive: true,
           maintainAspectRatio: false,
+
           scales: {
             x: {
               title: {
@@ -228,7 +234,7 @@ export default {
               text: `${intensity.title} Intensity Profile`,
               color: '#000',
               font: {
-                size: 16,
+                size: 8,
                 family: 'Arial',
                 weight: 'normal',
               },
@@ -240,11 +246,11 @@ export default {
               display: true,
               color: 'red',
               font: {
-                size: 12,
+                size: 8,
               },
               anchor: 'end',
               align: 'left',
-              offset: 10,
+              offset: 8,
               formatter: function (_, context) {
                 const index = context.dataIndex;
                 return context.dataset.data[index].x;
@@ -266,9 +272,11 @@ export default {
           options: chartOptions,
         });
       } else {
+        chart.options.scales.y.min = 0;
         chart.options.scales.y.max = intensity.maxLength;
         chart.options.scales.x.max = intensity.max;
         chart.options.scales.x.min = intensity.min;
+
         chart.options.scales.x.ticks.stepSize = intensity.stepSize;
         (chart.data.datasets = [
           {
@@ -278,11 +286,12 @@ export default {
               yAxisKey: 'y',
             },
 
-            borderWidth: 3,
+            borderWidth: 2,
             borderColor: intensity.borderColor,
           },
         ]),
-          chart.update();
+          chart.clear();
+        chart.update();
       }
     }
 
@@ -290,18 +299,27 @@ export default {
     function saveChartJpgInt() {
       let chart = Chart.getChart(intChart.value);
       if (!chart) return;
+      Chart.defaults.font.size = 16;
+      chart.options.plugins.datalabels.font.size = 16;
+      chart.options.plugins.datalabels.offset = 10;
+      chart.options.plugins.title.font.size = 24;
       container.value.style.height = '1900px';
       container.value.style.width = '350px';
 
       chart.resize();
+
       chart = Chart.getChart(intChart.value);
       const image = chart.toBase64Image('image/jpeg', 1);
 
       const study = convertRef(intensity.studyNo);
       window.api.send('save-chart', [image, study, 'intC']);
-      container.value.style.height = '700px';
-      container.value.style.width = '250px';
-      chart.resize();
+      // Chart.defaults.font.size = 8;
+      // chart.options.plugins.datalabels.font.size = 8;
+      // chart.options.plugins.datalabels.offset = 8;
+      // chart.options.plugins.title.font.size = 8;
+      container.value.style.height = '600px';
+      container.value.style.width = '150px';
+      destroyChart();
     }
     // Destroy Chart
     function destroyChart() {
@@ -325,5 +343,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

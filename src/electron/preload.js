@@ -29,6 +29,7 @@ contextBridge.exposeInMainWorld('api', {
       'close-studyId-modal:reply',
       'record-data-pressed:reply',
       'image-data-change:reply',
+      'delete-data-at:reply',
       'hist-mounted:reply',
       'int-mounted:reply',
       'table-mounted:reply',

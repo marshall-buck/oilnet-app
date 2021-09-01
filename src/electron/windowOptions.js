@@ -6,10 +6,11 @@ exports.mainOptions = {
   resizable: false,
 };
 exports.tableOptions = {
-  width: 600,
-  height: 300,
+  width: 575,
+  height: 250,
   title: 'Measurements',
   show: false,
+  frame: false,
 };
 exports.downloadStudyOptions = {
   width: 348,
@@ -24,11 +25,13 @@ exports.histogramOptions = {
   title: 'Histogram',
   show: false,
   frame: false,
+  resizable: false,
 };
 exports.intensityOptions = {
-  width: 300,
-  height: 900,
+  width: 250,
+  height: 660,
   title: 'Intensity',
   show: false,
   frame: false,
+  resizable: false,
 };

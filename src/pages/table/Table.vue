@@ -4,7 +4,7 @@
       <caption class="text-2xl mb-2">
         Sample
         {{
-          title
+          data.title
         }}
       </caption>
       <thead class="border-b-2 mb-2">
@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in data" :key="index">
+        <tr v-for="(item, index) in data.data" :key="index">
           <td @click="indexClicked(index)">
             <svg
               class="w-4 h-4 cursor-pointer"
@@ -50,30 +50,37 @@
       </tbody>
     </table>
   </div>
+  <ButtonDrag class="icon-button" />
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive } from 'vue';
+import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
 export default {
+  components: {
+    ButtonDrag,
+  },
   setup() {
-    const data = ref(null);
-    const title = ref('');
+    const data = reactive({ data: null, title: '' });
+
+    window.api.receive('image-data-change:reply', (arg) => {
+      data.data = arg.table;
+      data.title = arg.sampleId;
+      console.log('image-data-changed', data.value);
+    });
 
     onMounted(() => {
-      window.api.receive('image-data-change:reply', (arg) => {
-        data.value = arg.table;
-        title.value = arg.sampleId;
-        console.log('image-data-changed', data.value);
-      });
+      window.api.send('table-mounted');
     });
+
     // Send index to delete
     const indexClicked = (index) => {
+      console.log(index);
       window.api.send('delete-data-at', index);
     };
     return {
       data,
       indexClicked,
-      title,
     };
   },
 };

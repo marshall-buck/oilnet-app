@@ -18,7 +18,7 @@
 
 <script>
 // TODO:disable saving images if levels are equal of if no images loaded
-// TODO: trigger saving of charts
+
 import { useStore } from 'vuex';
 import { computed } from 'vue';
 import { convertRef } from '../../helpers/helpers';
@@ -29,16 +29,24 @@ export default {
     const windowWidth = computed(() => store.getters.windowWidth);
     const windowCenter = computed(() => store.getters.windowCenter);
     const paths = computed(() => store.getters.paths);
+    const imagePixelData = computed(() => store.getters.imagePixelData);
+    const measurementTable = computed(() => store.getters.measurementTable);
+    const sampleNo = computed(() => store.getters.sampleNo);
 
     const clicked = () => {
       const data = {
         studyId: studyId.value,
+        sampleNo: sampleNo.value,
         paths: convertRef(paths.value),
+        histogram: convertRef(imagePixelData.value),
+        table: convertRef(measurementTable.value),
+
         width: windowWidth.value,
         center: windowCenter.value,
       };
-      // if (data.width == data.center) alert('blah blah blah');
+
       window.api.send('save-jpeg-pressed', data);
+      store.dispatch('resetState');
     };
     return {
       clicked,

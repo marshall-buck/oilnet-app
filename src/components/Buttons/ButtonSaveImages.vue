@@ -1,5 +1,9 @@
 <template>
-  <button-base title="Save Images" @click="clicked">
+  <button-base
+    title="Save Images"
+    @click="clicked"
+    :mode="measurementTable.length === 0 ? 'active' : ''"
+  >
     <svg
       fill="none"
       stroke="white"
@@ -50,6 +54,7 @@ export default {
     };
     return {
       clicked,
+      measurementTable,
     };
   },
 };

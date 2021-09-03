@@ -41,10 +41,10 @@ export default {
     const store = useStore();
 
     window.api.receive('open-studyNo-modal:reply', () => {
-      store.dispatch('togglestudyNoModal');
+      store.dispatch('toggleStudyNoModal');
     });
     window.api.receive('close-studyNo-modal:reply', () => {
-      store.dispatch('togglestudyNoModal');
+      store.dispatch('toggleStudyNoModal');
     });
     initCornerstone();
     cornerstone.registerImageLoader(

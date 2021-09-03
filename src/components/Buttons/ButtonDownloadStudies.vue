@@ -25,7 +25,7 @@ export default {
     const clicked = () => {
       window.api.send('open-studyNo-modal', 'study modal Opened');
     };
-    const isActive = computed(() => store.getters.isstudyNoModal);
+    const isActive = computed(() => store.getters.isStudyNoModal);
 
     return {
       clicked,

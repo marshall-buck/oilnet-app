@@ -5,8 +5,8 @@ export const setWidth = ({ commit }, value) => {
 export const setCenter = ({ commit }, value) => {
   commit('setCenter', value);
 };
-export const togglestudyNoModal = ({ commit }) => {
-  commit('togglestudyNoModal');
+export const toggleStudyNoModal = ({ commit }) => {
+  commit('toggleStudyNoModal');
 };
 export const loadStoreStackIds = ({ commit }, value) => {
   commit('loadStoreStackIds', value);
@@ -53,12 +53,12 @@ export const addImagePixelData = ({ commit }, value) => {
 export const deleteImagePixelData = ({ commit }, index) => {
   commit('deleteImagePixelData', index);
 };
-export const addMeasurementTableData = ({ commit }, value) => {
-  commit('addMeasurementTableData', value);
+export const addTableData = ({ commit }, value) => {
+  commit('addTableData', value);
 };
 
-export const deleteMeasurementTableData = ({ commit }, index) => {
-  commit('deleteMeasurementTableData', index);
+export const deleteTableData = ({ commit }, index) => {
+  commit('deleteTableData', index);
 };
 
 export const scrollToThisNumber = ({ commit }, value) => {

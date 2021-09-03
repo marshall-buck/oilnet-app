@@ -2,7 +2,7 @@
   <button-base
     title="Save Images"
     @click="clicked"
-    :mode="measurementTable.length === 0 ? 'inactive' : ''"
+    :mode="table.length === 0 ? 'inactive' : ''"
   >
     <svg
       fill="none"
@@ -34,7 +34,7 @@ export default {
     const windowCenter = computed(() => store.getters.windowCenter);
     const paths = computed(() => store.getters.paths);
     const imagePixelData = computed(() => store.getters.imagePixelData);
-    const measurementTable = computed(() => store.getters.measurementTable);
+    const table = computed(() => store.getters.table);
     const sampleNo = computed(() => store.getters.sampleNo);
 
     const clicked = () => {
@@ -43,7 +43,7 @@ export default {
         sampleNo: sampleNo.value,
         paths: convertRef(paths.value),
         histogram: convertRef(imagePixelData.value),
-        table: convertRef(measurementTable.value),
+        table: convertRef(table.value),
         width: windowWidth.value,
         center: windowCenter.value,
       };
@@ -53,7 +53,7 @@ export default {
     };
     return {
       clicked,
-      measurementTable,
+      table,
     };
   },
 };

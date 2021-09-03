@@ -1,5 +1,5 @@
 export const defaultLevels = (state) => state.defaultLevels;
-export const isstudyNoModal = (state) => state.isstudyNoModal;
+export const isStudyNoModal = (state) => state.isStudyNoModal;
 export const scale = (state) => state.scale;
 export const imageIds = (state) => state.stack.imageIds;
 export const paths = (state) => state.stack.paths;
@@ -30,7 +30,7 @@ export const meanHu = (state) => state.liveData.meanHu;
 
 export const imagePixelData = (state) => state.imagePixelData;
 
-export const measurementTable = (state) => state.measurementTable;
+export const table = (state) => state.table;
 
 export const currentImageIdIndex = (state) => state.stack.currentImageIdIndex;
 

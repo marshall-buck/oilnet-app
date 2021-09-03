@@ -1,6 +1,6 @@
 export const getDefaultState = () => {
   return {
-    isstudyNoModal: false,
+    isStudyNoModal: false,
     isCircleToolActive: false,
     isClearLastCircle: false,
 
@@ -27,6 +27,6 @@ export const getDefaultState = () => {
     imagePixelData: [],
 
     // Contains the data to populate the table page
-    measurementTable: [],
+    table: [],
   };
 };

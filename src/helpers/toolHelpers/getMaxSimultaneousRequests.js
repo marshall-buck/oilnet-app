@@ -54,10 +54,7 @@ function getBrowserInfo() {
   if (M[1] === 'Chrome') {
     tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
     if (tem !== null) {
-      return tem
-        .slice(1)
-        .join(' ')
-        .replace('OPR', 'Opera');
+      return tem.slice(1).join(' ').replace('OPR', 'Opera');
     }
   }
 

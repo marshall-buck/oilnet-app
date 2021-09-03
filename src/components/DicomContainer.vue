@@ -7,7 +7,7 @@ import * as cornerstone from 'cornerstone-core';
 import * as cornerstoneTools from 'cornerstone-tools';
 import omit from 'lodash.omit';
 import ceil from 'lodash.ceil';
-// import * as cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
+
 import { computed, onMounted, ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
@@ -36,7 +36,7 @@ export default {
     const isCircleActive = computed(() => store.getters.isCircleToolActive);
     const isClearLastCircle = computed(() => store.getters.isClearLastCircle);
     const imagePixelData = computed(() => store.getters.imagePixelData);
-    const measurementTable = computed(() => store.getters.measurementTable);
+    const table = computed(() => store.getters.table);
     const axialDepth = computed(() => store.getters.axialDepth);
     const sampleNo = computed(() => store.getters.sampleNo);
     const studyNo = computed(() => store.getters.studyNo);
@@ -74,7 +74,7 @@ export default {
       ];
       const measurementObj = prepareDataForTable(measurementArray);
 
-      store.dispatch('addMeasurementTableData', measurementObj);
+      store.dispatch('addTableData', measurementObj);
     }
 
     onMounted(() => {
@@ -103,11 +103,11 @@ export default {
       });
       window.api.receive('delete-data-at:reply', (arg) => {
         store.dispatch('deleteImagePixelData', arg);
-        store.dispatch('deleteMeasurementTableData', arg);
+        store.dispatch('deleteTableData', arg);
       });
       window.api.receive('hist-mounted:reply', () => {
         const sentData = {
-          table: convertRef(measurementTable.value),
+          table: convertRef(table.value),
           histogram: convertRef(imagePixelData.value),
           sampleNo: sampleNo.value,
           studyNo: studyNo.value,
@@ -117,7 +117,7 @@ export default {
       });
       window.api.receive('int-mounted:reply', () => {
         const sentData = {
-          table: convertRef(measurementTable.value),
+          table: convertRef(table.value),
           histogram: convertRef(imagePixelData.value),
           sampleNo: sampleNo.value,
           studyNo: studyNo.value,
@@ -127,7 +127,7 @@ export default {
       });
       window.api.receive('table-mounted:reply', () => {
         const sentData = {
-          table: convertRef(measurementTable.value),
+          table: convertRef(table.value),
           histogram: convertRef(imagePixelData.value),
           sampleNo: sampleNo.value,
           studyNo: studyNo.value,
@@ -173,9 +173,9 @@ export default {
       }
     });
 
-    watch(measurementTable, () => {
+    watch(table, () => {
       const sentData = {
-        table: convertRef(measurementTable.value),
+        table: convertRef(table.value),
         histogram: convertRef(imagePixelData.value),
         sampleNo: sampleNo.value,
         studyNo: studyNo.value,

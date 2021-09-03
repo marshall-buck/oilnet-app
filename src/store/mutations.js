@@ -7,8 +7,8 @@ export const setWidth = (state, value) => {
 export const setCenter = (state, value) => {
   state.defaultLevels.windowCenter = value;
 };
-export const togglestudyNoModal = (state) => {
-  state.isstudyNoModal = !state.isstudyNoModal;
+export const toggleStudyNoModal = (state) => {
+  state.isStudyNoModal = !state.isStudyNoModal;
 };
 
 export const loadStoreStackIds = (state, value) => {
@@ -55,8 +55,8 @@ export const addImagePixelData = (state, value) => {
   state.imagePixelData = [...state.imagePixelData, value];
 };
 
-export const addMeasurementTableData = (state, value) => {
-  state.measurementTable = [...state.measurementTable, value];
+export const addTableData = (state, value) => {
+  state.table = [...state.table, value];
 };
 
 export const deleteImagePixelData = (state, value) => {
@@ -65,10 +65,8 @@ export const deleteImagePixelData = (state, value) => {
   );
 };
 
-export const deleteMeasurementTableData = (state, value) => {
-  state.measurementTable = state.measurementTable.filter(
-    (e, index) => index !== value
-  );
+export const deleteTableData = (state, value) => {
+  state.table = state.table.filter((e, index) => index !== value);
 };
 
 export const scrollToThisNumber = (state, value) => {

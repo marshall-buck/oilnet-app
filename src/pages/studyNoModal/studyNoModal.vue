@@ -3,7 +3,7 @@
     <input
       @keydown.enter="entered"
       @keydown.esc="clickClose"
-      v-model="studyId"
+      v-model="studyNo"
       class="
         appearance-none
         rounded
@@ -44,21 +44,21 @@
 import { ref, computed } from 'vue';
 export default {
   setup() {
-    const studyId = ref(null);
+    const studyNo = ref(null);
     const isDisabled = computed(() => {
-      if (!studyId.value) return true;
+      if (!studyNo.value) return true;
       return false;
     });
     const entered = () => {
       console.log(isDisabled.value);
-      if (!isDisabled.value) window.api.send('study-id-entered', studyId.value);
+      if (!isDisabled.value) window.api.send('study-id-entered', studyNo.value);
     };
     const clickClose = () => {
-      window.api.send('close-studyId-modal', []);
+      window.api.send('close-studyNo-modal', []);
     };
     return {
       clickClose,
-      studyId,
+      studyNo,
       entered,
       isDisabled,
     };

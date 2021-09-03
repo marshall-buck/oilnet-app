@@ -17,7 +17,7 @@ module.exports = {
       title: 'Measurements',
     },
     downloadStudy: {
-      entry: './src/pages/studyIdModal/studyIdModal.js',
+      entry: './src/pages/studyNoModal/studyNoModal.js',
       title: 'Download Study',
     },
 

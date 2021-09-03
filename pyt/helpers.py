@@ -8,7 +8,7 @@ import sys
 obj = json.loads(sys.argv[1])
 
 
-studyId = obj['studyId']
+studyNo = obj['studyNo']
 width = obj['width']
 center = obj['center']
 filePaths = obj['filePaths']
@@ -95,7 +95,7 @@ def save_to_jpeg():
     for item in js['zeroNinety']:
         jsList.append(item)
     # get Current study number
-    # studyId = re.search(r"\d{5}", names[0]).group()
+    # studyNo = re.search(r"\d{5}", names[0]).group()
 
     # Loop through names list start progress bar write jpg file
     for num, filePath in enumerate(names):
@@ -104,9 +104,9 @@ def save_to_jpeg():
             if obj['org-path'] == filePath:
                 fileName = f'{obj["fileName"]}'
         if num == 0:
-            with open(f'{path_to_ct_folder}/{studyId}/{studyId}.json', 'w') as outfile:
+            with open(f'{path_to_ct_folder}/{studyNo}/{studyNo}.json', 'w') as outfile:
                 json.dump(js, outfile)
-        jpgPath = f'{path_to_ct_folder}/{studyId}/{fileName}.jpeg'
+        jpgPath = f'{path_to_ct_folder}/{studyNo}/{fileName}.jpeg'
 
         with ThreadPoolExecutor(max_workers=6) as executor:
             executor.submit(write_file_to_path, filePath, jpgPath,

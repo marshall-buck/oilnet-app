@@ -14,7 +14,7 @@ const checkFolder = (folderPath) => {
 };
 const { pathToCtFolder, url, baseUrl } = pathObject();
 
-exports.findStudy = async (StudyID) => {
+exports.findStudy = async (studyNo) => {
   const progressBar = new ProgressBar({
     text: 'Working...',
 
@@ -32,7 +32,7 @@ exports.findStudy = async (StudyID) => {
   const data = {
     Level: 'Study',
     Query: {
-      StudyID: StudyID,
+      studyNo: studyNo,
     },
     Expand: true,
   };
@@ -51,10 +51,10 @@ exports.findStudy = async (StudyID) => {
     // set progress bar
 
     // return info;
-    _saveCompressedStudies(id, StudyID);
-    _saveDicomDir(id, StudyID);
+    _saveCompressedStudies(id, studyNo);
+    _saveDicomDir(id, studyNo);
 
-    if (checkFolder(`${pathToCtFolder}/${StudyID}`)) {
+    if (checkFolder(`${pathToCtFolder}/${studyNo}`)) {
       const mrs = dialog.showMessageBoxSync({
         type: 'warning',
         buttons: ['OK', 'CANCEL'],
@@ -66,17 +66,17 @@ exports.findStudy = async (StudyID) => {
         return;
       } else {
         try {
-          if (StudyID === '') return;
+          if (studyNo === '') return;
 
-          fs.rmSync(`${pathToCtFolder}/${StudyID}`);
-          fs.mkdirSync(`${pathToCtFolder}/${StudyID}`);
+          fs.rmSync(`${pathToCtFolder}/${studyNo}`);
+          fs.mkdirSync(`${pathToCtFolder}/${studyNo}`);
         } catch (error) {
           console.log(error);
         }
       }
     } else {
-      if (StudyID === '') return;
-      fs.mkdirSync(`${pathToCtFolder}/${StudyID}`);
+      if (studyNo === '') return;
+      fs.mkdirSync(`${pathToCtFolder}/${studyNo}`);
     }
   } catch (error) {
     progressBar.setCompleted();
@@ -109,20 +109,20 @@ exports.findStudy = async (StudyID) => {
   return;
 };
 
-function _saveDicomDir(id, StudyID) {
+function _saveDicomDir(id, studyNo) {
   const url = `${baseUrl}/studies/${id}/media`;
   try {
     http.get(url, (response) => {
       const file = fs.createWriteStream(
-        `${pathToCtFolder}/${StudyID}/archive.zip`
+        `${pathToCtFolder}/${studyNo}/archive.zip`
       );
       response.pipe(file);
       file.on('finish', () => {
         file.close();
-        fs.createReadStream(`${pathToCtFolder}/${StudyID}/archive.zip`).pipe(
-          unzipper.Extract({ path: `${pathToCtFolder}/${StudyID}` })
+        fs.createReadStream(`${pathToCtFolder}/${studyNo}/archive.zip`).pipe(
+          unzipper.Extract({ path: `${pathToCtFolder}/${studyNo}` })
         );
-        fs.unlink(`${pathToCtFolder}/${StudyID}/archive.zip`, (err) => {
+        fs.unlink(`${pathToCtFolder}/${studyNo}/archive.zip`, (err) => {
           if (err) {
             throw err;
           }
@@ -135,12 +135,12 @@ function _saveDicomDir(id, StudyID) {
   }
 }
 
-function _saveCompressedStudies(id, studyId) {
+function _saveCompressedStudies(id, studyNo) {
   const url = `${baseUrl}/studies/${id}/archive`;
   try {
     http.get(url, (response) => {
       const file = fs.createWriteStream(
-        `${pathToCtFolder}/${studyId}/${studyId}.zip`
+        `${pathToCtFolder}/${studyNo}/${studyNo}.zip`
       );
       response.pipe(file);
       file.on('finish', () => {

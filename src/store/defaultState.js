@@ -1,6 +1,6 @@
 export const getDefaultState = () => {
   return {
-    isStudyIdModal: false,
+    isstudyNoModal: false,
     isCircleToolActive: false,
     isClearLastCircle: false,
 

@@ -6,9 +6,9 @@ contextBridge.exposeInMainWorld('api', {
     // whitelist channels
     let validChannels = [
       'study-id-entered',
-      'open-studyId-modal',
+      'open-studyNo-modal',
       'save-jpeg-pressed',
-      'close-studyId-modal',
+      'close-studyNo-modal',
       'from-test-button',
       'record-data-pressed',
       'image-data-change',
@@ -28,8 +28,8 @@ contextBridge.exposeInMainWorld('api', {
   receive: (channel, func) => {
     let validChannels = [
       'from-main',
-      'open-studyId-modal:reply',
-      'close-studyId-modal:reply',
+      'open-studyNo-modal:reply',
+      'close-studyNo-modal:reply',
       'record-data-pressed:reply',
       'image-data-change:reply',
       'delete-data-at:reply',

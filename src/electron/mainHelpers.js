@@ -32,7 +32,7 @@ exports.writeImagesToDisk = async (arg) => {
     const regex = /\d{5}/;
     const path = paths[0];
     const id = path.match(regex)[0];
-    arg.studyId = id;
+    arg.studyNo = id;
     arg.filePaths = paths;
     arg.ct = pathToCtFolder;
     fs.writeFileSync(`${pathToCtFolder}/${id}/${id}.csv`, csv, 'utf8', (err) =>
@@ -63,7 +63,7 @@ function _makeCsvArray(arg) {
   const yAxis = histogram.yAxis;
 
   const header = [
-    arg.studyId,
+    arg.studyNo,
     arg.sampleNo,
 
     ...Object.keys(table[0]),

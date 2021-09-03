@@ -29,7 +29,7 @@ import { convertRef } from '../../helpers/helpers';
 export default {
   setup() {
     const store = useStore();
-    const studyId = computed(() => store.getters.studyNo);
+    const studyNo = computed(() => store.getters.studyNo);
     const windowWidth = computed(() => store.getters.windowWidth);
     const windowCenter = computed(() => store.getters.windowCenter);
     const paths = computed(() => store.getters.paths);
@@ -39,12 +39,11 @@ export default {
 
     const clicked = () => {
       const data = {
-        studyId: studyId.value,
+        studyNo: studyNo.value,
         sampleNo: sampleNo.value,
         paths: convertRef(paths.value),
         histogram: convertRef(imagePixelData.value),
         table: convertRef(measurementTable.value),
-
         width: windowWidth.value,
         center: windowCenter.value,
       };

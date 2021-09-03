@@ -185,9 +185,9 @@ app.on('window-all-closed', () => {
   }
 });
 // Downloading Studies Communications
-ipcMain.on('open-studyId-modal', () => {
+ipcMain.on('open-studyNo-modal', () => {
   downloadStudyWin.show();
-  mainWindow.webContents.send('open-studyId-modal:reply', true);
+  mainWindow.webContents.send('open-studyNo-modal:reply', true);
 });
 ipcMain.on('study-id-entered', async (e, arg) => {
   const regex = /^\d{5}$/;
@@ -203,9 +203,9 @@ ipcMain.on('study-id-entered', async (e, arg) => {
   await findStudy(arg);
 });
 
-ipcMain.on('close-studyId-modal', () => {
+ipcMain.on('close-studyNo-modal', () => {
   downloadStudyWin.hide();
-  mainWindow.webContents.send('close-studyId-modal:reply', false);
+  mainWindow.webContents.send('close-studyNo-modal:reply', false);
 });
 // Data Recording and deleting Communications
 ipcMain.on('record-data-pressed', async () => {
@@ -319,8 +319,8 @@ ipcMain.on('from-test-button', () => {
 });
 // data:image/jpeg;base64,
 
-function checkCurrentData(old, newt) {
-  if (!old) return;
-  if (JSON.stringify(old) == JSON.stringify(newt)) return true;
-  return false;
-}
+// function checkCurrentData(old, newt) {
+//   if (!old) return;
+//   if (JSON.stringify(old) == JSON.stringify(newt)) return true;
+//   return false;
+// }

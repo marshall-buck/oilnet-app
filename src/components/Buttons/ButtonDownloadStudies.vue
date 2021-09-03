@@ -23,9 +23,9 @@ export default {
   setup() {
     const store = useStore();
     const clicked = () => {
-      window.api.send('open-studyId-modal', 'study modal Opened');
+      window.api.send('open-studyNo-modal', 'study modal Opened');
     };
-    const isActive = computed(() => store.getters.isStudyIdModal);
+    const isActive = computed(() => store.getters.isstudyNoModal);
 
     return {
       clicked,

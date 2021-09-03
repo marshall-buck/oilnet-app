@@ -34,11 +34,8 @@
 </template>
 
 <script>
-// TODO:Changeable mins and max's
-// TODO:Changeable font sizes for viewing and saving
-
 import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
-// import ButtonSave from '../../components/Buttons/ButtonSave.vue';
+
 import ButtonRefresh from '../../components/Buttons/ButtonRefresh.vue';
 
 import { ref, reactive, watch, onMounted } from 'vue';
@@ -100,7 +97,7 @@ export default {
       createHistogramChartData(arg);
     });
 
-    window.api.receive('save-jpeg-pressed:reply', () => {
+    window.api.receive('save-button-pressed:reply', () => {
       saveChartJpgHistogram();
     });
     // Watch data and run create chart on change

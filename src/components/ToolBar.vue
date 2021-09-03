@@ -12,7 +12,7 @@
     <ButtonNextImg class="mb-4" />
     <ButtonRecordData class="mb-4" />
 
-    <ButtonSaveImages />
+    <ButtonSave />
     <ButtonTest />
   </div>
 </template>
@@ -27,7 +27,7 @@ import ButtonPrevImg from './Buttons/ButtonPrevImg.vue';
 
 import ButtonRecordData from './Buttons/ButtonRecordData.vue';
 import ButtonNextImg from './Buttons/ButtonNextImg.vue';
-import ButtonSaveImages from './Buttons/ButtonSaveImages.vue';
+import ButtonSave from './Buttons/ButtonSave.vue';
 import ButtonTest from './Buttons/ButtonTest.vue';
 
 export default {
@@ -41,7 +41,7 @@ export default {
     ButtonNextImg,
     ButtonPrevImg,
 
-    ButtonSaveImages,
+    ButtonSave,
     ButtonTest,
   },
 };

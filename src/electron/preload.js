@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('api', {
     let validChannels = [
       'study-id-entered',
       'open-studyNo-modal',
-      'save-jpeg-pressed',
+      'save-button-pressed',
       'close-studyNo-modal',
       'from-test-button',
       'record-data-pressed',
@@ -36,7 +36,7 @@ contextBridge.exposeInMainWorld('api', {
       'hist-mounted:reply',
       'int-mounted:reply',
       'table-mounted:reply',
-      'save-jpeg-pressed:reply',
+      'save-button-pressed:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

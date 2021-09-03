@@ -29,10 +29,10 @@ const chartVisibility = {
   table: true,
 };
 // TODO: make current dta global and use for downloads
-let currentData;
+let currentData = null;
 
 // TODO: Python Packager
-// TODO: save csv files
+
 // TODO: move files to trash on overwrite dir
 
 // Scheme must be registered before the app is ready
@@ -235,15 +235,15 @@ ipcMain.on('delete-data-at', (e, arg) => {
 });
 
 // Save Jpeg Images
-ipcMain.on('save-jpeg-pressed', (e, arg) => {
+ipcMain.on('save-button-pressed', (e, arg) => {
   if (histogramWindow.isVisible()) {
-    histogramWindow.webContents.send('save-jpeg-pressed:reply');
+    histogramWindow.webContents.send('save-button-pressed:reply');
   }
   if (tableWindow.isVisible()) {
-    tableWindow.webContents.send('save-jpeg-pressed:reply');
+    tableWindow.webContents.send('save-button-pressed:reply');
   }
   if (intensityWindow.isVisible()) {
-    intensityWindow.webContents.send('save-jpeg-pressed:reply');
+    intensityWindow.webContents.send('save-button-pressed:reply');
   }
 
   writeImagesToDisk(arg);

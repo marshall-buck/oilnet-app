@@ -165,7 +165,6 @@ export default {
             ]);
             cornerstoneTools.addToolState(dicom.value, 'stack', stack.value);
 
-            // TODO: Prevent StackScrollMouseWheel form begin added twice
             cornerstoneTools.addTool(StackScrollMouseWheelTool);
             cornerstoneTools.setToolActive('StackScrollMouseWheel', {});
           })

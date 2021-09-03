@@ -46,11 +46,9 @@
 </template>
 
 <script>
-// TODO:Changeable mins and max's
-// TODO:Changeable font sizes for viewing and saving
 import { reactive, ref, watch, onMounted } from 'vue';
 import ButtonDrag from '../../components/Buttons/ButtonDrag.vue';
-// import ButtonSave from '../../components/Buttons/ButtonSave.vue';
+
 import ButtonRefresh from '../../components/Buttons/ButtonRefresh.vue';
 
 import sortBy from 'lodash.sortby';
@@ -122,7 +120,7 @@ export default {
       createChartDataIntensity(arg);
     });
 
-    window.api.receive('save-jpeg-pressed:reply', () => {
+    window.api.receive('save-button-pressed:reply', () => {
       saveChartJpgInt();
     });
 

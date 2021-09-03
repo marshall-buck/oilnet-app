@@ -35,3 +35,6 @@ export const measurementTable = (state) => state.measurementTable;
 export const currentImageIdIndex = (state) => state.stack.currentImageIdIndex;
 
 export const scrollToThisNumber = (state) => state.scrollToThisNumber;
+
+export const isHistogramActive = (state) => state.isHistogramActive;
+export const isIntensityActive = (state) => state.isIntensityActive;

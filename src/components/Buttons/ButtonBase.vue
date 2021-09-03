@@ -9,7 +9,7 @@ export default {
 };
 </script>
 <style scoped>
-.active {
+.inactive {
   opacity: 0.5;
 }
 </style>

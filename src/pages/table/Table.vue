@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white p-1">
+  <div class="bg-white p-1 relative">
     <table class="table-auto">
-      <caption class="text-2xl mb-2">
+      <caption class="mb-2">
         Sample
         {{
           data.title
@@ -50,7 +50,7 @@
       </tbody>
     </table>
   </div>
-  <ButtonDrag class="icon-button" />
+  <ButtonDrag class="icon-button absolute left-2 top-2" />
 </template>
 
 <script>

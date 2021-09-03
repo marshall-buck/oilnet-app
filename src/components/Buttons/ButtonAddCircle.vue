@@ -2,7 +2,7 @@
   <button-base
     title="Add Circle"
     @click="clicked"
-    :mode="isCircleToolActive ? 'active' : ''"
+    :mode="isCircleToolActive ? 'inactive' : ''"
   >
     <svg
       fill="none"

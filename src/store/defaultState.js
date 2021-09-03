@@ -3,6 +3,7 @@ export const getDefaultState = () => {
     isStudyIdModal: false,
     isCircleToolActive: false,
     isClearLastCircle: false,
+
     scrollToThisNumber: 0,
     scale: 1.75,
     stack: {

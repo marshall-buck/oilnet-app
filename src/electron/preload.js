@@ -17,6 +17,9 @@ contextBridge.exposeInMainWorld('api', {
       'hist-mounted',
       'int-mounted',
       'table-mounted',
+      'toggle-chart:int',
+      'toggle-chart:hist',
+      'toggle-chart:table',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);

@@ -7,7 +7,7 @@ const fs = require('fs');
 
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
-  console.log('writeImagesToDisk');
+  // console.log('writeImagesToDisk');
   // let progressBar;
   // progressBar = new ProgressBar({
   //   text: 'Working...',

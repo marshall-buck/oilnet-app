@@ -23,6 +23,13 @@ const {
   intensityOptions,
 } = require('./windowOptions');
 
+const chartVisibility = {
+  int: false,
+  hist: false,
+  table: true,
+};
+let currentData;
+
 // TODO: Python Packager
 // TODO: save csv files
 // TODO: move files to trash on overwrite dir
@@ -92,7 +99,7 @@ app.on('ready', async () => {
     const mainBounds = mainWindow.getBounds();
     const tableBounds = tableWindow.getBounds();
     tableWindow.setPosition(mainBounds.x, mainBounds.y - tableBounds.height);
-    tableWindow.show();
+    if (chartVisibility.table) tableWindow.show();
   });
   tableWindow.on('close', (e) => {
     e.preventDefault();
@@ -112,7 +119,7 @@ app.on('ready', async () => {
       mainBounds.x + mainBounds.width - histBounds.width,
       mainBounds.y - histBounds.height
     );
-    histogramWindow.show();
+    if (chartVisibility.hist) histogramWindow.show();
   });
 
   histogramWindow.on('close', (e) => {
@@ -130,7 +137,7 @@ app.on('ready', async () => {
   intensityWindow.once('ready-to-show', () => {
     const mainBounds = mainWindow.getBounds();
     intensityWindow.setPosition(mainBounds.x + mainBounds.width, mainBounds.y);
-    intensityWindow.show();
+    if (chartVisibility.int) histogramWindow.show();
   });
   intensityWindow.on('close', (e) => {
     e.preventDefault();
@@ -206,7 +213,10 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
-  // console.log('image-data-change', args.table);
+  let oldData = currentData;
+  currentData = args;
+  if (checkCurrentData(oldData, currentData)) return;
+  // console.log(checkCurrentData(oldData, currentData));
 
   if (histogramWindow.isVisible()) {
     histogramWindow.webContents.send('image-data-change:reply', args);
@@ -225,7 +235,6 @@ ipcMain.on('delete-data-at', (e, arg) => {
 
 // Save Jpeg Images
 ipcMain.on('save-jpeg-pressed', (e, arg) => {
-  // console.log(arg);
   if (histogramWindow.isVisible()) {
     histogramWindow.webContents.send('save-jpeg-pressed:reply');
   }
@@ -254,6 +263,53 @@ ipcMain.on('int-mounted', () => {
 ipcMain.on('table-mounted', () => {
   mainWindow.webContents.send('table-mounted:reply');
 });
+ipcMain.on('toggle-chart:int', (e, arg) => {
+  const chart = arg.chart;
+  const isVisible = arg.isVisible;
+  chartVisibility[chart] = isVisible;
+
+  if (chartVisibility.int) {
+    const mainBounds = mainWindow.getBounds();
+    intensityWindow.setPosition(mainBounds.x + mainBounds.width, mainBounds.y);
+    intensityWindow.webContents.send('image-data-change:reply', currentData);
+    intensityWindow.show();
+  } else {
+    intensityWindow.hide();
+  }
+});
+ipcMain.on('toggle-chart:hist', (e, arg) => {
+  const chart = arg.chart;
+  const isVisible = arg.isVisible;
+  chartVisibility[chart] = isVisible;
+
+  if (chartVisibility.hist) {
+    const mainBounds = mainWindow.getBounds();
+    const histBounds = histogramWindow.getBounds();
+    histogramWindow.setPosition(
+      mainBounds.x + mainBounds.width - histBounds.width,
+      mainBounds.y - histBounds.height
+    );
+    histogramWindow.webContents.send('image-data-change:reply', currentData);
+    histogramWindow.show();
+  } else {
+    histogramWindow.hide();
+  }
+});
+ipcMain.on('toggle-chart:table', (e, arg) => {
+  const chart = arg.chart;
+  const isVisible = arg.isVisible;
+  chartVisibility[chart] = isVisible;
+
+  if (chartVisibility.table) {
+    const mainBounds = mainWindow.getBounds();
+    const tableBounds = tableWindow.getBounds();
+    tableWindow.setPosition(mainBounds.x, mainBounds.y - tableBounds.height);
+    tableWindow.webContents.send('image-data-change:reply', currentData);
+    tableWindow.show();
+  } else {
+    tableWindow.hide();
+  }
+});
 
 // TESTING
 ipcMain.on('from-test-button', () => {
@@ -261,3 +317,9 @@ ipcMain.on('from-test-button', () => {
   console.log(mainBounds);
 });
 // data:image/jpeg;base64,
+
+function checkCurrentData(old, newt) {
+  if (!old) return;
+  if (JSON.stringify(old) == JSON.stringify(newt)) return true;
+  return false;
+}

@@ -2,7 +2,7 @@
   <button-base
     title="Save Images"
     @click="clicked"
-    :mode="measurementTable.length === 0 ? 'active' : ''"
+    :mode="measurementTable.length === 0 ? 'inactive' : ''"
   >
     <svg
       fill="none"

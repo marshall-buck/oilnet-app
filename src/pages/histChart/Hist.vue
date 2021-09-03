@@ -30,6 +30,9 @@
     />
     <ButtonDrag class="icon-button absolute right-2 top-2" />
   </div>
+  <p>{{ histogram.totalPixelCount }}</p>
+  <p>{{ min }}</p>
+  <p>{{ max }}</p>
 </template>
 
 <script>
@@ -280,7 +283,6 @@ export default {
     return {
       histogram,
       histChart,
-      // buttonClicked,
       container,
       min,
       max,

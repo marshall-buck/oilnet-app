@@ -61,7 +61,6 @@ function _makeCsvArray(arg) {
   const histogram = _prepareCsvData(arg);
   const sliceInfo = histogram.sliceArray;
   const yAxis = histogram.yAxis;
-  // const countTotals = histogram.allPixels
 
   const header = [
     arg.studyId,
@@ -69,16 +68,17 @@ function _makeCsvArray(arg) {
 
     ...Object.keys(table[0]),
     '',
+    'CT Number',
 
     ...histogram.xAxis,
   ];
 
   let csvArr = [header];
-  for (let i = 1; i < sliceInfo.length; i++) {
-    const row = ['', '', ...Object.values(table[i]), '', ...sliceInfo[i]];
+  for (let i = 0; i < sliceInfo.length; i++) {
+    const row = ['', '', ...Object.values(table[i]), '', '', ...sliceInfo[i]];
     csvArr.push(row);
   }
-  csvArr.push(['', '', '', '', '', '', '', '', '', 'Total', ...yAxis]);
+  csvArr.push(['', '', '', '', '', '', '', '', '', '', 'Total', ...yAxis]);
 
   let csvContent = csvArr.map((e) => e.join(',')).join('\n');
 

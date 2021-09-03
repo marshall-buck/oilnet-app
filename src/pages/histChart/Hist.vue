@@ -24,13 +24,11 @@
   </div>
 
   <div class="flex flex-row flex-nowrap items-center justify-around">
-    <!-- <button @click="buttonClicked" class="icon-button p-2" type="submit">
-      Save
-    </button> -->
-
-    <!-- <ButtonSave @click="buttonClicked" class="icon-button p-2" /> -->
-    <ButtonRefresh @click="refresh" />
-    <ButtonDrag />
+    <ButtonRefresh
+      class="icon-button absolute right-2 bottom-2"
+      @click="refresh"
+    />
+    <ButtonDrag class="icon-button absolute right-2 top-2" />
   </div>
 </template>
 

@@ -28,6 +28,7 @@ const chartVisibility = {
   hist: false,
   table: true,
 };
+// TODO: make current dta global and use for downloads
 let currentData;
 
 // TODO: Python Packager
@@ -213,9 +214,9 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
-  let oldData = currentData;
+  // let oldData = currentData;
   currentData = args;
-  if (checkCurrentData(oldData, currentData)) return;
+  // if (checkCurrentData(oldData, currentData)) return;
   // console.log(checkCurrentData(oldData, currentData));
 
   if (histogramWindow.isVisible()) {

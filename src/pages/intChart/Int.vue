@@ -1,46 +1,47 @@
 <template>
-  <div class="overflow-hidden">
-    <div
-      ref="container"
-      style="position: relative; height: 600px; width: 150px"
-    >
-      <canvas ref="intChart"></canvas>
+  <div
+    class="overflow-hidden"
+    ref="container"
+    style="position: relative; height: 585px; width: 150px"
+  >
+    <canvas ref="intChart"></canvas>
+  </div>
+  <div class="flex flex-row text-xs justify-around">
+    <div>
+      <label class="mr-1">Min</label>
+      <input
+        v-model="min"
+        class="w-10 border-2"
+        type="text"
+        :placeholder="intensity.min"
+      />
     </div>
+    <div>
+      <label class="mr-1">Max</label>
+      <input
+        v-model="max"
+        class="w-10 border-2"
+        type="text"
+        :placeholder="intensity.max"
+      />
+    </div>
+    <div>
+      <label class="mr-1">Step Size</label>
+      <input
+        v-model="step"
+        class="w-6 border-2"
+        type="text"
+        :placeholder="intensity.stepSize"
+      />
+    </div>
+  </div>
 
-    <div class="flex flex-row mb-1 text-xs justify-around">
-      <div>
-        <label class="mr-1">Min</label>
-        <input
-          v-model="min"
-          class="w-10 border-2"
-          type="text"
-          :placeholder="intensity.min"
-        />
-      </div>
-      <div>
-        <label class="mr-1">Max</label>
-        <input
-          v-model="max"
-          class="w-10 border-2"
-          type="text"
-          :placeholder="intensity.max"
-        />
-      </div>
-      <div>
-        <label class="mr-1">Step Size</label>
-        <input
-          v-model="step"
-          class="w-6 border-2"
-          type="text"
-          :placeholder="intensity.stepSize"
-        />
-      </div>
-    </div>
-    <div class="flex flex-row flex-nowrap items-center justify-around">
-      <!-- <ButtonSave @click="buttonClicked" class="icon-button" /> -->
-      <ButtonRefresh @click="refresh" class="icon-button" />
-      <ButtonDrag class="icon-button" />
-    </div>
+  <div class="flex flex-row flex-nowrap items-center justify-around">
+    <ButtonRefresh
+      class="icon-button absolute right-2 bottom-2"
+      @click="refresh"
+    />
+    <ButtonDrag class="icon-button absolute right-2 top-2" />
   </div>
 </template>
 
@@ -334,7 +335,7 @@ export default {
       const study = convertRef(intensity.studyNo);
       window.api.send('save-chart', [image, study, 'intC']);
 
-      container.value.style.height = '600px';
+      container.value.style.height = '585px';
       container.value.style.width = '150px';
       destroyChart();
     }

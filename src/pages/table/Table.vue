@@ -50,7 +50,7 @@
       </tbody>
     </table>
   </div>
-  <ButtonDrag class="icon-button absolute left-2 top-2" />
+  <ButtonDrag class="icon-button absolute right-2 top-2" />
 </template>
 
 <script>

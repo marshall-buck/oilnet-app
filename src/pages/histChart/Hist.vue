@@ -30,9 +30,7 @@
     />
     <ButtonDrag class="icon-button absolute right-2 top-2" />
   </div>
-  <p>{{ histogram.totalPixelCount }}</p>
-  <p>{{ min }}</p>
-  <p>{{ max }}</p>
+  <p class="text-xs">Total Pixels: {{ histogram.totalPixelCount }}</p>
 </template>
 
 <script>

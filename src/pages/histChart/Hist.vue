@@ -91,7 +91,10 @@ export default {
 
     onMounted(() => {
       let chart = Chart.getChart(histChart.value);
-      if (chart) chart.destroy();
+      if (chart) {
+        chart.resize();
+        chart.update();
+      }
       window.api.send('hist-mounted');
       window.api.receive('image-data-change:reply', (arg) => {
         if (arg.histogram.length === 0) {
@@ -270,11 +273,10 @@ export default {
       window.api.send('save-chart', [image, study, 'hisC']);
       container.value.style.height = '150px';
       container.value.style.width = '400px';
-      destroyChart();
+      chart.resize();
+      chart.update();
+      // destroyChart();
     }
-    // const buttonClicked = () => {
-    //   saveChartJpgHistogram();
-    // };
 
     return {
       histogram,

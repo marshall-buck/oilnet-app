@@ -97,6 +97,11 @@ export default {
       if (step.value !== '') intensity.stepSize = parseInt(step.value);
     };
     onMounted(() => {
+      let chart = Chart.getChart(intChart.value);
+      if (chart) {
+        chart.resize();
+        chart.update();
+      }
       window.api.receive('image-data-change:reply', (arg) => {
         if (arg.histogram.length === 0) {
           intensity.data = null;
@@ -334,7 +339,25 @@ export default {
 
       container.value.style.height = '585px';
       container.value.style.width = '150px';
-      destroyChart();
+      Chart.defaults.font.size = 7;
+      chart.options.plugins.datalabels.font.size = 8;
+      chart.options.plugins.datalabels.offset = 8;
+      chart.options.plugins.title.font.size = 8;
+
+      chart.data.datasets = [
+        {
+          data: intensity.data,
+          parsing: {
+            xAxisKey: 'x',
+            yAxisKey: 'y',
+          },
+
+          borderWidth: 1,
+          borderColor: intensity.borderColor,
+        },
+      ];
+      chart.resize();
+      chart.update();
     }
     // Destroy Chart
     function destroyChart() {

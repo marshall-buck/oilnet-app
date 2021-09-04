@@ -52,7 +52,7 @@ export default {
       };
 
       window.api.send('save-button-pressed', data);
-      store.dispatch('resetState');
+      // store.dispatch('resetState');
     };
     return {
       clicked,

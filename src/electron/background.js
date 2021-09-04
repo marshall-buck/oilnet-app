@@ -218,7 +218,7 @@ ipcMain.on('image-data-change', (e, args) => {
   // let oldData = currentData;
   currentData = args;
   if (!currentData) return;
-  console.log('image-data-change', currentData, args);
+  // console.log('image-data-change', currentData, args);
   // if (checkCurrentData(oldData, currentData)) return;
   // console.log(checkCurrentData(oldData, currentData));
 
@@ -255,7 +255,17 @@ ipcMain.on('save-button-pressed', (e, arg) => {
 ipcMain.on('save-chart', (e, args) => {
   const data = args[0].substring(23);
   const buffer = Buffer.from(data, 'base64');
-  fs.writeFileSync(`${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`, buffer);
+  fs.writeFile(
+    `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
+    buffer,
+    (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${args[2]} success`);
+      }
+    }
+  );
 });
 // History chart mounted
 ipcMain.on('hist-mounted', () => {

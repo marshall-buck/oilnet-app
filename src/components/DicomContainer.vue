@@ -105,36 +105,6 @@ export default {
         store.dispatch('deleteImagePixelData', arg);
         store.dispatch('deleteTableData', arg);
       });
-      //   window.api.receive('hist-mounted:reply', () => {
-      //     const sentData = {
-      //       table: convertRef(table.value),
-      //       histogram: convertRef(imagePixelData.value),
-      //       sampleNo: sampleNo.value,
-      //       studyNo: studyNo.value,
-      //     };
-
-      //     window.api.send('image-data-change', sentData);
-      //   });
-      //   window.api.receive('int-mounted:reply', () => {
-      //     const sentData = {
-      //       table: convertRef(table.value),
-      //       histogram: convertRef(imagePixelData.value),
-      //       sampleNo: sampleNo.value,
-      //       studyNo: studyNo.value,
-      //     };
-
-      //     window.api.send('image-data-change', sentData);
-      //   });
-      //   window.api.receive('table-mounted:reply', () => {
-      //     const sentData = {
-      //       table: convertRef(table.value),
-      //       histogram: convertRef(imagePixelData.value),
-      //       sampleNo: sampleNo.value,
-      //       studyNo: studyNo.value,
-      //     };
-
-      //     window.api.send('image-data-change', sentData);
-      //   });
     });
 
     watch(scale, () => {
@@ -178,6 +148,8 @@ export default {
         histogram: convertRef(imagePixelData.value),
         sampleNo: sampleNo.value,
         studyNo: studyNo.value,
+        width: windowWidth.value,
+        center: windowCenter.value,
       };
 
       window.api.send('image-data-change', sentData);

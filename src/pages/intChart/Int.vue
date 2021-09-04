@@ -97,31 +97,30 @@ export default {
       if (step.value !== '') intensity.stepSize = parseInt(step.value);
     };
     onMounted(() => {
+      window.api.receive('image-data-change:reply', (arg) => {
+        if (arg.histogram.length === 0) {
+          intensity.data = null;
+          intensity.min = 0;
+          intensity.max = 0;
+          intensity.length = 0;
+          intensity.maxLength = 0;
+          intensity.title = '';
+          intensity.studyNo = '';
+          intensity.stepSize = 50;
+
+          destroyChart();
+          return;
+        }
+
+        intensity.title = arg.sampleNo;
+        intensity.studyNo = arg.studyNo;
+        createChartDataIntensity(arg);
+      });
+
+      window.api.receive('save-button-pressed:reply', () => {
+        saveChartJpgInt();
+      });
       window.api.send('int-mounted');
-    });
-
-    window.api.receive('image-data-change:reply', (arg) => {
-      if (arg.histogram.length === 0) {
-        intensity.data = null;
-        intensity.min = 0;
-        intensity.max = 0;
-        intensity.length = 0;
-        intensity.maxLength = 0;
-        intensity.title = '';
-        intensity.studyNo = '';
-        intensity.stepSize = 50;
-
-        destroyChart();
-        return;
-      }
-
-      intensity.title = arg.sampleNo;
-      intensity.studyNo = arg.studyNo;
-      createChartDataIntensity(arg);
-    });
-
-    window.api.receive('save-button-pressed:reply', () => {
-      saveChartJpgInt();
     });
 
     watch(intensity, () => {
@@ -343,12 +342,10 @@ export default {
       if (!chart) return;
       chart.destroy();
     }
-    // const buttonClicked = () => {
-    //   saveChartJpgInt();
-    // };
+
     return {
       intChart,
-      // buttonClicked,
+
       container,
       min,
       max,

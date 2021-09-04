@@ -80,26 +80,7 @@ export default {
 
       return;
     };
-    window.api.receive('image-data-change:reply', (arg) => {
-      if (arg.histogram.length === 0) {
-        (histogram.xAxis = []),
-          (histogram.yAxis = []),
-          (histogram.totalPixelCount = 0),
-          (histogram.min = 0),
-          (histogram.max = 0),
-          (histogram.title = ''),
-          (histogram.studyNo = '');
-        destroyChart();
-        return;
-      }
-      histogram.studyNo = arg.studyNo;
-      histogram.title = arg.sampleNo;
-      createHistogramChartData(arg);
-    });
 
-    window.api.receive('save-button-pressed:reply', () => {
-      saveChartJpgHistogram();
-    });
     // Watch data and run create chart on change
     watch(histogram, () => {
       if (histogram.totalPixelCount === 0) return;
@@ -112,6 +93,26 @@ export default {
       let chart = Chart.getChart(histChart.value);
       if (chart) chart.destroy();
       window.api.send('hist-mounted');
+      window.api.receive('image-data-change:reply', (arg) => {
+        if (arg.histogram.length === 0) {
+          (histogram.xAxis = []),
+            (histogram.yAxis = []),
+            (histogram.totalPixelCount = 0),
+            (histogram.min = 0),
+            (histogram.max = 0),
+            (histogram.title = ''),
+            (histogram.studyNo = '');
+          destroyChart();
+          return;
+        }
+        histogram.studyNo = arg.studyNo;
+        histogram.title = arg.sampleNo;
+        createHistogramChartData(arg);
+      });
+
+      window.api.receive('save-button-pressed:reply', () => {
+        saveChartJpgHistogram();
+      });
     });
 
     //Create Chart Data

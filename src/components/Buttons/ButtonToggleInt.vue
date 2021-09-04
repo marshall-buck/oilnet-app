@@ -25,7 +25,7 @@
 import { ref } from 'vue';
 export default {
   setup() {
-    const isIntensityActive = ref(false);
+    const isIntensityActive = ref(true);
     window.api.send('toggle-chart:int', {
       chart: 'int',
       isVisible: isIntensityActive.value,

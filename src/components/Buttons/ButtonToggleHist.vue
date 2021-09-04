@@ -26,7 +26,7 @@
 import { ref } from 'vue';
 export default {
   setup() {
-    const isHistogramActive = ref(false);
+    const isHistogramActive = ref(true);
     window.api.send('toggle-chart:hist', {
       chart: 'hist',
       isVisible: isHistogramActive.value,

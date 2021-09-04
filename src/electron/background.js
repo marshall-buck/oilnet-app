@@ -60,7 +60,8 @@ async function createWindow(devPath, prodPath, options) {
     // Load the url of the dev server if in development mode
     window.loadURL(process.env.WEBPACK_DEV_SERVER_URL + devPath);
     if (!process.env.IS_TEST) {
-      if (window.title === 'Ct App') window.webContents.openDevTools();
+      // if (window.title === 'Ct App')
+      window.webContents.openDevTools();
     }
   } else {
     // Load the index.html when not in development
@@ -214,9 +215,11 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
+  if (!currentData) return;
+  console.log('image-data-change', currentData, args);
   // let oldData = currentData;
   currentData = args;
-  // if (checkCurrentData(oldData, currentData)) return;
+  if (checkCurrentData(oldData, currentData)) return;
   // console.log(checkCurrentData(oldData, currentData));
 
   if (histogramWindow.isVisible()) {
@@ -256,13 +259,21 @@ ipcMain.on('save-chart', (e, args) => {
 });
 // History chart mounted
 ipcMain.on('hist-mounted', () => {
-  mainWindow.webContents.send('hist-mounted:reply');
+  if (currentData) {
+    histogramWindow.webContents.send('image-data-change:reply', currentData);
+  }
 });
 ipcMain.on('int-mounted', () => {
-  mainWindow.webContents.send('int-mounted:reply');
+  if (currentData) {
+    intensityWindow.webContents.send('image-data-change:reply', currentData);
+  }
 });
 ipcMain.on('table-mounted', () => {
-  mainWindow.webContents.send('table-mounted:reply');
+  if (currentData) {
+    tableWindow.webContents.send('image-data-change:reply', currentData);
+  }
+
+  // mainWindow.webContents.send('table-mounted:reply');
 });
 ipcMain.on('toggle-chart:int', (e, arg) => {
   const chart = arg.chart;
@@ -272,7 +283,10 @@ ipcMain.on('toggle-chart:int', (e, arg) => {
   if (chartVisibility.int) {
     const mainBounds = mainWindow.getBounds();
     intensityWindow.setPosition(mainBounds.x + mainBounds.width, mainBounds.y);
-    intensityWindow.webContents.send('image-data-change:reply', currentData);
+    if (currentData) {
+      intensityWindow.webContents.send('image-data-change:reply', currentData);
+    }
+
     intensityWindow.show();
   } else {
     intensityWindow.hide();
@@ -290,7 +304,9 @@ ipcMain.on('toggle-chart:hist', (e, arg) => {
       mainBounds.x + mainBounds.width - histBounds.width,
       mainBounds.y - histBounds.height
     );
-    histogramWindow.webContents.send('image-data-change:reply', currentData);
+    if (currentData) {
+      histogramWindow.webContents.send('image-data-change:reply', currentData);
+    }
     histogramWindow.show();
   } else {
     histogramWindow.hide();
@@ -305,7 +321,9 @@ ipcMain.on('toggle-chart:table', (e, arg) => {
     const mainBounds = mainWindow.getBounds();
     const tableBounds = tableWindow.getBounds();
     tableWindow.setPosition(mainBounds.x, mainBounds.y - tableBounds.height);
-    tableWindow.webContents.send('image-data-change:reply', currentData);
+    if (currentData) {
+      tableWindow.webContents.send('image-data-change:reply', currentData);
+    }
     tableWindow.show();
   } else {
     tableWindow.hide();

@@ -63,14 +63,12 @@ export default {
   setup() {
     const data = reactive({ data: null, title: '' });
 
-    window.api.receive('image-data-change:reply', (arg) => {
-      data.data = arg.table;
-      data.title = arg.sampleNo;
-      console.log('image-data-changed', data.value);
-    });
-
     onMounted(() => {
       window.api.send('table-mounted');
+      window.api.receive('image-data-change:reply', (arg) => {
+        data.data = arg.table;
+        data.title = arg.sampleNo;
+      });
     });
 
     // Send index to delete

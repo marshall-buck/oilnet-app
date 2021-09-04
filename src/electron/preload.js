@@ -35,7 +35,7 @@ contextBridge.exposeInMainWorld('api', {
       'delete-data-at:reply',
       'hist-mounted:reply',
       'int-mounted:reply',
-      'table-mounted:reply',
+      // 'table-mounted:reply',
       'save-button-pressed:reply',
     ];
     if (validChannels.includes(channel)) {

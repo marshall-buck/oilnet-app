@@ -29,7 +29,7 @@ export default {
       store.dispatch('resetState');
       fPut.value.onchange = () => {
         let files = fPut.value.files;
-        // console.log(Array.from(files).map((e) => e.path));
+        console.log(files);
         let ids = [];
 
         for (let i = 0; i < files.length; i++) {

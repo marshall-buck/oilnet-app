@@ -215,11 +215,11 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
-  if (!currentData) return;
-  console.log('image-data-change', currentData, args);
   // let oldData = currentData;
   currentData = args;
-  if (checkCurrentData(oldData, currentData)) return;
+  if (!currentData) return;
+  console.log('image-data-change', currentData, args);
+  // if (checkCurrentData(oldData, currentData)) return;
   // console.log(checkCurrentData(oldData, currentData));
 
   if (histogramWindow.isVisible()) {

@@ -27,9 +27,11 @@ export default {
     const fPut = ref(null);
     const clicked = () => {
       store.dispatch('resetState');
+      console.log('werwer');
       fPut.value.onchange = () => {
         let files = fPut.value.files;
-        console.log(files);
+        if (!files) return;
+
         let ids = [];
 
         for (let i = 0; i < files.length; i++) {
@@ -45,6 +47,7 @@ export default {
 
         // loadStack();
       };
+
       fPut.value.click();
       fPut.value.remove();
     };

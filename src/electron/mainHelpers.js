@@ -2,11 +2,12 @@
 const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder } = pathObject();
-const sum = require('lodash.sum');
+// const sum = require('lodash.sum');
 const fs = require('fs');
 
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
+  console.log(arg);
   // console.log('writeImagesToDisk');
   // let progressBar;
   // progressBar = new ProgressBar({
@@ -35,7 +36,7 @@ exports.writeImagesToDisk = async (arg) => {
     arg.studyNo = id;
     arg.filePaths = paths;
     arg.ct = pathToCtFolder;
-    fs.writeFileSync(`${pathToCtFolder}/${id}/${id}.csv`, csv, 'utf8', (err) =>
+    fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csv, 'utf8', (err) =>
       console.log(err || 'File written')
     );
     const str = JSON.stringify(arg);
@@ -58,7 +59,8 @@ exports.writeImagesToDisk = async (arg) => {
 function _makeCsvArray(arg) {
   const table = arg.table;
 
-  const histogram = _prepareCsvData(arg);
+  const histogram = arg.csv;
+  // const histogram = _prepareCsvData(arg);
   const sliceInfo = histogram.sliceArray;
   const yAxis = histogram.yAxis;
 
@@ -83,51 +85,4 @@ function _makeCsvArray(arg) {
   let csvContent = csvArr.map((e) => e.join(',')).join('\n');
 
   return csvContent;
-}
-
-function _prepareCsvData(arg) {
-  const mArr = arg.table.map((e) => Object.values(e));
-  const table = arg.table;
-  // Array of all pixels arrays
-  const imageDataArray = arg.histogram.map((e) => e.data);
-  // Min and max from recorded data
-  let max = Math.max(...mArr.map((e) => e[6]));
-  let min = Math.min(...mArr.map((e) => e[5]));
-
-  let xAxis = [];
-  let yAxis = [];
-  let sliceArray = [];
-  // array containing all pixels for, all images in image data array
-  let allPixels = [];
-  // create an xAxis pixel slot
-  for (let i = min; i <= max; i++) {
-    if (i > 0) xAxis.push(i);
-  }
-  // Loop through all arrays in imageData and put in 1 array
-  imageDataArray.forEach((arr) => {
-    let slicePixelCount = [];
-    allPixels = [...allPixels, ...arr];
-    for (let i = 0; i < xAxis.length; i++) {
-      const result = arr.filter((num) => num == xAxis[i]).length;
-      slicePixelCount.push(result);
-    }
-    sliceArray.push(slicePixelCount);
-  });
-
-  // loop through AllPixels array and filter by pixel number return the pixel count
-  for (let i = 0; i < xAxis.length; i++) {
-    const result = allPixels.filter((num) => num == xAxis[i]).length;
-    yAxis.push(result);
-  }
-
-  return {
-    totalPixelCount: sum(yAxis),
-    xAxis: xAxis,
-    yAxis: yAxis,
-    min: min,
-    max: max,
-    sliceArray: sliceArray,
-
-    table: table,
-  };
 }

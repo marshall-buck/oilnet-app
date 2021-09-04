@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('api', {
       'toggle-chart:int',
       'toggle-chart:hist',
       'toggle-chart:table',
+      'send-csv',
     ];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);

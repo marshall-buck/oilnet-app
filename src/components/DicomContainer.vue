@@ -41,6 +41,7 @@ export default {
     const sampleNo = computed(() => store.getters.sampleNo);
     const studyNo = computed(() => store.getters.studyNo);
     const scrollToThisNumber = computed(() => store.getters.scrollToThisNumber);
+    const paths = computed(() => store.getters.paths);
     const getToolState = (tool) => {
       return cornerstoneTools.getToolState(dicom.value, tool);
     };
@@ -144,10 +145,11 @@ export default {
 
     watch(table, () => {
       const sentData = {
-        table: convertRef(table.value),
-        histogram: convertRef(imagePixelData.value),
-        sampleNo: sampleNo.value,
         studyNo: studyNo.value,
+        sampleNo: sampleNo.value,
+        paths: convertRef(paths.value),
+        histogram: convertRef(imagePixelData.value),
+        table: convertRef(table.value),
         width: windowWidth.value,
         center: windowCenter.value,
       };

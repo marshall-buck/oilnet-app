@@ -69,6 +69,7 @@ export default {
       xAxis: [],
       yAxis: [],
       totalPixelCount: 0,
+      sliceArray: [],
       min: 0,
       max: 0,
       title: '',
@@ -104,7 +105,8 @@ export default {
             (histogram.min = 0),
             (histogram.max = 0),
             (histogram.title = ''),
-            (histogram.studyNo = '');
+            (histogram.studyNo = ''),
+            (histogram.sliceArray = []);
           destroyChart();
           return;
         }
@@ -113,7 +115,8 @@ export default {
         createHistogramChartData(arg);
       });
 
-      window.api.receive('save-button-pressed:reply', () => {
+      window.api.receive('save-button-pressed:reply', async () => {
+        await window.api.send('send-csv', convertRef(histogram));
         saveChartJpgHistogram();
       });
     });
@@ -129,6 +132,7 @@ export default {
 
       let xAxis = [];
       let yAxis = [];
+      let sliceArray = [];
       // array containing all pixels for, all images in image data array
       let allPixels = [];
       // create an xAxis pixel slot
@@ -137,8 +141,18 @@ export default {
       }
       // Loop through all arrays in imageData and put in 1 array
       imageDataArray.forEach((arr) => {
+        let slicePixelCount = [];
         allPixels = [...allPixels, ...arr];
+        for (let i = 0; i < xAxis.length; i++) {
+          const result = arr.filter((num) => num == xAxis[i]).length;
+          slicePixelCount.push(result);
+        }
+        sliceArray.push(slicePixelCount);
       });
+      // imageDataArray.forEach((arr) => {
+
+      //   allPixels = [...allPixels, ...arr];
+      // });
 
       // loop through AllPixels array and filter by pixel number return the pixel count
       for (let i = 0; i < xAxis.length; i++) {
@@ -151,6 +165,7 @@ export default {
       histogram.yAxis = yAxis;
       histogram.min = min;
       histogram.max = max;
+      histogram.sliceArray = sliceArray;
       // createHistogramChart();
     }
     // Create chart

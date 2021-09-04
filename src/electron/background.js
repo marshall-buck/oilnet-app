@@ -30,6 +30,7 @@ const chartVisibility = {
 };
 // TODO: make current dta global and use for downloads
 let currentData = null;
+let saveState = null;
 
 // TODO: Python Packager
 
@@ -238,7 +239,7 @@ ipcMain.on('delete-data-at', (e, arg) => {
 });
 
 // Save Jpeg Images
-ipcMain.on('save-button-pressed', (e, arg) => {
+ipcMain.on('save-button-pressed', () => {
   if (histogramWindow.isVisible()) {
     histogramWindow.webContents.send('save-button-pressed:reply');
   }
@@ -249,7 +250,12 @@ ipcMain.on('save-button-pressed', (e, arg) => {
     intensityWindow.webContents.send('save-button-pressed:reply');
   }
 
-  writeImagesToDisk(arg);
+  // writeImagesToDisk(currentData);
+});
+// Receive csv from hist window
+ipcMain.on('send-csv', (e, args) => {
+  currentData['csv'] = args;
+  writeImagesToDisk(currentData);
 });
 // Save chart
 ipcMain.on('save-chart', (e, args) => {

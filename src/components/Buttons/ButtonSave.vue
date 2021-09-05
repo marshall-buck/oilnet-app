@@ -25,35 +25,14 @@
 
 import { useStore } from 'vuex';
 import { computed } from 'vue';
-// import { convertRef } from '../../helpers/helpers';
+
 export default {
   setup() {
     const store = useStore();
     const table = computed(() => store.getters.table);
-    // const studyNo = computed(() => store.getters.studyNo);
-    // const windowWidth = computed(() => store.getters.windowWidth);
-    // const windowCenter = computed(() => store.getters.windowCenter);
-    // const paths = computed(() => store.getters.paths);
-    // const imagePixelData = computed(() => store.getters.imagePixelData);
-
-    // const sampleNo = computed(() => store.getters.sampleNo);
 
     const clicked = () => {
-      // if (windowWidth.value == windowCenter.value)
-      //   alert('Please make sure the levels are adjusted');
-      // const data = {
-      //   studyNo: studyNo.value,
-      //   sampleNo: sampleNo.value,
-      //   paths: convertRef(paths.value),
-      //   histogram: convertRef(imagePixelData.value),
-      //   table: convertRef(table.value),
-      //   width: windowWidth.value,
-      //   center: windowCenter.value,
-      // };
-      //
       window.api.send('save-button-pressed');
-      // window.api.send('save-button-pressed', data);
-      // store.dispatch('resetState');
     };
     return {
       clicked,

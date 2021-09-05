@@ -19,7 +19,6 @@
 </template>
 
 <script>
-// BUG: dialogue opens twice sometimes
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 

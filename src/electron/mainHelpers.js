@@ -4,10 +4,6 @@ const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder } = pathObject();
 
 const fs = require('fs');
-// TODO: separate file saving into async functions
-// Save chart jpegs
-// Save images from python
-// Save Csv
 
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;

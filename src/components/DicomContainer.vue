@@ -171,7 +171,6 @@ export default {
       cornerstone.setViewport(dicom.value, viewport);
     });
 
-    // TODO: Figure out a way to hide cursor when circle tool is false
     watch(isCircleActive, () => {
       if (isCircleActive.value === true) {
         cornerstoneTools.addTool(circleRoiTool);

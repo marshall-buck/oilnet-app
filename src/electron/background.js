@@ -259,9 +259,7 @@ ipcMain.on('save-button-pressed', () => {
       if (histogramWindow.isVisible()) {
         histogramWindow.webContents.send('save-button-pressed:reply');
       }
-      if (tableWindow.isVisible()) {
-        tableWindow.webContents.send('save-button-pressed:reply');
-      }
+
       if (intensityWindow.isVisible()) {
         intensityWindow.webContents.send('save-button-pressed:reply');
       }
@@ -275,9 +273,7 @@ ipcMain.on('save-button-pressed', () => {
     if (histogramWindow.isVisible()) {
       histogramWindow.webContents.send('save-button-pressed:reply');
     }
-    if (tableWindow.isVisible()) {
-      tableWindow.webContents.send('save-button-pressed:reply');
-    }
+
     if (intensityWindow.isVisible()) {
       intensityWindow.webContents.send('save-button-pressed:reply');
     }
@@ -322,8 +318,6 @@ ipcMain.on('table-mounted', () => {
   if (currentData) {
     tableWindow.webContents.send('image-data-change:reply', currentData);
   }
-
-  // mainWindow.webContents.send('table-mounted:reply');
 });
 ipcMain.on('toggle-chart:int', (e, arg) => {
   const chart = arg.chart;

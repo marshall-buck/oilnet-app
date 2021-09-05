@@ -30,7 +30,6 @@ const chartVisibility = {
 };
 // TODO: make current dta global and use for downloads
 let currentData = null;
-let saveState = null;
 
 // TODO: Python Packager
 
@@ -61,8 +60,7 @@ async function createWindow(devPath, prodPath, options) {
     // Load the url of the dev server if in development mode
     window.loadURL(process.env.WEBPACK_DEV_SERVER_URL + devPath);
     if (!process.env.IS_TEST) {
-      // if (window.title === 'Ct App')
-      window.webContents.openDevTools();
+      if (window.title === 'Ct App') window.webContents.openDevTools();
     }
   } else {
     // Load the index.html when not in development
@@ -240,21 +238,31 @@ ipcMain.on('delete-data-at', (e, arg) => {
 
 // Save Jpeg Images
 ipcMain.on('save-button-pressed', () => {
-  if (histogramWindow.isVisible()) {
-    histogramWindow.webContents.send('save-button-pressed:reply');
+  if (currentData.width == currentData.center) {
+    const mrs = dialog.showMessageBoxSync({
+      type: 'warning',
+      buttons: ['Ok', 'Cancel'],
+      detail:
+        'Width and Center are equal, is this is correct, press Ok to continue save, or press Cancel to chose correct windowing',
+    });
+    if (mrs === 0) {
+      if (histogramWindow.isVisible()) {
+        histogramWindow.webContents.send('save-button-pressed:reply');
+      }
+      if (tableWindow.isVisible()) {
+        tableWindow.webContents.send('save-button-pressed:reply');
+      }
+      if (intensityWindow.isVisible()) {
+        intensityWindow.webContents.send('save-button-pressed:reply');
+      }
+    }
+    return;
   }
-  if (tableWindow.isVisible()) {
-    tableWindow.webContents.send('save-button-pressed:reply');
-  }
-  if (intensityWindow.isVisible()) {
-    intensityWindow.webContents.send('save-button-pressed:reply');
-  }
-
-  // writeImagesToDisk(currentData);
 });
-// Receive csv from hist window
-ipcMain.on('send-csv', (e, args) => {
-  currentData['csv'] = args;
+// Receive csv data from hist window
+ipcMain.on('send-csv', (e, csvData) => {
+  currentData['csv'] = csvData;
+
   writeImagesToDisk(currentData);
 });
 // Save chart

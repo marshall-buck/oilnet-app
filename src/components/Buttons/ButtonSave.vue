@@ -21,7 +21,6 @@
 </template>
 
 <script>
-// TODO:Add Confirmation dialogue for windowing
 // TODO: Wait for valid reply form api save before resetting state
 
 import { useStore } from 'vuex';

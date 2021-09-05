@@ -1,33 +1,34 @@
-// const ProgressBar = require('electron-progressbar');
+const ProgressBar = require('electron-progressbar');
 const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder } = pathObject();
-// const sum = require('lodash.sum');
+
 const fs = require('fs');
+// TODO: seperate file saving into async fucntions
+// Save chart jpegs
+// Save images from python
+// Save Csv
 
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
-  console.log(arg);
-  // console.log('writeImagesToDisk');
-  // let progressBar;
-  // progressBar = new ProgressBar({
-  //   text: 'Working...',
 
-  //   title: 'Saving Images',
-  //   abortOnError: true,
-  // });
-  // progressBar
-  //   .on('completed', function () {
-  //     progressBar.detail = 'Complete, Exiting...';
-  //   })
-  //   .on('aborted', function () {
-  //     console.info(`aborted...`);
-  //   });
+  let progressBar;
+  progressBar = new ProgressBar({
+    text: 'Working...',
+
+    title: 'Saving Images',
+    abortOnError: true,
+  });
+  progressBar
+    .on('completed', function () {
+      progressBar.detail = 'Complete, Exiting...';
+    })
+    .on('aborted', function () {
+      console.info(`aborted...`);
+    });
   try {
-    // console.log(csv);
-
     const paths = arg.paths;
-    // if (paths.canceled === true) return;
+
     const csv = _makeCsvArray(arg);
 
     const regex = /\d{5}/;
@@ -53,14 +54,14 @@ exports.writeImagesToDisk = async (arg) => {
   } catch (error) {
     console.log(error);
   }
-  // progressBar.setCompleted();
+  progressBar.setCompleted();
 };
 
 function _makeCsvArray(arg) {
   const table = arg.table;
 
   const histogram = arg.csv;
-  // const histogram = _prepareCsvData(arg);
+
   const sliceInfo = histogram.sliceArray;
   const yAxis = histogram.yAxis;
 

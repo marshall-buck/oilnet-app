@@ -149,10 +149,6 @@ export default {
         }
         sliceArray.push(slicePixelCount);
       });
-      // imageDataArray.forEach((arr) => {
-
-      //   allPixels = [...allPixels, ...arr];
-      // });
 
       // loop through AllPixels array and filter by pixel number return the pixel count
       for (let i = 0; i < xAxis.length; i++) {
@@ -166,7 +162,6 @@ export default {
       histogram.min = min;
       histogram.max = max;
       histogram.sliceArray = sliceArray;
-      // createHistogramChart();
     }
     // Create chart
     function createHistogramChart() {
@@ -286,11 +281,12 @@ export default {
 
       const study = convertRef(histogram.studyNo);
       window.api.send('save-chart', [image, study, 'hisC']);
+      Chart.defaults.font.size = 12;
+      chart.options.plugins.title.font.size = 16;
       container.value.style.height = '150px';
       container.value.style.width = '400px';
       chart.resize();
       chart.update();
-      // destroyChart();
     }
 
     return {

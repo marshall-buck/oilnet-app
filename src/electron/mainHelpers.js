@@ -1,10 +1,10 @@
-const ProgressBar = require('electron-progressbar');
+// const ProgressBar = require('electron-progressbar');
 const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder } = pathObject();
 
 const fs = require('fs');
-// TODO: seperate file saving into async fucntions
+// TODO: separate file saving into async functions
 // Save chart jpegs
 // Save images from python
 // Save Csv
@@ -12,24 +12,22 @@ const fs = require('fs');
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
 
-  let progressBar;
-  progressBar = new ProgressBar({
-    text: 'Working...',
+  // let progressBar;
+  // progressBar = new ProgressBar({
+  //   text: 'Working...',
 
-    title: 'Saving Images',
-    abortOnError: true,
-  });
-  progressBar
-    .on('completed', function () {
-      progressBar.detail = 'Complete, Exiting...';
-    })
-    .on('aborted', function () {
-      console.info(`aborted...`);
-    });
+  //   title: 'Saving Images',
+  //   abortOnError: true,
+  // });
+  // progressBar
+  //   .on('completed', function () {
+  //     progressBar.detail = 'Complete, Exiting...';
+  //   })
+  //   .on('aborted', function () {
+  //     console.info(`aborted...`);
+  //   });
   try {
     const paths = arg.paths;
-
-    const csv = _makeCsvArray(arg);
 
     const regex = /\d{5}/;
     const path = paths[0];
@@ -37,9 +35,9 @@ exports.writeImagesToDisk = async (arg) => {
     arg.studyNo = id;
     arg.filePaths = paths;
     arg.ct = pathToCtFolder;
-    fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csv, 'utf8', (err) =>
-      console.log(err || 'File written')
-    );
+    // fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csv, 'utf8', (err) =>
+    //   console.log(err || 'File written')
+    // );
     const str = JSON.stringify(arg);
     const childPython = spawn('./venv/bin/python3', ['./pyt/helpers.py', str]);
     childPython.stdout.on('data', (data) => {
@@ -54,16 +52,16 @@ exports.writeImagesToDisk = async (arg) => {
   } catch (error) {
     console.log(error);
   }
-  progressBar.setCompleted();
+  // progressBar.setCompleted();
 };
 
-function _makeCsvArray(arg) {
-  const table = arg.table;
+exports.saveCsv = async (arg) => {
+  const table = await arg.table;
 
-  const histogram = arg.csv;
+  const histogram = await arg.csv;
 
-  const sliceInfo = histogram.sliceArray;
-  const yAxis = histogram.yAxis;
+  const sliceInfo = await histogram.sliceArray;
+  const yAxis = await histogram.yAxis;
 
   const header = [
     arg.studyNo,
@@ -84,6 +82,14 @@ function _makeCsvArray(arg) {
   csvArr.push(['', '', '', '', '', '', '', '', '', '', 'Total', ...yAxis]);
 
   let csvContent = csvArr.map((e) => e.join(',')).join('\n');
-
-  return csvContent;
-}
+  const paths = arg.paths;
+  const regex = /\d{5}/;
+  const path = paths[0];
+  const id = path.match(regex)[0];
+  arg.studyNo = id;
+  arg.filePaths = paths;
+  arg.ct = pathToCtFolder;
+  fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csvContent, 'utf8', (err) =>
+    console.log(err || 'File written')
+  );
+};

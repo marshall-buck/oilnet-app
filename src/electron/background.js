@@ -6,7 +6,7 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
-const { writeImagesToDisk } = require('./mainHelpers');
+const { writeImagesToDisk, saveCsv } = require('./mainHelpers');
 
 const { pathObject } = require('./basePaths');
 const { pathToCtFolder } = pathObject();
@@ -28,12 +28,19 @@ const chartVisibility = {
   hist: false,
   table: true,
 };
-// TODO: make current dta global and use for downloads
+
 let currentData = null;
+let saveState = {
+  jpg: 'inactive',
+  csv: 'inactive',
+  int: 'inactive',
+  hist: 'inactive',
+};
 
 // TODO: Python Packager
 
 // TODO: move files to trash on overwrite dir
+// BUG: Width and center need record button to change api object need to fix
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -214,12 +221,8 @@ ipcMain.on('record-data-pressed', async () => {
 
 // send proper data back to when data is changed
 ipcMain.on('image-data-change', (e, args) => {
-  // let oldData = currentData;
   currentData = args;
   if (!currentData) return;
-  // console.log('image-data-change', currentData, args);
-  // if (checkCurrentData(oldData, currentData)) return;
-  // console.log(checkCurrentData(oldData, currentData));
 
   if (histogramWindow.isVisible()) {
     histogramWindow.webContents.send('image-data-change:reply', args);
@@ -246,6 +249,9 @@ ipcMain.on('save-button-pressed', () => {
         'Width and Center are equal, is this is correct, press Ok to continue save, or press Cancel to chose correct windowing',
     });
     if (mrs === 0) {
+      for (const key in saveState) {
+        saveState[key] = 'pending';
+      }
       if (histogramWindow.isVisible()) {
         histogramWindow.webContents.send('save-button-pressed:reply');
       }
@@ -255,6 +261,7 @@ ipcMain.on('save-button-pressed', () => {
       if (intensityWindow.isVisible()) {
         intensityWindow.webContents.send('save-button-pressed:reply');
       }
+      console.log(saveState);
     }
     return;
   }
@@ -264,6 +271,7 @@ ipcMain.on('send-csv', (e, csvData) => {
   currentData['csv'] = csvData;
 
   writeImagesToDisk(currentData);
+  saveCsv(currentData);
 });
 // Save chart
 ipcMain.on('save-chart', (e, args) => {

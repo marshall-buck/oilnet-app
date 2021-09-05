@@ -1,5 +1,5 @@
 <template>
-  <button-base title="Record Data" @click="clicked">
+  <button-base title="Record Data" @click.prevent="clicked">
     <svg
       fill="none"
       stroke="white"
@@ -17,10 +17,20 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
+import { computed } from 'vue';
 export default {
   setup() {
-    const clicked = () =>
-      window.api.send('record-data-pressed', 'record button pressed');
+    const store = useStore();
+    const width = computed(() => store.getters.windowWidth);
+    const center = computed(() => store.getters.windowCenter);
+    const clicked = () => {
+      if (width.value == center.value) {
+        alert('Please adjust windowing before recording');
+      } else {
+        window.api.send('record-data-pressed', 'record button pressed');
+      }
+    };
     return {
       clicked,
     };

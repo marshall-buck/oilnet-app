@@ -191,6 +191,9 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+ipcMain.on('reset-state', () => {
+  currentData = null;
+});
 // Downloading Studies Communications
 ipcMain.on('open-studyNo-modal', () => {
   downloadStudyWin.show();
@@ -241,6 +244,7 @@ ipcMain.on('delete-data-at', (e, arg) => {
 
 // Save Jpeg Images
 ipcMain.on('save-button-pressed', () => {
+  // console.log(currentData);
   if (currentData.width == currentData.center) {
     const mrs = dialog.showMessageBoxSync({
       type: 'warning',
@@ -264,6 +268,20 @@ ipcMain.on('save-button-pressed', () => {
       console.log(saveState);
     }
     return;
+  } else {
+    for (const key in saveState) {
+      saveState[key] = 'pending';
+    }
+    if (histogramWindow.isVisible()) {
+      histogramWindow.webContents.send('save-button-pressed:reply');
+    }
+    if (tableWindow.isVisible()) {
+      tableWindow.webContents.send('save-button-pressed:reply');
+    }
+    if (intensityWindow.isVisible()) {
+      intensityWindow.webContents.send('save-button-pressed:reply');
+    }
+    console.log(saveState);
   }
 });
 // Receive csv data from hist window

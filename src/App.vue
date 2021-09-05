@@ -40,12 +40,6 @@ export default {
   setup() {
     const store = useStore();
 
-    window.api.receive('open-studyNo-modal:reply', () => {
-      store.dispatch('toggleStudyNoModal');
-    });
-    window.api.receive('close-studyNo-modal:reply', () => {
-      store.dispatch('toggleStudyNoModal');
-    });
     initCornerstone();
     cornerstone.registerImageLoader(
       'wadouri',
@@ -53,6 +47,12 @@ export default {
     );
 
     onMounted(() => {
+      window.api.receive('open-studyNo-modal:reply', () => {
+        store.dispatch('toggleStudyNoModal');
+      });
+      window.api.receive('close-studyNo-modal:reply', () => {
+        store.dispatch('toggleStudyNoModal');
+      });
       console.log('app mounted');
     });
   },

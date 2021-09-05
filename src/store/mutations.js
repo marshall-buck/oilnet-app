@@ -19,6 +19,7 @@ export const loadStoreStackPaths = (state, value) => {
 };
 
 export const resetState = (state) => {
+  console.log('reset state mutation');
   Object.assign(state, getDefaultState());
 };
 export const sampleInfo = (state, value) => {

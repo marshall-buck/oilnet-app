@@ -33,7 +33,7 @@ exports.findStudy = async (studyNo) => {
   const data = {
     Level: 'Study',
     Query: {
-      // must be StudyID:
+      // must be StudyID: studyNo
       StudyID: studyNo,
     },
     Expand: true,

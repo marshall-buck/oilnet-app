@@ -31,11 +31,6 @@ export default {
     const store = useStore();
     const files = ref([]);
     watch(files, () => {
-      // store.dispatch('resetState');
-
-      // // Tells backend to reset its currentData
-      // window.api.send('reset-state');
-
       let ids = [];
       const filesArr = files.value;
       for (let i = 0; i < filesArr.length; i++) {
@@ -43,6 +38,7 @@ export default {
           cornerstoneWADOImageLoader.wadouri.fileManager.add(filesArr[i])
         );
       }
+
       store.dispatch('loadStoreStackIds', ids);
       store.dispatch(
         'loadStoreStackPaths',

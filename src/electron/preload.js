@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld('api', {
       'open-studyNo-modal',
       'save-button-pressed',
       'close-studyNo-modal',
-      'from-test-button',
+      'test-but-pressed',
       'record-data-pressed',
       'image-data-change',
       'delete-data-at',
@@ -35,10 +35,12 @@ contextBridge.exposeInMainWorld('api', {
       'record-data-pressed:reply',
       'image-data-change:reply',
       'delete-data-at:reply',
-      'hist-mounted:reply',
-      'int-mounted:reply',
-      // 'table-mounted:reply',
+      // 'hist-mounted:reply',
+      // 'int-mounted:reply',
+      // // 'table-mounted:reply',
       'save-button-pressed:reply',
+      'test-but-pressed',
+      'reset-state:reply',
     ];
     if (validChannels.includes(channel)) {
       // Deliberately strip event as it includes `sender`

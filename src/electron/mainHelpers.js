@@ -31,9 +31,7 @@ exports.writeImagesToDisk = async (arg) => {
     arg.studyNo = id;
     arg.filePaths = paths;
     arg.ct = pathToCtFolder;
-    // fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csv, 'utf8', (err) =>
-    //   console.log(err || 'File written')
-    // );
+
     const str = JSON.stringify(arg);
     const childPython = spawn('./venv/bin/python3', ['./pyt/helpers.py', str]);
     childPython.stdout.on('data', (data) => {
@@ -87,5 +85,21 @@ exports.saveCsv = async (arg) => {
   arg.ct = pathToCtFolder;
   fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csvContent, 'utf8', (err) =>
     console.log(err || 'File written')
+  );
+};
+
+exports.writeCharts = async (args) => {
+  const data = await args[0].substring(23);
+  const buffer = Buffer.from(data, 'base64');
+  fs.writeFile(
+    `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
+    buffer,
+    (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(`${args[2]} success`);
+      }
+    }
   );
 };

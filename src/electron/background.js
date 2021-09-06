@@ -6,14 +6,10 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 
 const { findStudy } = require('./fetch.js');
-const { writeImagesToDisk, saveCsv } = require('./mainHelpers');
-
-const { pathObject } = require('./basePaths');
-const { pathToCtFolder } = pathObject();
+const { writeImagesToDisk, saveCsv, writeCharts } = require('./mainHelpers');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const path = require('path');
-const fs = require('fs');
 
 const {
   mainOptions,
@@ -30,17 +26,10 @@ const chartVisibility = {
 };
 
 let currentData = null;
-let saveState = {
-  jpg: 'inactive',
-  csv: 'inactive',
-  int: 'inactive',
-  hist: 'inactive',
-};
 
 // TODO: Python Packager
 
 // TODO: move files to trash on overwrite dir
-// BUG: Width and center need record button to change api object need to fix
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -192,6 +181,7 @@ app.on('window-all-closed', () => {
   }
 });
 ipcMain.on('reset-state', () => {
+  mainWindow.webContents.send('reset-state:reply');
   currentData = null;
 });
 // Downloading Studies Communications
@@ -210,6 +200,7 @@ ipcMain.on('study-id-entered', async (e, arg) => {
     });
     return;
   }
+
   await findStudy(arg);
 });
 
@@ -242,42 +233,16 @@ ipcMain.on('delete-data-at', (e, arg) => {
   mainWindow.webContents.send('delete-data-at:reply', arg);
 });
 
-// Save Jpeg Images
+// Save Button Pressed
+
+// Send reply's to int and hist that the save button was pressed
 ipcMain.on('save-button-pressed', () => {
-  // console.log(currentData);
-  if (currentData.width == currentData.center) {
-    const mrs = dialog.showMessageBoxSync({
-      type: 'warning',
-      buttons: ['Ok', 'Cancel'],
-      detail:
-        'Width and Center are equal, is this is correct, press Ok to continue save, or press Cancel to chose correct windowing',
-    });
-    if (mrs === 0) {
-      for (const key in saveState) {
-        saveState[key] = 'pending';
-      }
-      if (histogramWindow.isVisible()) {
-        histogramWindow.webContents.send('save-button-pressed:reply');
-      }
+  if (histogramWindow.isVisible()) {
+    histogramWindow.webContents.send('save-button-pressed:reply');
+  }
 
-      if (intensityWindow.isVisible()) {
-        intensityWindow.webContents.send('save-button-pressed:reply');
-      }
-      console.log(saveState);
-    }
-    return;
-  } else {
-    for (const key in saveState) {
-      saveState[key] = 'pending';
-    }
-    if (histogramWindow.isVisible()) {
-      histogramWindow.webContents.send('save-button-pressed:reply');
-    }
-
-    if (intensityWindow.isVisible()) {
-      intensityWindow.webContents.send('save-button-pressed:reply');
-    }
-    console.log(saveState);
+  if (intensityWindow.isVisible()) {
+    intensityWindow.webContents.send('save-button-pressed:reply');
   }
 });
 // Receive csv data from hist window
@@ -287,23 +252,24 @@ ipcMain.on('send-csv', (e, csvData) => {
   writeImagesToDisk(currentData);
   saveCsv(currentData);
 });
-// Save chart
+// Receive charts from both windows this will be called twice
 ipcMain.on('save-chart', (e, args) => {
-  const data = args[0].substring(23);
-  const buffer = Buffer.from(data, 'base64');
-  fs.writeFile(
-    `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
-    buffer,
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(`${args[2]} success`);
-      }
-    }
-  );
+  writeCharts(args);
+  // const data = args[0].substring(23);
+  // const buffer = Buffer.from(data, 'base64');
+  // fs.writeFile(
+  //   `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
+  //   buffer,
+  //   (err) => {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       console.log(`${args[2]} success`);
+  //     }
+  //   }
+  // );
 });
-// History chart mounted
+// When table, hist, or int mount send trigger image data change to update contents
 ipcMain.on('hist-mounted', () => {
   if (currentData) {
     histogramWindow.webContents.send('image-data-change:reply', currentData);
@@ -319,6 +285,8 @@ ipcMain.on('table-mounted', () => {
     tableWindow.webContents.send('image-data-change:reply', currentData);
   }
 });
+
+// Logic for toggling table and charts on and off
 ipcMain.on('toggle-chart:int', (e, arg) => {
   const chart = arg.chart;
   const isVisible = arg.isVisible;
@@ -375,9 +343,8 @@ ipcMain.on('toggle-chart:table', (e, arg) => {
 });
 
 // TESTING
-ipcMain.on('from-test-button', () => {
-  const mainBounds = mainWindow.getBounds();
-  console.log(mainBounds);
+ipcMain.on('test-but-pressed', () => {
+  mainWindow.webContents.send('test-but-pressed');
 });
 // data:image/jpeg;base64,
 

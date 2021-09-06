@@ -34,6 +34,7 @@ export default {
     const store = useStore();
     const inputRef = ref(null);
     const openDialog = () => {
+      // reset app state
       store.dispatch('resetState');
 
       // Tells backend to reset its currentData
@@ -48,7 +49,8 @@ export default {
     });
 
     const updateFiles = () => {
-      emit('update:modelValue', [...props.modelValue, ...inputRef.value.files]);
+      // emit('update:modelValue', [...props.modelValue, ...inputRef.value.files]);
+      emit('update:modelValue', [...inputRef.value.files]);
     };
 
     return {

@@ -21,8 +21,6 @@
 </template>
 
 <script>
-// TODO: Wait for valid reply form api save before resetting state
-
 import { useStore } from 'vuex';
 import { computed } from 'vue';
 

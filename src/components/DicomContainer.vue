@@ -106,6 +106,9 @@ export default {
         store.dispatch('deleteImagePixelData', arg);
         store.dispatch('deleteTableData', arg);
       });
+      window.api.receive('test-but-pressed', () => {
+        console.log('test from dicom');
+      });
     });
 
     watch(scale, () => {

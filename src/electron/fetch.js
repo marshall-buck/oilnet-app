@@ -28,11 +28,12 @@ exports.findStudy = async (studyNo) => {
     .on('aborted', function () {
       console.info(`aborted...`);
     });
+  console.log(studyNo, typeof studyNo);
 
   const data = {
     Level: 'Study',
     Query: {
-      studyNo: studyNo,
+      studyNo: `${studyNo}`,
     },
     Expand: true,
   };
@@ -47,8 +48,8 @@ exports.findStudy = async (studyNo) => {
       body: JSON.stringify(data),
     });
     const info = await response.json();
+
     const id = await info[0].ID;
-    // set progress bar
 
     // return info;
     _saveCompressedStudies(id, studyNo);
@@ -91,8 +92,8 @@ exports.findStudy = async (studyNo) => {
       return;
     }
     if (error.name === 'TypeError') {
-      // eslint-disable-next-line no-unused-vars
-      const mrs = dialog.showMessageBoxSync({
+      console.log(error);
+      dialog.showMessageBoxSync({
         type: 'warning',
         buttons: ['OK'],
         detail: "The Study Number doesn't exist on the server",

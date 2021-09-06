@@ -13,7 +13,7 @@ const checkFolder = (folderPath) => {
   return isFolderExist;
 };
 const { pathToCtFolder, url, baseUrl } = pathObject();
-
+// BUG: TypeError: Cannot read property 'ID' of undefined at exports.findStudy (webpack:///./src/electron/fetch.js?:52:30)
 exports.findStudy = async (studyNo) => {
   const progressBar = new ProgressBar({
     text: 'Working...',

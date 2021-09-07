@@ -1,7 +1,7 @@
 // const ProgressBar = require('electron-progressbar');
-const { spawn, execFile } = require('child_process');
+const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
-const { pathToCtFolder } = pathObject();
+const { pathToCtFolder, pathToPython, pathToApp } = pathObject();
 
 const fs = require('fs');
 
@@ -24,9 +24,9 @@ exports.writeImagesToDisk = async (arg) => {
   if (isDevelopment) {
     childPython = spawn('./pyt/venv/bin/python3', ['./pyt/app.py', str]);
   } else {
-    childPython = execFile('./venv/bin/python3', ['./pyt/app.py', str]);
+    childPython = spawn(pathToPython, [pathToApp, str]);
   }
-  // const childPython = spawn('./venv/bin/python3', ['./pyt/helpers.py', str]);
+
   childPython.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
   });

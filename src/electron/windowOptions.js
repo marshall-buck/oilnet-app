@@ -1,6 +1,6 @@
 exports.mainOptions = {
   width: 1025,
-  height: 660,
+  height: 675,
   title: 'Ct App',
   backgroundColor: '#000',
   resizable: false,

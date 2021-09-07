@@ -1,10 +1,11 @@
 'use strict';
-
+const ProgressBar = require('electron-progressbar');
 import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
-
+// TODO: figure out menu
+// TODO: move files to trash on overwrite dir
 const { findStudy } = require('./fetch.js');
 const { writeImagesToDisk, saveCsv, writeCharts } = require('./mainHelpers');
 
@@ -26,10 +27,6 @@ const chartVisibility = {
 };
 
 let currentData = null;
-
-// TODO: Python Packager
-
-// TODO: move files to trash on overwrite dir
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -245,10 +242,24 @@ ipcMain.on('save-button-pressed', () => {
   }
 });
 // Receive csv data from hist window
-ipcMain.on('send-csv', (e, csvData) => {
+ipcMain.on('send-csv', async (e, csvData) => {
+  const progressBar = new ProgressBar({
+    text: 'Preparing data...',
+    detail: 'Wait...',
+  });
+
+  progressBar
+    .on('completed', function () {
+      console.info(`completed...`);
+      progressBar.detail = 'Task completed. Exiting...';
+    })
+    .on('aborted', function () {
+      console.info(`aborted...`);
+    });
   currentData['csv'] = csvData;
-  writeImagesToDisk(currentData);
-  saveCsv(currentData);
+  await writeImagesToDisk(currentData);
+  await saveCsv(currentData);
+  progressBar.setCompleted();
 });
 // Receive charts from both windows this will be called twice
 ipcMain.on('save-chart', (e, args) => {

@@ -6,6 +6,7 @@ const unzipper = require('unzipper');
 const { dialog } = require('electron');
 const { pathObject } = require('./basePaths.js');
 const ProgressBar = require('electron-progressbar');
+const trash = require('trash');
 
 const checkFolder = (folderPath) => {
   // Check folder exists in the path using `fs.existsSync`
@@ -28,7 +29,6 @@ exports.findStudy = async (studyNo) => {
     .on('aborted', function () {
       console.info(`aborted...`);
     });
-  console.log(studyNo, typeof studyNo);
 
   const data = {
     Level: 'Study',
@@ -53,8 +53,6 @@ exports.findStudy = async (studyNo) => {
     const id = await info[0].ID;
 
     // return info;
-    _saveCompressedStudies(id, studyNo);
-    _saveDicomDir(id, studyNo);
 
     if (checkFolder(`${pathToCtFolder}/${studyNo}`)) {
       const mrs = dialog.showMessageBoxSync({
@@ -70,15 +68,23 @@ exports.findStudy = async (studyNo) => {
         try {
           if (studyNo === '') return;
 
-          fs.rmSync(`${pathToCtFolder}/${studyNo}`);
-          fs.mkdirSync(`${pathToCtFolder}/${studyNo}`);
+          await trash(`${pathToCtFolder}/${studyNo}`);
+          fs.mkdir(`${pathToCtFolder}/${studyNo}`, (err) => {
+            if (err) console.log(err);
+          });
+          await _saveCompressedStudies(id, studyNo);
+          await _saveDicomDir(id, studyNo);
         } catch (error) {
           console.log(error);
         }
       }
     } else {
       if (studyNo === '') return;
-      fs.mkdirSync(`${pathToCtFolder}/${studyNo}`);
+      fs.mkdir(`${pathToCtFolder}/${studyNo}`, (err) => {
+        if (err) console.log(err);
+      });
+      await _saveCompressedStudies(id, studyNo);
+      await _saveDicomDir(id, studyNo);
     }
   } catch (error) {
     progressBar.setCompleted();
@@ -110,7 +116,7 @@ exports.findStudy = async (studyNo) => {
   return;
 };
 
-function _saveDicomDir(id, studyNo) {
+async function _saveDicomDir(id, studyNo) {
   const url = `${baseUrl}/studies/${id}/media`;
   try {
     http.get(url, (response) => {
@@ -136,7 +142,7 @@ function _saveDicomDir(id, studyNo) {
   }
 }
 
-function _saveCompressedStudies(id, studyNo) {
+async function _saveCompressedStudies(id, studyNo) {
   const url = `${baseUrl}/studies/${id}/archive`;
   try {
     http.get(url, (response) => {

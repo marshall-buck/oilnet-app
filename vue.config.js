@@ -2,7 +2,7 @@ module.exports = {
   pages: {
     index: {
       entry: './src/main.js',
-      title: 'Main Page',
+      title: 'CT App',
     },
     histChart: {
       entry: './src/pages/histChart/histMain.js',

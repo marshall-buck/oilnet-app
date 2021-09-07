@@ -1,4 +1,3 @@
-// const ProgressBar = require('electron-progressbar');
 const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
 const { pathToCtFolder, pathToPython, pathToApp } = pathObject();

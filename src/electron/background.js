@@ -192,8 +192,7 @@ ipcMain.on('open-studyNo-modal', () => {
 ipcMain.on('study-id-entered', async (e, arg) => {
   const regex = /^\d{5}$/;
   if (!arg.match(regex) || !arg) {
-    // eslint-disable-next-line no-unused-vars
-    const mrs = dialog.showMessageBoxSync({
+    dialog.showMessageBoxSync({
       type: 'warning',
       buttons: ['OK'],
       detail: 'Error, Study Numbers are 5 Digits',
@@ -248,26 +247,12 @@ ipcMain.on('save-button-pressed', () => {
 // Receive csv data from hist window
 ipcMain.on('send-csv', (e, csvData) => {
   currentData['csv'] = csvData;
-
   writeImagesToDisk(currentData);
   saveCsv(currentData);
 });
 // Receive charts from both windows this will be called twice
 ipcMain.on('save-chart', (e, args) => {
   writeCharts(args);
-  // const data = args[0].substring(23);
-  // const buffer = Buffer.from(data, 'base64');
-  // fs.writeFile(
-  //   `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
-  //   buffer,
-  //   (err) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       console.log(`${args[2]} success`);
-  //     }
-  //   }
-  // );
 });
 // When table, hist, or int mount send trigger image data change to update contents
 ipcMain.on('hist-mounted', () => {
@@ -347,9 +332,3 @@ ipcMain.on('test-but-pressed', () => {
   mainWindow.webContents.send('test-but-pressed');
 });
 // data:image/jpeg;base64,
-
-// function checkCurrentData(old, newt) {
-//   if (!old) return;
-//   if (JSON.stringify(old) == JSON.stringify(newt)) return true;
-//   return false;
-// }

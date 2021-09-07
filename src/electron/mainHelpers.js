@@ -8,45 +8,26 @@ const fs = require('fs');
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
 
-  // let progressBar;
-  // progressBar = new ProgressBar({
-  //   text: 'Working...',
+  const paths = arg.paths;
 
-  //   title: 'Saving Images',
-  //   abortOnError: true,
-  // });
-  // progressBar
-  //   .on('completed', function () {
-  //     progressBar.detail = 'Complete, Exiting...';
-  //   })
-  //   .on('aborted', function () {
-  //     console.info(`aborted...`);
-  //   });
-  try {
-    const paths = arg.paths;
+  const regex = /\d{5}/;
+  const path = paths[0];
+  const id = path.match(regex)[0];
+  arg.studyNo = id;
+  arg.filePaths = paths;
+  arg.ct = pathToCtFolder;
 
-    const regex = /\d{5}/;
-    const path = paths[0];
-    const id = path.match(regex)[0];
-    arg.studyNo = id;
-    arg.filePaths = paths;
-    arg.ct = pathToCtFolder;
-
-    const str = JSON.stringify(arg);
-    const childPython = spawn('./venv/bin/python3', ['./pyt/helpers.py', str]);
-    childPython.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-    });
-    childPython.stderr.on('data', (data) => {
-      console.log(`stderr: ${data}`);
-    });
-    childPython.on('close', (code) => {
-      console.log(`process exited with code: ${code}`);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-  // progressBar.setCompleted();
+  const str = JSON.stringify(arg);
+  const childPython = spawn('./venv/bin/python3', ['./pyt/helpers.py', str]);
+  childPython.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+  childPython.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+  });
+  childPython.on('close', (code) => {
+    console.log(`process exited with code: ${code}`);
+  });
 };
 
 exports.saveCsv = async (arg) => {
@@ -83,8 +64,17 @@ exports.saveCsv = async (arg) => {
   arg.studyNo = id;
   arg.filePaths = paths;
   arg.ct = pathToCtFolder;
-  fs.writeFile(`${pathToCtFolder}/${id}/${id}.csv`, csvContent, 'utf8', (err) =>
-    console.log(err || 'File written')
+  fs.writeFile(
+    `${pathToCtFolder}/${id}/${id}.csv`,
+    csvContent,
+    'utf8',
+    (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('File written');
+      }
+    }
   );
 };
 

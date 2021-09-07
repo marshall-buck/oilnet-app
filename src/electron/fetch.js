@@ -83,8 +83,7 @@ exports.findStudy = async (studyNo) => {
   } catch (error) {
     progressBar.setCompleted();
     if (error.name === 'FetchError') {
-      // eslint-disable-next-line no-unused-vars
-      const mrs = dialog.showMessageBoxSync({
+      dialog.showMessageBoxSync({
         type: 'warning',
         buttons: ['OK'],
         detail:

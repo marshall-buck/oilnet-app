@@ -1,4 +1,4 @@
-// import 'regenerator-runtime/runtime';
+// TODO: make sure files go to recycle bin on windows
 const fetch = require('node-fetch');
 const http = require('http');
 const fs = require('fs');

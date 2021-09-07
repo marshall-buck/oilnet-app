@@ -243,27 +243,52 @@ ipcMain.on('save-button-pressed', () => {
 });
 // Receive csv data from hist window
 ipcMain.on('send-csv', async (e, csvData) => {
+  const mainBounds = await mainWindow.getBounds();
+  // const x = mainBounds.x + mainBounds.width / 2 - 225;
+  // const y = mainBounds.y + 100;
   const progressBar = new ProgressBar({
-    text: 'Preparing data...',
+    text: 'Saving Files...',
     detail: 'Wait...',
+    browserWindow: {
+      x: mainBounds.x + 500,
+      y: mainBounds.y,
+    },
   });
 
   progressBar
     .on('completed', function () {
-      console.info(`completed...`);
       progressBar.detail = 'Task completed. Exiting...';
     })
     .on('aborted', function () {
-      console.info(`aborted...`);
+      progressBar.setCompleted();
     });
   currentData['csv'] = csvData;
   await writeImagesToDisk(currentData);
   await saveCsv(currentData);
-  progressBar.setCompleted();
+  setTimeout(function () {
+    progressBar.setCompleted();
+  }, 2000);
 });
 // Receive charts from both windows this will be called twice
-ipcMain.on('save-chart', (e, args) => {
-  writeCharts(args);
+ipcMain.on('save-chart', async (e, args) => {
+  const mainBounds = await mainWindow.getBounds();
+  const progressBar1 = new ProgressBar({
+    text: 'Saving Charts...',
+    detail: 'Wait...',
+    browserWindow: { x: mainBounds.x, y: mainBounds.y + 300 },
+  });
+
+  progressBar1
+    .on('completed', function () {
+      progressBar1.detail = 'Task completed. Exiting...';
+    })
+    .on('aborted', function () {
+      progressBar1.setCompleted();
+    });
+  await writeCharts(args);
+  setTimeout(function () {
+    progressBar1.setCompleted();
+  }, 2000);
 });
 // When table, hist, or int mount send trigger image data change to update contents
 ipcMain.on('hist-mounted', () => {

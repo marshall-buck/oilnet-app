@@ -22,7 +22,7 @@ exports.writeImagesToDisk = async (arg) => {
   const str = JSON.stringify(arg);
   let childPython;
   if (isDevelopment) {
-    childPython = spawn('./venv/bin/python3', ['./pyt/app.py', str]);
+    childPython = spawn('./pyt/venv/bin/python3', ['./pyt/app.py', str]);
   } else {
     childPython = execFile('./venv/bin/python3', ['./pyt/app.py', str]);
   }

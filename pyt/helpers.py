@@ -111,14 +111,3 @@ def save_to_jpeg():
         with ThreadPoolExecutor(max_workers=6) as executor:
             executor.submit(write_file_to_path, filePath, jpgPath,
                             width, center)
-
-
-# def test():
-
-#     sys.stdout.write('completed')
-#     sys.stdout.flush()
-
-
-# test(obj)
-
-save_to_jpeg()

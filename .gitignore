@@ -3,7 +3,8 @@ node_modules
 /dist
 venv
 oldSite
-
+build
+__pycache__
 
 
 # local env files

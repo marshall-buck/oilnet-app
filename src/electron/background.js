@@ -5,7 +5,7 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
 
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 // TODO: figure out menu
-// TODO: move files to trash on overwrite dir
+
 const { findStudy } = require('./fetch.js');
 const { writeImagesToDisk, saveCsv, writeCharts } = require('./mainHelpers');
 

@@ -17,7 +17,7 @@ exports.writeImagesToDisk = async (arg) => {
   arg.ct = pathToCtFolder;
 
   const str = JSON.stringify(arg);
-  let childPython = (childPython = spawn(pathToPython, [pathToApp, str]));
+  let childPython = spawn(pathToPython, [pathToApp, str]);
 
   childPython.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);

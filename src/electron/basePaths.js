@@ -14,7 +14,7 @@ exports.pathObject = () => {
     ctFolder = 'test';
     pathToCtFolder = `${home}/Desktop/${ctFolder}`;
     pathToPython = `${home}/Desktop/electronApp/pyt/venv/bin/python3`;
-    pathToApp = `${home}/Desktop/electronApp/pyt/app.py`;
+    pathToApp = `${home}/Dev/electron-vue/pyt/app.py`;
   } else {
     home = 'C:/';
     ctFolder = 'CT';

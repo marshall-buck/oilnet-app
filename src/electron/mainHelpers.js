@@ -1,33 +1,18 @@
-const { spawn } = require('child_process');
 const { pathObject } = require('./basePaths.js');
-const { pathToCtFolder, pathToPython, pathToApp } = pathObject();
-
-const fs = require('fs');
+const { pathToCtFolder } = pathObject();
 
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
 
-  const paths = arg.paths;
+  const obj = {
+    studyNo: arg.studyNo,
+    width: arg.width,
+    center: arg.center,
+    filePaths: arg.paths,
+    ct: pathToCtFolder,
+  };
 
-  const regex = /\d{5}/;
-  const path = paths[0];
-  const id = path.match(regex)[0];
-  arg.studyNo = id;
-  arg.filePaths = paths;
-  arg.ct = pathToCtFolder;
-
-  const str = JSON.stringify(arg);
-  let childPython = spawn(pathToPython, [pathToApp, str]);
-
-  childPython.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-  });
-  childPython.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
-  });
-  childPython.on('close', (code) => {
-    console.log(`process exited with code: ${code}`);
-  });
+  return JSON.stringify(obj);
 };
 
 exports.saveCsv = async (arg) => {
@@ -57,39 +42,10 @@ exports.saveCsv = async (arg) => {
   csvArr.push(['', '', '', '', '', '', '', '', '', '', 'Total', ...yAxis]);
 
   let csvContent = csvArr.map((e) => e.join(',')).join('\n');
-  const paths = arg.paths;
-  const regex = /\d{5}/;
-  const path = paths[0];
-  const id = path.match(regex)[0];
-  arg.studyNo = id;
-  arg.filePaths = paths;
-  arg.ct = pathToCtFolder;
-  fs.writeFile(
-    `${pathToCtFolder}/${id}/${id}.csv`,
-    csvContent,
-    'utf8',
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('File written');
-      }
-    }
-  );
+  return { csvContent: csvContent, id: arg.studyNo };
 };
 
 exports.writeCharts = async (args) => {
   const data = await args[0].substring(23);
-  const buffer = Buffer.from(data, 'base64');
-  fs.writeFile(
-    `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
-    buffer,
-    (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(`${args[2]} success`);
-      }
-    }
-  );
+  return Buffer.from(data, 'base64');
 };

@@ -1,3 +1,4 @@
+from os import error
 import pydicom
 import cv2
 import numpy as np
@@ -98,16 +99,20 @@ def save_to_jpeg():
     # studyNo = re.search(r"\d{5}", names[0]).group()
 
     # Loop through names list start progress bar write jpg file
-    for num, filePath in enumerate(names):
+    try:
+        for num, filePath in enumerate(names):
 
-        for obj in jsList:
-            if obj['org-path'] == filePath:
-                fileName = f'{obj["fileName"]}'
-        if num == 0:
-            with open(f'{path_to_ct_folder}/{studyNo}/{studyNo}.json', 'w') as outfile:
-                json.dump(js, outfile)
-        jpgPath = f'{path_to_ct_folder}/{studyNo}/{fileName}.jpeg'
+            for obj in jsList:
+                if obj['org-path'] == filePath:
+                    fileName = f'{obj["fileName"]}'
+            if num == 0:
+                with open(f'{path_to_ct_folder}/{studyNo}/{studyNo}.json', 'w') as outfile:
+                    json.dump(js, outfile)
+            jpgPath = f'{path_to_ct_folder}/{studyNo}/{fileName}.jpeg'
 
-        with ThreadPoolExecutor(max_workers=6) as executor:
-            executor.submit(write_file_to_path, filePath, jpgPath,
-                            width, center)
+            with ThreadPoolExecutor(max_workers=6) as executor:
+                executor.submit(write_file_to_path, filePath, jpgPath,
+                                width, center)
+        print('Python Success')
+    except Exception as e:
+        print("type error: " + str(e))

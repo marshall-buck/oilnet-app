@@ -2,6 +2,10 @@
 const ProgressBar = require('electron-progressbar');
 import { app, protocol, BrowserWindow, ipcMain, dialog } from 'electron';
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib';
+const { spawn } = require('child_process');
+const { pathObject } = require('./basePaths.js');
+const { pathToPython, pathToApp, pathToCtFolder } = pathObject();
+const fs = require('fs');
 
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer';
 // TODO: figure out menu
@@ -242,10 +246,9 @@ ipcMain.on('save-button-pressed', () => {
   }
 });
 // Receive csv data from hist window
-ipcMain.on('send-csv', async (e, csvData) => {
-  const mainBounds = await mainWindow.getBounds();
-  // const x = mainBounds.x + mainBounds.width / 2 - 225;
-  // const y = mainBounds.y + 100;
+ipcMain.on('send-csv', (e, csvData) => {
+  const mainBounds = mainWindow.getBounds();
+
   const progressBar = new ProgressBar({
     text: 'Saving Files...',
     detail: 'Wait...',
@@ -263,15 +266,45 @@ ipcMain.on('send-csv', async (e, csvData) => {
       progressBar.setCompleted();
     });
   currentData['csv'] = csvData;
-  await writeImagesToDisk(currentData);
-  await saveCsv(currentData);
+  writeImagesToDisk(currentData)
+    .then((obj) => {
+      console.log(obj.length);
+      let childPython = spawn(pathToPython, [pathToApp, obj]);
+
+      childPython.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+      });
+      childPython.stderr.on('data', (data) => {
+        console.log(`stderr: ${data}`);
+      });
+      childPython.on('close', (code) => {
+        console.log(`process exited with code: ${code}`);
+      });
+    })
+    .catch((err) => console.log(err));
+  saveCsv(currentData)
+    .then((data) => {
+      fs.writeFile(
+        `${pathToCtFolder}/${data.id}/${data.id}.csv`,
+        data.csvContent,
+        'utf8',
+        (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('File written');
+          }
+        }
+      );
+    })
+    .catch((err) => console.log(err));
   setTimeout(function () {
     progressBar.setCompleted();
   }, 2000);
 });
 // Receive charts from both windows this will be called twice
-ipcMain.on('save-chart', async (e, args) => {
-  const mainBounds = await mainWindow.getBounds();
+ipcMain.on('save-chart', (e, args) => {
+  const mainBounds = mainWindow.getBounds();
   const progressBar1 = new ProgressBar({
     text: 'Saving Charts...',
     detail: 'Wait...',
@@ -285,10 +318,23 @@ ipcMain.on('save-chart', async (e, args) => {
     .on('aborted', function () {
       progressBar1.setCompleted();
     });
-  await writeCharts(args);
-  setTimeout(function () {
-    progressBar1.setCompleted();
-  }, 2000);
+  writeCharts(args)
+    .then((data) => {
+      fs.writeFile(
+        `${pathToCtFolder}/${args[1]}/${args[2]}.jpeg`,
+        data,
+        (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(`${args[2]} success`);
+          }
+        }
+      );
+    })
+    .catch((err) => console.log(err));
+
+  progressBar1.setCompleted();
 });
 // When table, hist, or int mount send trigger image data change to update contents
 ipcMain.on('hist-mounted', () => {

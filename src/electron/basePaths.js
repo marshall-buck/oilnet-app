@@ -6,6 +6,7 @@ exports.pathObject = () => {
   let pathToCtFolder;
   let pathToPython;
   let pathToApp;
+
   const url = 'http://localhost:8042/tools/find/';
   const baseUrl = 'http://localhost:8042';
   if (process.platform === 'darwin') {
@@ -18,8 +19,8 @@ exports.pathObject = () => {
     home = 'C:/';
     ctFolder = 'CT';
     pathToCtFolder = `${home}/${ctFolder}`;
-    pathToPython = `${home}/dev/pyt/venv/bin/python3`;
-    pathToApp = `${home}/dev/pyt/app.py`;
+    pathToPython = `${home}/Dev/electron/pyt/venv/Scripts/python.exe`;
+    pathToApp = `${home}/Dev/electron/pyt/app.py`;
   }
   return { pathToCtFolder, url, baseUrl, pathToApp, pathToPython };
 };

@@ -4,8 +4,6 @@ const { pathToCtFolder, pathToPython, pathToApp } = pathObject();
 
 const fs = require('fs');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
-
 exports.writeImagesToDisk = async (arg) => {
   if (arg.paths.length === 0) return;
 
@@ -19,12 +17,7 @@ exports.writeImagesToDisk = async (arg) => {
   arg.ct = pathToCtFolder;
 
   const str = JSON.stringify(arg);
-  let childPython;
-  if (isDevelopment) {
-    childPython = spawn('./pyt/venv/bin/python3', ['./pyt/app.py', str]);
-  } else {
-    childPython = spawn(pathToPython, [pathToApp, str]);
-  }
+  let childPython = (childPython = spawn(pathToPython, [pathToApp, str]));
 
   childPython.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);

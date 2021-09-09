@@ -1,4 +1,3 @@
-// TODO: make sure files go to recycle bin on windows
 const fetch = require('node-fetch');
 const http = require('http');
 const fs = require('fs');
@@ -9,7 +8,6 @@ const ProgressBar = require('electron-progressbar');
 const trash = require('trash');
 
 const checkFolder = (folderPath) => {
-  // Check folder exists in the path using `fs.existsSync`
   const isFolderExist = fs.existsSync(folderPath);
   return isFolderExist;
 };

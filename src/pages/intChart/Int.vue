@@ -325,8 +325,8 @@ export default {
         },
       ];
 
-      container.value.style.height = '2630px';
-      container.value.style.width = '485px';
+      container.value.style.height = '2670px';
+      container.value.style.width = '492px';
 
       chart.resize();
       chart.update();

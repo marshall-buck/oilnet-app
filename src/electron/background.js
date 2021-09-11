@@ -266,6 +266,7 @@ ipcMain.on('send-csv', (e, csvData) => {
       progressBar.setCompleted();
     });
   currentData['csv'] = csvData;
+  console.log(currentData);
   writeImagesToDisk(currentData)
     .then((obj) => {
       console.log(obj.length);
@@ -387,8 +388,10 @@ ipcMain.on('toggle-chart:hist', (e, arg) => {
       histogramWindow.webContents.send('image-data-change:reply', currentData);
     }
     histogramWindow.show();
+    histogramWindow.setOpacity(1.0);
   } else {
-    histogramWindow.hide();
+    // histogramWindow.hide();
+    histogramWindow.setOpacity(0.0);
   }
 });
 ipcMain.on('toggle-chart:table', (e, arg) => {

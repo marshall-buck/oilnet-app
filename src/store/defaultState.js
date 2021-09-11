@@ -3,6 +3,8 @@ export const getDefaultState = () => {
     isStudyNoModal: false,
     isCircleToolActive: false,
     isClearLastCircle: false,
+    isSavingImages: false,
+    isSavingCharts: false,
 
     scrollToThisNumber: 0,
     scale: 1.75,

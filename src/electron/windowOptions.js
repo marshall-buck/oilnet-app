@@ -5,7 +5,7 @@ exports.mainOptions = {
   y: 300,
   title: 'Ct App',
   backgroundColor: '#000',
-  resizable: false,
+  resizable: true,
 };
 exports.tableOptions = {
   width: 575,

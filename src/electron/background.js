@@ -57,7 +57,8 @@ async function createWindow(devPath, prodPath, options) {
     // Load the url of the dev server if in development mode
     window.loadURL(process.env.WEBPACK_DEV_SERVER_URL + devPath);
     if (!process.env.IS_TEST) {
-      if (window.title === 'Ct App') window.webContents.openDevTools();
+      // if (window.title === 'Ct App') window.webContents.openDevTools();
+      console.log("isTEsting");
     }
   } else {
     // Load the index.html when not in development

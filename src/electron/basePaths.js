@@ -13,7 +13,7 @@ exports.pathObject = () => {
     home = os.homedir();
     ctFolder = 'test';
     pathToCtFolder = `${home}/Desktop/${ctFolder}`;
-    pathToPython = `${home}/Desktop/electronApp/pyt/venv/bin/python3`;
+    pathToPython = `/Users/marshallbuck/Desktop/electronApp/pyt/venv/bin/python3`;
     pathToApp = `${home}/Dev/electron-vue/pyt/app.py`;
   } else {
     home = 'C:/';

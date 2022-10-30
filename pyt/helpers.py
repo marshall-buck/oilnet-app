@@ -86,7 +86,7 @@ def create_pshop_json(namesList):
 
 
 def save_to_jpeg():
-
+    """Saves fiel to jpg"""
     names = filePaths
 
     js = create_pshop_json(names)
@@ -101,7 +101,7 @@ def save_to_jpeg():
     # Loop through names list start progress bar write jpg file
     try:
         for num, filePath in enumerate(names):
-
+            print(f'filepath', filePath)
             for obj in jsList:
                 if obj['org-path'] == filePath:
                     fileName = f'{obj["fileName"]}'
